@@ -25,14 +25,14 @@ Access the server with ssh
 Create a user for the external contributor
 
     sudo adduser chuck
+    
+Store Chuck's public ssh key in the authorized_keys file
+
     sudo -u chuck bash
     mkdir .ssh
     chmod 700 .ssh
     touch .ssh/authorized_keys
     chmod 600 .ssh/authorized_keys
-    
-Put Chuck's public ssh key in the authorized_keys file
-
     cat chuck_id.pub >> .ssh/authorized_keys
     
 Tell Chuck, that all is setup and that he should change his password as soon as possible.
