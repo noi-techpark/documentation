@@ -14,5 +14,27 @@ ps. _Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ## Servers
 
-### I want to give server-access to an external contributor
+### I want to give server-access via SSH to an external contributor
 
+On AWS open ssh ports in inbound for the IP's you want to grant access.
+
+Access the server with ssh
+
+    ssh -i key.pem admin@1.2.3.4 
+
+Create a user for the external contributor
+
+    sudo adduser chuck
+    cd /home/chuck 
+    mkdir .ssh
+    chown chuck:chuck .ssh
+    chmod 700 .ssh
+    touch .ssh/authorized_keys
+    chmod 600 .ssh/authorized_keys
+    
+Put Chuck's public ssh key in the authorized_keys file
+
+    cat chuck_id.pub >> .ssh/authorized_keys
+    
+Tell Chuck, that all is setup and that he should change his password as soon as possible.
+    
