@@ -25,9 +25,8 @@ Access the server with ssh
 Create a user for the external contributor
 
     sudo adduser chuck
-    cd /home/chuck 
+    sudo -u chuck bash
     mkdir .ssh
-    chown chuck:chuck .ssh
     chmod 700 .ssh
     touch .ssh/authorized_keys
     chmod 600 .ssh/authorized_keys
