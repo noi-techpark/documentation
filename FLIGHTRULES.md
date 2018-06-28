@@ -104,13 +104,13 @@ Ex.1: Declare all records related to station `station xyz` open data.
 
     INSERT INTO bdprules(role_id, station_id, type_id, period)
         SELECT r.id, s.id, null, null FROM bdprole r, station s
-            WHERE name = 'GUEST' AND stationcode = 'station xyz';
+            WHERE r.name = 'GUEST' AND stationcode = 'station xyz';
 
 Ex.2: Make atmospheric pressure measurements of all meteorological stations open-data.
 
     INSERT INTO bdprules(role_id, station_id, type_id, period)
         SELECT r.id, s.id, t.id, null FROM bdprole r, station s, type t
-            WHERE name = 'GUEST' AND stationtype = 'Meteostation' AND cname = 'atmospheric-pressure';
+            WHERE r.name = 'GUEST' AND stationtype = 'Meteostation' AND cname = 'atmospheric-pressure';
 
 
 > NB: `GUEST` contains all open-data sources, just add rules for that role and you
@@ -151,7 +151,7 @@ Ex.2: Make atmospheric pressure measurements of all meteorological stations open
 
     INSERT INTO bdprules(role_id, station_id, type_id, period)
         SELECT r.id, s.id, null, null FROM bdprole r, station s
-            WHERE name = 'Role A' AND stationcode = 'station xyz';
+            WHERE r.name = 'Role A' AND stationcode = 'station xyz';
 
 > This means, `Role A` can see any `(type,period)` combination for `station xyz`.
 
