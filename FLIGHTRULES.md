@@ -73,7 +73,7 @@ add the following lines after the main title and initial paragraphs:
     <!-- START doctoc -->
     <!-- END doctoc -->
 
-Use the doctoc command to update the markdown file. First install that command with
+Use the [doctoc](https://github.com/thlorenz/doctoc) command to update the markdown file. First install that command with
 
     sudo npm install -g doctoc
 
