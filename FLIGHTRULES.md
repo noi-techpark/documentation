@@ -28,7 +28,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to disable an existing user](#i-want-to-disable-an-existing-user)
     - [I want to add a new role](#i-want-to-add-a-new-role)
     - [I want to combine a role with users](#i-want-to-combine-a-role-with-users)
-    - [How to define filter rules for a certain role](#how-to-define-filter-rules-for-a-certain-role)
+    - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
     - [I want to debug my rules](#i-want-to-debug-my-rules)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -147,7 +147,7 @@ Ex.2: Make atmospheric pressure measurements of all meteorological stations open
 
     INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (2, 3);
 
-#### How to define filter rules for a certain role
+#### I want to define filter rules for a certain role
 
     INSERT INTO bdprules(role_id, station_id, type_id, period)
         SELECT r.id, s.id, null, null FROM bdprole r, station s
