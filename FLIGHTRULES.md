@@ -112,7 +112,7 @@ Run it
 
     sudo ./install-pimcore.sh
 
-Test it with a browser and see if http://3.4.5.6 shows the [Pimcore](https://pimcore.com) welcome screen.
+Test it with a browser and see if `http://3.4.5.6` shows the [Pimcore](https://pimcore.com) welcome screen.
 
 
 ## Documentation
