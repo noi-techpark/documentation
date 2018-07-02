@@ -99,7 +99,7 @@ Copy `install-pimcore.sh` to your new server instance:
 
     scp -i ~/.ssh/your-key.pem install-pimcore.sh admin@3.4.5.6:
 
-Access your server and execute the script
+Access your server and make the script executable
 
     ssh -i ~/.ssh/your-key.pem admin@3.4.5.6
     chmod +x install-pimcore.sh
