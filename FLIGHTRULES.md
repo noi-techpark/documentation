@@ -2,11 +2,15 @@
 
 #### What are "flight rules"?
 
-A [guide for astronauts](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (now, programmers contributing to the Open Data Hub) about what to do when things go wrong.
+A [guide for astronauts](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (now, programmers contributing to the
+Open Data Hub) about what to do when things go wrong.
 
->  *Flight Rules* are the hard-earned body of knowledge recorded in manuals that list, step-by-step, what to do if X occurs, and why. Essentially, they are extremely detailed, scenario-specific standard operating procedures. [...]
+> *Flight Rules* are the hard-earned body of knowledge recorded in manuals that list, step-by-step, what to do if X
+> occurs, and why. Essentially, they are extremely detailed, scenario-specific standard operating procedures. [...]
 
-> NASA has been capturing our missteps, disasters and solutions since the early 1960s, when Mercury-era ground teams first started gathering "lessons learned" into a compendium that now lists thousands of problematic situations, from engine failure to busted hatch handles to computer glitches, and their solutions.
+> NASA has been capturing our missteps, disasters and solutions since the early 1960s, when Mercury-era ground teams
+> first started gathering "lessons learned" into a compendium that now lists thousands of problematic situations, from
+> engine failure to busted hatch handles to computer glitches, and their solutions.
 
 &mdash; Chris Hadfield, *An Astronaut's Guide to Life*.
 
@@ -19,6 +23,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 - [Servers](#servers)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
+  - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -61,6 +66,52 @@ Tell Chuck, that all is setup and that he should change his password as soon as 
 In addition, if Chuck should be administrator on that server, add him to the sudoers group.
 
     sudo usermod -aG sudo chuck
+
+
+### I want to create a new Pimcore server instance on AWS
+
+Get our server-deployment repository
+
+    git clone git@github.com:idm-suedtirol/server-deployment.git
+
+Configure the `utils/aws-launch-debian-pimcore` script. All needed information can be found inside the script.
+
+    vim utils/aws-launch-debian-pimcore
+
+Run it
+
+    ./utils/aws-launch-debian-pimcore
+
+Go to the AWS console and name the new EC2 `Instance`, `Volume`, `Elastic IP`, and `Security Group`. Use a prefix for
+all of them with a pattern like `<test|prod>-pimcore-detail`
+
+    Instance = prod-pimcore-hackathon
+    Volume = prod-pimcore-hackathon-volume
+    Elastic IP = prod-pimcore-hackathon-eip
+    Security Group = prod-pimcore-hackathon-sg
+
+Get our pimcore-automation repository
+
+    git clone git@github.com:idm-suedtirol/pimcore-automation.git
+
+Copy `install-pimcore.sh` to your new server instance:
+
+    scp -i ~/.ssh/your-key.pem install-pimcore.sh admin@3.4.5.6:
+
+Access your server and execute the script
+
+    ssh -i ~/.ssh/your-key.pem admin@3.4.5.6
+    chmod +x install-pimcore.sh
+
+Configure the `install-pimcore.sh` script. All needed information can be found inside the script.
+
+    vim install-pimcore.sh
+
+Run it
+
+    sudo ./install-pimcore.sh
+
+Test it with a browser and see if http://3.4.5.6 shows the [Pimcore](https://pimcore.com) welcome screen.
 
 
 ## Documentation
