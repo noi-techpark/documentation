@@ -24,6 +24,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 - [Jenkins Pipelines](#jenkins-pipelines)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
+  - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
 - [Servers](#servers)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
