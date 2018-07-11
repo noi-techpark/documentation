@@ -15,11 +15,15 @@ A [guide for astronauts](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) 
 
 _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-flight-rules) project._
 
+----
+
 #### Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Jenkins Pipelines](#jenkins-pipelines)
+  - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
 - [Servers](#servers)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
@@ -37,7 +41,72 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-***
+----
+
+## Jenkins Pipelines
+
+### I want to execute arbitrary commands on the remote server
+
+You need to use `ssh` for that. Your pipeline script looks similar to this:
+
+    pipeline {
+        agent any
+        environment {
+            KEY = credentials('private-key-123')
+        }
+        stages {
+            stage('Whatever') {
+                steps {
+                   sh 'ssh -i ${KEY} user@1.2.3.4 "touch IT_WORKS"'
+                }
+            }
+        }
+    }
+
+Upload the private key as secret file to Jenkins and give it the ID `private-key-123`.
+
+Jenkins needs to add this host to its `known_hosts` file. Open a ssh session to your
+Jenkins server, and allow that remote host.
+
+    ssh admin@your-jenkins-server
+    sudo -iu jenkins
+    ssh user@1.2.3.4
+
+This gives:
+
+    The authenticity of host [...]
+    Are you sure you want to continue connecting (yes/no)? yes
+
+Finally you will see a `public key violation` error, but that's OK, because we do 
+not have the private key available outside Jenkins' credentials module.
+
+Test it inside the Jenkins web-console and see what `Console Output` shows up.
+
+### I want to execute git commands on the remote server
+
+Please follow all instructions of 
+[I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server) 
+first.
+
+Change your pipeline script, that is, exchange `touch IT_WORKS` with some git commands.
+
+Connect to the remote server, and add an ssh-key for your git account. 
+
+    ssh user@1.2.3.4
+    ssh-keygen 
+    cat ~/.ssh/id_rsa.pub
+
+Copy `id_rsa.pub` contents into your allowed [SSH keys](https://github.com/settings/keys) 
+section of github. Alternatively, you can also copy an existing private key, that has already 
+been added to your github account to `user@1.2.3.4:/.ssh/`.
+
+Test it with 
+
+     git pull
+
+Make sure that `git config -l` shows a ssh protocol for `remote.origin.url`, i.e., 
+`git@github.com:your_username/your_project.git`. If not, change it inside `.git/config`.
+
 
 ## Servers
 
