@@ -136,16 +136,19 @@ We merge all changes also to `development`, and delete the release-branch, when 
 We have a `master` branch with a release at `1.0.0` and want now to fix a bug. The new version should be `1.0.1`, since
 this is just a bugfix and not changing functionality. (See https://semver.org to understand how to choose a new version)
 
-Create a `hotfix-<version>` branch, where `version` is the current version of the `master` branch.
-Include an `issue-id` to the commit message, which you can get from the github issue tracker. If the issue is not
-present now, create a new one and describe the issue briefly. Assume, we have an issue on github with id `13`.
+Create a `hotfix-1.0.1` branch, and bump the version.
 
     git checkout -b hotfix-1.0.1 master
     ./my-personal-script-to-bump-version 1.0.1
 
-Do your work, commit the fix, and merge it back into `master` (with a tag) and `development` (without tag).
+Do your work and commit the fix. Include an `issue-id` to the commit message, which you can get from the github
+issue tracker. If the issue is not present now, create a new one and describe the issue briefly. Assume, we have an
+issue on github with id `13`.
 
    git commit -am "Fix severe production issue\nFixes #13."
+
+Merge it back into `master` (with a tag) and `development` (without tag).
+
    git checkout master
    git merge --no-ff hotfix-1.0.1
    git tag -a 1.0.1
