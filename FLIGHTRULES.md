@@ -22,6 +22,11 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Work Flow and Release Management](#work-flow-and-release-management)
+  - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
+  - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
+  - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
+  - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version)
 - [Jenkins Pipelines](#jenkins-pipelines)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
@@ -43,6 +48,115 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ----
+
+## Work Flow and Release Management
+
+### I want to create a project for ODH
+
+Each project must be on our github `idm-suedtirol`. So, if you want to create a new repository, do:
+
+    cd your-project
+    git init
+    git add <some-files>
+    git commit -m "Initial import"
+    git remote add origin https://github.com/idm-suedtirol/<your-git-repository>.git
+    git push -u origin master
+
+...or push an existing repository:
+
+    cd your-project
+    git remote add origin https://github.com/idm-suedtirol/<your-git-repository>.git
+    git push -u origin master
+
+Then, create a development branch and protect the master branch (See Github>Settings>Branches>Protected branches).
+
+Important notes:
+  - We consider a `master` branch as production-ready at each new HEAD
+  - We consider a `development` branch in an unstable-testing state
+  - You can optionally also have additional branches for features or hotfixes
+
+NB: We can make an exception of this repository structure, iff a project is all of the following...
+  - on a private repository
+  - has no external contributors
+  - is a really simple project
+
+...then you do not need to create a `development` branch and do not protect the `master` branch.
+
+### I want to know how the git flow works for a project of ODH
+
+This work is based on [Vincent Driessen's post](https://nvie.com/posts/a-successful-git-branching-model/), about a
+successful Git branching model, and [Semantic Versioning](https://semver.org). We suggest, that you read these
+articles to better understand what follows.
+
+Please read [I want to create a project for ODH](#i-want-to-create-a-project-for-ODH) before you start.
+
+We have two main branches:
+  - `master` contains production-ready commits only
+     - Each HEAD has a version bump commit, and a corresponding git tag
+  - `development` contains the unstable work-in-progress commits
+     - No version commits, except from historical ones
+
+...and supporting branches:
+  - `release-<version>` branches off from `development` during last steps before release
+    - No new features are allowed here, just some minor bugfixes and adaptations
+    - Bump versions during this stage
+  - `hotfix-<version>` branches off from `master` and allow fast and uncomplicated bug fixes, without intermediate
+    steps inside `development`
+    - Must be merged to `master` and `development` at the end
+    - no fast-forward (`--no-ff`)
+
+### I want to release a new version of an ODH-project
+
+We have a `master` branch with a release at `1.0.0` and want now to release a new `development` branch. The new version
+should be `1.1.0`, since we add a new feature. (See https://semver.org to understand how to choose a new version)
+
+First, we create a new `release-1.1.0` branch, and bump the version on that branch.
+
+    git checkout -b release-1.1.0 development
+    ./my-personal-script-to-bump-version 1.1.0
+    git commit -am "Bump version to 1.1.0"
+
+Assume, we find out, that there is a minor bug. This can be fixed immediately on this branch. This new branch may exist
+there for a while, until the release may be rolled out definitely. During that time, bug fixes may be applied in this
+branch. Adding large new features here is strictly prohibited. They must be merged into `development`, and therefore,
+wait for the next big release. Finally, we merge this new release into `master`, and tag it with version `1.1.0`.
+
+    git checkout master
+    git merge --no-ff release-1.1.0
+    git tag -a 1.1.0
+
+We merge all changes also to `development`, and delete the release-branch, when done.
+
+    git checkout development
+    git merge --no-ff release-1.1.0
+    git branch -d release-1.1.0
+
+### I found a small bug, and want to fix it immediately on a released version
+
+We have a `master` branch with a release at `1.0.0` and want now to fix a bug. The new version should be `1.0.1`, since
+this is just a bugfix and not changing functionality. (See https://semver.org to understand how to choose a new version)
+
+Create a `hotfix-<version>` branch, where `version` is the current version of the `master` branch.
+Include an `issue-id` to the commit message, which you can get from the github issue tracker. If the issue is not
+present now, create a new one and describe the issue briefly. Assume, we have an issue on github with id `13`.
+
+    git checkout -b hotfix-1.0.1 master
+    ./my-personal-script-to-bump-version 1.0.1
+
+Do your work, commit the fix, and merge it back into `master` (with a tag) and `development` (without tag).
+
+   git commit -am "Fix severe production issue\nFixes #13."
+   git checkout master
+   git merge --no-ff hotfix-1.0.1
+   git tag -a 1.0.1
+   git checkout development
+   git merge --no-ff hotfix-1.0.1
+
+We do not need the `hotfix` branch any longer.
+
+   git branch -d hotfix-1.0.1
+
+
 
 ## Jenkins Pipelines
 
@@ -78,34 +192,34 @@ This gives:
     The authenticity of host [...]
     Are you sure you want to continue connecting (yes/no)? yes
 
-Finally you will see a `public key violation` error, but that's OK, because we do 
+Finally you will see a `public key violation` error, but that's OK, because we do
 not have the private key available outside Jenkins' credentials module.
 
 Test it inside the Jenkins web-console and see what `Console Output` shows up.
 
 ### I want to execute git commands on the remote server
 
-Please follow all instructions of 
-[I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server) 
+Please follow all instructions of
+[I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
 first.
 
 Change your pipeline script, that is, exchange `touch IT_WORKS` with some git commands.
 
-Connect to the remote server, and add an ssh-key for your git account. 
+Connect to the remote server, and add an ssh-key for your git account.
 
     ssh user@1.2.3.4
-    ssh-keygen 
+    ssh-keygen
     cat ~/.ssh/id_rsa.pub
 
-Copy `id_rsa.pub` contents into your allowed [SSH keys](https://github.com/settings/keys) 
-section of github. Alternatively, you can also copy an existing private key, that has already 
+Copy `id_rsa.pub` contents into your allowed [SSH keys](https://github.com/settings/keys)
+section of github. Alternatively, you can also copy an existing private key, that has already
 been added to your github account to `user@1.2.3.4:/.ssh/`.
 
-Test it with 
+Test it with
 
      git pull
 
-Make sure that `git config -l` shows a ssh protocol for `remote.origin.url`, i.e., 
+Make sure that `git config -l` shows a ssh protocol for `remote.origin.url`, i.e.,
 `git@github.com:your_username/your_project.git`. If not, change it inside `.git/config`.
 
 
