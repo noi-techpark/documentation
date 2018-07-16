@@ -145,19 +145,19 @@ Do your work and commit the fix. Include an `issue-id` to the commit message, wh
 issue tracker. If the issue is not present now, create a new one and describe the issue briefly. Assume, we have an
 issue on github with id `13`.
 
-   git commit -am "Fix severe production issue\nFixes #13."
+    git commit -am "Fix severe production issue\nFixes #13."
 
 Merge it back into `master` (with a tag) and `development` (without tag).
 
-   git checkout master
-   git merge --no-ff hotfix-1.0.1
-   git tag -a 1.0.1
-   git checkout development
-   git merge --no-ff hotfix-1.0.1
+    git checkout master
+    git merge --no-ff hotfix-1.0.1
+    git tag -a 1.0.1
+    git checkout development
+    git merge --no-ff hotfix-1.0.1
 
 We do not need the `hotfix` branch any longer.
 
-   git branch -d hotfix-1.0.1
+    git branch -d hotfix-1.0.1
 
 
 
