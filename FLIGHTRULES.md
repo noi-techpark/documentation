@@ -405,3 +405,12 @@ to all (`= NULL`), `type` and `period` are no longer considered.
 
 > This query, shows you the permissions view, which is a flattened representation of
 > all rules.
+
+*How to interpret the output?*
+This table consists of five columns `(uuid, role_id, station_id, type_id, period)`. It is a minimal set of rules,
+this means, that there are no overlapping rules. The `uuid` column is a primary key, not important for debugging. The
+rest defines the rule itself, for example, `(1,null,null,null)` means that a role with id `1` can see everything. A cell
+set to `null` stands for *no restriction*. Another example could be `(2,5,null,null)`, which means that role with id `2`
+sees all types and periods of station `5`. However, since `(station, type, period)` is a hierarchical triple (read from
+left-to-right), something like `(3,null,null,1)` is considered a erroneous permission rule.
+
