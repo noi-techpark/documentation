@@ -409,9 +409,12 @@ Ex.2: Make atmospheric pressure measurements of all meteorological stations open
         SELECT r.id, s.id, t.id, null FROM bdprole r, station s, type t
             WHERE r.name = 'GUEST' AND stationtype = 'Meteostation' AND cname = 'atmospheric-pressure';
 
-
 > NB: `GUEST` contains all open-data sources, just add rules for that role and you
 > will open it without the need of authentication through tokens, or username/password.
+
+Finally, refresh the materialized view to reflect the new changes:
+
+    REFRESH MATERIALIZED VIEW bdppermissions;
 
 #### I want to add a new user
 
@@ -433,6 +436,10 @@ Ex.2: Make atmospheric pressure measurements of all meteorological stations open
 >> `Role A` cannot see anything at the moment, whereas `Role B` inherits everything
 >> from `GUEST`.
 
+Finally, refresh the materialized view to reflect the new changes:
+
+    REFRESH MATERIALIZED VIEW bdppermissions;
+
 #### I want to combine a role with users
 
     INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (
@@ -451,6 +458,10 @@ Ex.2: Make atmospheric pressure measurements of all meteorological stations open
             WHERE r.name = 'Role A' AND stationcode = 'station xyz';
 
 > This means, `Role A` can see any `(type,period)` combination for `station xyz`.
+
+Finally, refresh the materialized view to reflect the new changes:
+
+    REFRESH MATERIALIZED VIEW bdppermissions;
 
 Rule information:
 - If you define new filter rules for parents, all children automatically inherit them.
