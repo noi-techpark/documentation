@@ -167,7 +167,8 @@ We do not need the `hotfix` branch any longer.
 I did something inside [bdp-core](https://github.com/idm-suedtirol/bdp-core), that involves a schema change. 
 First of all, you need to understand if Hibernate can handle this change with its `update` strategy. See 
 [bdp-core/dal](https://github.com/idm-suedtirol/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml) 
-for further details. Best thing is, to install a new (empty!) bdp-core instance on the test server, and check schema diffs.
+for further details. Best thing is, to run the newest bdp-core instance on the test server, and check schema diffs. Use a 
+clone of the existing production database to be as similar as possible to the current production database state.
 
     pg_dump -U bdp -s bdp -h postgres-test-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-test-server.sql
     pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
