@@ -27,6 +27,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
   - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
   - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version)
+  - [I want to update the database schema of bdp-core](#i-want-to-update-the-database-schema-of-bdp-core)
 - [Jenkins Pipelines](#jenkins-pipelines)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
@@ -158,6 +159,46 @@ Merge it back into `master` (with a tag) and `development` (without tag).
 We do not need the `hotfix` branch any longer.
 
     git branch -d hotfix-1.0.1
+
+
+### I want to update the database schema of bdp-core
+
+I did something inside [bdp-core](https://github.com/idm-suedtirol/bdp-core), that involves a schema change. 
+First of all, you need to understand if Hibernate can handle this change with its `update` strategy. See 
+[bdp-core/dal](https://github.com/idm-suedtirol/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml) 
+for further details. Best thing is, to install a new (empty!) bdp-core instance on the test server, and check schema diffs.
+
+    pg_dump -U bdp -s bdp -h postgres-test-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-test-server.sql
+    pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
+    diff /tmp/schema-dump-postgres-test-server.sql /tmp/schema-dump-postgres-prod-server.sql
+
+If it is simple and log files do not show any issues with the new change, install the new bdp-core on the production environment
+and let Hibernate handle all schema changes.
+
+However, if the change is more complex, like new views or functions, dump the original schema from the production environment,
+and create a migration script that updates that schema. See our official [database documentation](http://opendatahub.readthedocs.io/en/latest/guidelines/database.html) for details.
+
+    pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
+    createdb -U postgres -h localhost -p 5432 __bdptest
+
+We need also `postgis`:
+
+    apt install postgresql-9.5-postgis-2.4
+    psql -U postgres -h localhost -p 5432 -d __bdptest -c "CREATE EXTENSION postgis with schema public;"
+
+Now, we are ready to import the production server schema, and test the migration script, for ex. `schema-1.0.0-1.1.0.sql`.
+
+    psql -U postgres -h localhost -p 5432 -d __bdptest -1 -e -v ON_ERROR_STOP=1 < /tmp/schema-dump-postgres-prod-server.sql
+    psql -U postgres -h localhost -p 5432 -d __bdptest -1 -e -v ON_ERROR_STOP=1 < schema-1.0.0-1.1.0.sql
+     
+NB: If something fails, solve each shown error by yourself, and repeat steps above. Update `schema-1.0.0-1.1.0.sql` accordingly.
+
+If you are satisfied with your schema migration script, test it on our test environment and see if Hibernate fills logs with
+errors. If not, your ready for production.
+
+Finally, we no longer need the test database `__bdptest`, hence we can drop it:
+
+    psql -U postgres -h localhost -p 5432 -c "DROP DATABASE __bdptest;" 
 
 
 
