@@ -37,6 +37,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
+  - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
   - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
     - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
     - [I want to add a new user](#i-want-to-add-a-new-user)
@@ -368,6 +369,21 @@ Finally publish it with
     git push
 
 ## Database
+
+### I want to diff two tables with the same schema
+
+The following SQL query gives the diff of two tables called `your-first-table` and `your-second-table`, 
+or an empty result if both are equal.
+
+    WITH
+        table1 AS (table your-first-table),
+        table2 AS (table your-second-table)
+    SELECT * FROM (
+        (TABLE table1 EXCEPT ALL TABLE table2)
+        UNION
+        (TABLE table2 EXCEPT ALL TABLE table1)
+    ) temp;
+
 
 ### I want to change visibility of mobility data
 
