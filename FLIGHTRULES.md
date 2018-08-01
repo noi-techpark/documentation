@@ -2,7 +2,8 @@
 
 #### What are "flight rules"?
 
-A [guide for astronauts](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (now, programmers contributing to the Open Data Hub) about what to do when things go wrong, _or must be executed with no delay_.
+A [guide for astronauts](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (now, programmers contributing to the
+Open Data Hub) about what to do when things go wrong, _or must be executed with no delay_.
 
 > *Flight Rules* are the hard-earned body of knowledge recorded in manuals that list, step-by-step, what to do if X
 > occurs, and why. Essentially, they are extremely detailed, scenario-specific standard operating procedures. [...]
@@ -34,6 +35,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Servers](#servers)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
+- [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -46,6 +48,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to combine a role with users](#i-want-to-combine-a-role-with-users)
     - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
     - [I want to debug my rules](#i-want-to-debug-my-rules)
+- [Pimcore](#pimcore)
+  - [I want to update Pimcore](#i-want-to-update-pimcore)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -164,11 +168,11 @@ We do not need the `hotfix` branch any longer.
 
 ### I want to update the database schema of bdp-core
 
-I did something inside [bdp-core](https://github.com/idm-suedtirol/bdp-core), that involves a schema change. 
-First of all, you need to understand if Hibernate can handle this change with its `update` strategy. See 
-[bdp-core/dal](https://github.com/idm-suedtirol/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml) 
-for further details. Best thing is, to run the newest bdp-core instance on the test server, and check schema diffs. Use a 
-clone of the existing production database to be as similar as possible to the current production database state.
+I did something inside [bdp-core](https://github.com/idm-suedtirol/bdp-core), that involves a schema change.
+First of all, you need to understand if Hibernate can handle this change with its `update` strategy. See
+[bdp-core/dal](https://github.com/idm-suedtirol/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml)
+for further details. Best thing is, to run the newest bdp-core instance on the test server, and check schema diffs. Use
+a clone of the existing production database to be as similar as possible to the current production database state.
 
     pg_dump -U bdp -s bdp -h postgres-test-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-test-server.sql
     pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
@@ -177,8 +181,9 @@ clone of the existing production database to be as similar as possible to the cu
 If it is simple and log files do not show any issues with the new change, install the new bdp-core on the production environment
 and let Hibernate handle all schema changes.
 
-However, if the change is more complex, like new views or functions, dump the original schema from the production environment,
-and create a migration script that updates that schema. See our official [database documentation](http://opendatahub.readthedocs.io/en/latest/guidelines/database.html) for details.
+However, if the change is more complex, like new views or functions, dump the original schema from the production
+environment, and create a migration script that updates that schema. See our official
+[database documentation](http://opendatahub.readthedocs.io/en/latest/guidelines/database.html) for details.
 
     pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
     createdb -U postgres -h localhost -p 5432 __bdptest
@@ -192,7 +197,7 @@ Now, we are ready to import the production server schema, and test the migration
 
     psql -U postgres -h localhost -p 5432 -d __bdptest -1 -e -v ON_ERROR_STOP=1 < /tmp/schema-dump-postgres-prod-server.sql
     psql -U postgres -h localhost -p 5432 -d __bdptest -1 -e -v ON_ERROR_STOP=1 < schema-1.0.0-1.1.0.sql
-     
+
 NB: If something fails, solve each shown error by yourself, and repeat steps above. Update `schema-1.0.0-1.1.0.sql` accordingly.
 
 If you are satisfied with your schema migration script, test it on our test environment and see if Hibernate fills logs with
@@ -200,7 +205,7 @@ errors. If not, your ready for production.
 
 Finally, we no longer need the test database `__bdptest`, hence we can drop it:
 
-    psql -U postgres -h localhost -p 5432 -c "DROP DATABASE __bdptest;" 
+    psql -U postgres -h localhost -p 5432 -c "DROP DATABASE __bdptest;"
 
 
 
@@ -344,6 +349,25 @@ Run it
 
 Test it with a browser and see if `http://3.4.5.6` shows the [Pimcore](https://pimcore.com) welcome screen.
 
+## I want to use a swap file on my server
+
+I have a server, which does not have enough RAM, and I do not want to upgrade it now. However, some tools
+run out of memory.
+
+Check if you have a swap file installed:
+
+    sudo swapon --summary
+
+Enable a 4GB swap file:
+
+    sudo fallocate -l 4G /mnt/4GB.swap
+    sudo dd if=/dev/zero of=/mnt/4GB.swap bs=1024 count=4194304
+    sudo mkswap /mnt/4GB.swap
+    sudo chmod 0600 /mnt/4GB.swap
+    sudo swapon /mnt/4GB.swap
+
+A script can be found on our [server-deployment](https://github.com/idm-suedtirol/server-deployment/blob/master/utils/swap-file-create)
+repository.
 
 ## Documentation
 
@@ -373,7 +397,7 @@ Finally publish it with
 
 ### I want to diff two tables with the same schema
 
-The following SQL query gives the diff of two tables called `your-first-table` and `your-second-table`, 
+The following SQL query gives the diff of two tables called `your-first-table` and `your-second-table`,
 or an empty result if both are equal.
 
     WITH
@@ -483,3 +507,13 @@ set to `null` stands for *no restriction*. Another example could be `(2,5,null,n
 sees all types and periods of station `5`. However, since `(station, type, period)` is a hierarchical triple (read from
 left-to-right), something like `(3,null,null,1)` is considered a erroneous permission rule.
 
+## Pimcore
+
+### I want to update Pimcore
+
+I want to update my Pimcore to version `5.3.1`. 
+
+Run `/var/www/html/bin/console --update=5.3.1`
+
+It needs at least 2GB of RAM, consider to [enable a swap file](#i-want-to-use-a-swap-file-on-my-server), if it fails 
+due to low memory error.
