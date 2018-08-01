@@ -35,7 +35,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Servers](#servers)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
-- [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
+  - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -349,7 +349,7 @@ Run it
 
 Test it with a browser and see if `http://3.4.5.6` shows the [Pimcore](https://pimcore.com) welcome screen.
 
-## I want to use a swap file on my server
+### I want to use a swap file on my server
 
 I have a server, which does not have enough RAM, and I do not want to upgrade it now. However, some tools
 run out of memory.
