@@ -24,7 +24,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 
 - [Work Flow and Release Management](#work-flow-and-release-management)
-  - [I want to make my GPL-v3 project REUSE compliant](#i-want-to-make-my-gpl-v3-project-reuse-compliant)
+  - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant)
+  - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant)
+  - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
   - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
@@ -58,26 +60,30 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ## Work Flow and Release Management
 
-### I want to make my GPL-v3 project REUSE compliant
+### I want to check if my project is REUSE compliant
 
-Download your preferred license from https://github.com/spdx/license-list, and get your SPDX identifier 
-from https://spdx.org/licenses/.
+We use a tool called [reuse](https://reuse.gitlab.io) to see, if the project `my-example` follows the
+REUSE recommendations. First, we install it and then we execute it, to see
+which files are not compliant to the [REUSE Initiative](https://reuse.software/).
 
-Add the license text to your project's source code, and add the valid license identifier:
+    apt install python3-pygit2
+    pip3 install --user fsfe-reuse
+    cd my-example
+    reuse lint
 
-    cp GPL-3.0.txt LICENSE
+The result shows a list of files, that do not have licenses associated.
+
+### I want to make my GPL-3 project REUSE compliant
+
+Download the GPL-3 license from https://github.com/spdx/license-list to your project's
+source code. Then, add the valid [SPDX license identifier](https://spdx.org/licenses/).
+
+    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSE
     sed -i "1iValid-License-Identifier: GPL-3.0" LICENSE
 
-Iff you have more than one license, create a LICENSES folder and put your license texts there. You
-should put also a LICENSE file for your main license to be recognized on Github.
+From here, you have two possibilities to continue:
 
-    mkdir LICENSES
-    cp GPL-3.0.txt LICENSES/
-    sed -i "1iValid-License-Identifier: GPL-3.0" LICENSES/GPL-3.0.txt
-    cp MIT-Microsoft.txt LICENSES/
-    sed -i "1iValid-License-Identifier: LicenseRef-Microsoft" LICENSES/MIT-Microsoft.txt
-
-Add a comment header to each file as follows:
+1) Add a comment header to each file as follows:
 
     Copyright (C) 2015-2017 Mary Thomas (mary@example.com)
     Copyright (C) 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
@@ -87,8 +93,8 @@ Add a comment header to each file as follows:
 Optionally, you can also add additional license information, like title, short description, and
 warranty information, as follows:
 
-    Big data platform - Data Writer for the Big Data Platform
-    
+    Open Data Hub - Data Writer for the Open Data Hub
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -100,14 +106,31 @@ warranty information, as follows:
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program (see LICENSES/GPL-3.0.txt). If not, see
+    along with this program (see LICENSE). If not, see
     <http://www.gnu.org/licenses/>.
+
+2) Use a `debian/copyright` file to associate a license to a file
+
+**!!TODO!!**
 
 NB: Do not forget the SPDX identifier at the end, and to add multiple `Copyright` lines, if you
 have more than one copyright holder over several years.
 
-Additional documentation can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or 
+In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
 [practices](https://reuse.software/practices/2.0/).
+
+
+### I want to make my multi-license project REUSE compliant
+
+If you have more than one license, create a LICENSES folder and put your license texts there.
+
+    mkdir LICENSES
+    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSES/GPL-3.0.txt
+    wget https://raw.githubusercontent.com/spdx/license-list/master/MIT-Microsoft.txt -O LICENSES/MIT-Microsoft.txt
+
+The SPDX identifier is already encoded within the license file name, hence we do not need to add it
+to the head of the file itself.
+
 
 ### I want to create a project for ODH
 
@@ -563,9 +586,9 @@ left-to-right), something like `(3,null,null,1)` is considered a erroneous permi
 
 ### I want to update Pimcore
 
-I want to update my Pimcore to version `5.3.1`. 
+I want to update my Pimcore to version `5.3.1`.
 
 Run `/var/www/html/bin/console --update=5.3.1`
 
-It needs at least 2GB of RAM, consider to [enable a swap file](#i-want-to-use-a-swap-file-on-my-server), if it fails 
+It needs at least 2GB of RAM, consider to [enable a swap file](#i-want-to-use-a-swap-file-on-my-server), if it fails
 due to low memory error.
