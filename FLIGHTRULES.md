@@ -60,7 +60,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ### I want to make my GPL-v3 project REUSE compliant
 
-Download your preferred license from https://www.gnu.org/licenses/.
+Download your preferred license from https://github.com/spdx/license-list, and get your SPDX identifier 
+from https://spdx.org/licenses/.
 
 Add the license text to your project's source code, and add the valid license identifier:
 

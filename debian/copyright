@@ -1,0 +1,14 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: idm-suedtirol/documentation
+Upstream-Contact: Open Data Hub Team <info@opendatahub.bz.it>
+Source: https://github.com/idm-suedtirol/documentation
+
+Files: *.md
+Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com) 
+License: CC-BY-SA-4.0
+
+Files: *.sh
+Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com) 
+License: GPL-3.0-or-later
+
+
