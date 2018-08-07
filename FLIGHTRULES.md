@@ -24,6 +24,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 
 - [Work Flow and Release Management](#work-flow-and-release-management)
+  - [I want to make my GPL-v3 project REUSE compliant](#i-want-to-make-my-gpl-v3-project-reuse-compliant)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
   - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
@@ -56,6 +57,51 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 ----
 
 ## Work Flow and Release Management
+
+### I want to make my GPL-v3 project REUSE compliant
+
+Download your preferred license from https://www.gnu.org/licenses/.
+
+Add the license text to your project's source code, and add the valid license identifier:
+
+    cp GPL-3.0.txt LICENSE
+    sed -i "1iValid-License-Identifier: GPL-3.0" LICENSE
+
+Iff you have more than one license, create a LICENSES folder and put your license texts there. You
+should put also a LICENSE file for your main license to be recognized on Github.
+
+    mkdir LICENSES
+    cp GPL-3.0.txt LICENSES/
+    sed -i "1iValid-License-Identifier: GPL-3.0" LICENSES/GPL-3.0.txt
+    cp MIT-Microsoft.txt LICENSES/
+    sed -i "1iValid-License-Identifier: LicenseRef-Microsoft" LICENSES/MIT-Microsoft.txt
+
+Add a comment header to each file as follows (example taken from bdp-core):
+
+    Big data platform - Data Writer for the Big Data Platform
+    
+    Copyright (C) 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program (see LICENSES/GPL-3.0.txt). If not, see
+    <http://www.gnu.org/licenses/>.
+
+    SPDX-License-Identifier: GPL-3.0
+
+NB: Do not forget the SPDX identifier at the end, and to add multiple `Copyright` lines, if you
+have more than one copyright holder over several years.
+
+Additional documentation can be found within the [reuse](https://reuse.gitlab.io/) documentation.
 
 ### I want to create a project for ODH
 
