@@ -76,12 +76,18 @@ should put also a LICENSE file for your main license to be recognized on Github.
     cp MIT-Microsoft.txt LICENSES/
     sed -i "1iValid-License-Identifier: LicenseRef-Microsoft" LICENSES/MIT-Microsoft.txt
 
-Add a comment header to each file as follows (example taken from bdp-core):
+Add a comment header to each file as follows:
+
+    Copyright (C) 2015-2017 Mary Thomas (mary@example.com)
+    Copyright (C) 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
+
+    SPDX-License-Identifier: GPL-3.0
+
+Optionally, you can also add additional license information, like title, short description, and
+warranty information, as follows:
 
     Big data platform - Data Writer for the Big Data Platform
     
-    Copyright (C) 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -96,12 +102,11 @@ Add a comment header to each file as follows (example taken from bdp-core):
     along with this program (see LICENSES/GPL-3.0.txt). If not, see
     <http://www.gnu.org/licenses/>.
 
-    SPDX-License-Identifier: GPL-3.0
-
 NB: Do not forget the SPDX identifier at the end, and to add multiple `Copyright` lines, if you
 have more than one copyright holder over several years.
 
-Additional documentation can be found within the [reuse](https://reuse.gitlab.io/) documentation.
+Additional documentation can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or 
+[practices](https://reuse.software/practices/2.0/).
 
 ### I want to create a project for ODH
 
