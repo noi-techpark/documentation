@@ -26,6 +26,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant)
   - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant)
+  - [I want to add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
+  - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
   - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
@@ -83,7 +85,15 @@ source code. Then, add the valid [SPDX license identifier](https://spdx.org/lice
 
 From here, you have two possibilities to continue:
 
-1) Add a comment header to each file as follows:
+  1) [Add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
+  2) Use a `debian/copyright` file to [associate a license to various files](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
+
+In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
+[practices](https://reuse.software/practices/2.0/).
+
+### I want to add a comment header to each file
+
+Add the following lines as comment to each source code file:
 
     Copyright (C) 2015-2017 Mary Thomas (mary@example.com)
     Copyright (C) 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
@@ -109,16 +119,13 @@ warranty information, as follows:
     along with this program (see LICENSE). If not, see
     <http://www.gnu.org/licenses/>.
 
-2) Use a `debian/copyright` file to associate a license to a file
-
-**!!TODO!!**
-
 NB: Do not forget the SPDX identifier at the end, and to add multiple `Copyright` lines, if you
 have more than one copyright holder over several years.
 
-In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
-[practices](https://reuse.software/practices/2.0/).
 
+### I want to define a pattern to associate various files to a license
+
+**!!TODO!!**
 
 ### I want to make my multi-license project REUSE compliant
 
@@ -126,7 +133,7 @@ If you have more than one license, create a LICENSES folder and put your license
 
     mkdir LICENSES
     wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSES/GPL-3.0.txt
-    wget https://raw.githubusercontent.com/spdx/license-list/master/MIT-Microsoft.txt -O LICENSES/MIT-Microsoft.txt
+    wget https://raw.githubusercontent.com/spdx/license-list/master/CC-BY-SA-4.0.txt -O LICENSES/CC-BY-SA-4.0.txt
 
 The SPDX identifier is already encoded within the license file name, hence we do not need to add it
 to the head of the file itself.
