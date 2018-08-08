@@ -23,12 +23,13 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Work Flow and Release Management](#work-flow-and-release-management)
+- [Licensing](#licensing)
   - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant)
   - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant)
   - [I want to add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
   - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
   - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant)
+- [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
   - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
@@ -88,7 +89,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ----
 
-## Work Flow and Release Management
+## Licensing
 
 ### I want to check if my project is REUSE compliant
 
@@ -154,7 +155,28 @@ have more than one copyright holder over several years.
 
 ### I want to define a pattern to associate various files to a license
 
-**!!TODO!!**
+For this you can use `debian/copyright` files, also if you are not writing software for the Debian
+project explicitely.
+
+    mkdir debian
+    vim debian/copyright
+
+An example could be as follows:
+
+    Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+    Upstream-Name: idm-suedtirol/documentation
+    Upstream-Contact: Open Data Hub Team <info@opendatahub.bz.it>
+    Source: https://github.com/idm-suedtirol/documentation
+
+    Files: *.md
+    Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
+    License: CC-BY-SA-4.0
+
+    Files: *.sh
+    Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
+    License: GPL-3.0-or-later
+
+
 
 ### I want to make my multi-license project REUSE compliant
 
@@ -176,6 +198,7 @@ In-depth information can be found within the *reuse* [documentation](https://reu
 [practices](https://reuse.software/practices/2.0/).
 
 
+## Work Flow and Release Management
 
 ### I want to create a project for ODH
 
