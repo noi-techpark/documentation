@@ -23,162 +23,6 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-  - [Work Flow and Release Management](#work-flow-and-release-management)
-    - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant)
-    - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant)
-    - [I want to add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
-- [Flight rules for ODH](#flight-rules-for-odh)
-      - [What are "flight rules"?](#what-are-flight-rules)
-      - [Table of Contents](#table-of-contents)
-  - [Work Flow and Release Management](#work-flow-and-release-management-1)
-    - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant-1)
-    - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant-1)
-    - [I want to add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file-1)
-    - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
-    - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant)
-    - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
-    - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
-    - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
-    - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version)
-    - [I want to update the database schema of bdp-core](#i-want-to-update-the-database-schema-of-bdp-core)
-  - [Jenkins Pipelines](#jenkins-pipelines)
-    - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
-    - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
-  - [Servers](#servers)
-    - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
-    - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
-    - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
-  - [Documentation](#documentation)
-    - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
-  - [Database](#database)
-    - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
-    - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
-      - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
-      - [I want to add a new user](#i-want-to-add-a-new-user)
-      - [I want to disable an existing user](#i-want-to-disable-an-existing-user)
-      - [I want to add a new role](#i-want-to-add-a-new-role)
-      - [I want to combine a role with users](#i-want-to-combine-a-role-with-users)
-      - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
-      - [I want to debug my rules](#i-want-to-debug-my-rules)
-  - [Pimcore](#pimcore)
-    - [I want to update Pimcore](#i-want-to-update-pimcore)
-    - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license-1)
-    - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant-1)
-    - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh-1)
-    - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh-1)
-    - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project-1)
-    - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version-1)
-    - [I want to update the database schema of bdp-core](#i-want-to-update-the-database-schema-of-bdp-core-1)
-  - [Jenkins Pipelines](#jenkins-pipelines-1)
-    - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server-1)
-    - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server-1)
-  - [Servers](#servers-1)
-    - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor-1)
-    - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws-1)
-    - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server-1)
-  - [Documentation](#documentation-1)
-    - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file-1)
-  - [Database](#database-1)
-    - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema-1)
-    - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data-1)
-      - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data-1)
-      - [I want to add a new user](#i-want-to-add-a-new-user-1)
-      - [I want to disable an existing user](#i-want-to-disable-an-existing-user-1)
-      - [I want to add a new role](#i-want-to-add-a-new-role-1)
-      - [I want to combine a role with users](#i-want-to-combine-a-role-with-users-1)
-      - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role-1)
-      - [I want to debug my rules](#i-want-to-debug-my-rules-1)
-  - [Pimcore](#pimcore-1)
-    - [I want to update Pimcore](#i-want-to-update-pimcore-1)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-----
-
-## Work Flow and Release Management
-
-### I want to check if my project is REUSE compliant
-
-We use a tool called [reuse](https://reuse.gitlab.io) to see, if the project `my-example` follows the
-REUSE recommendations. First, we install it and then we execute it, to see
-which files are not compliant to the [REUSE Initiative](https://reuse.software/).
-
-    apt install python3-pygit2
-    pip3 install --user fsfe-reuse
-    cd my-example
-    reuse lint
-
-The result shows a list of files, that do not have licenses associated.
-
-### I want to make my GPL-3 project REUSE compliant
-
-Download the GPL-3 license from https://github.com/spdx/license-list to your project's
-source code. Then, add the valid [SPDX license identifier](https://spdx.org/licenses/).
-
-    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSE
-    sed -i "1iValid-License-Identifier: GPL-3.0" LICENSE
-
-From here, you have two possibilities to continue:
-
-  1) [Add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
-  2) Use a `debian/copyright` file to [associate a license to various files](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
-
-In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
-[practices](https://reuse.software/practices/2.0/).
-
-### I want to add a comment header to each file
-
-Add the following lines as comment to each source code file:
-
-    Copyright (C) 2015-2017 Mary Thomas (mary@example.com)
-    Copyright (C) 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
-
-    SPDX-License-Identifier: GPL-3.0
-
-Optionally, you can also add additional license information, like title, short description, and
-warranty information, as follows:
-
-    Open Data Hub - Data Writer for the Open Data Hub
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program (see LICENSE). If not, see
-    <http://www.gnu.org/licenses/>.
-
-# Flight rules for ODH
-
-#### What are "flight rules"?
-
-A [guide for astronauts](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (now, programmers contributing to the
-Open Data Hub) about what to do when things go wrong, _or must be executed with no delay_.
-
-> *Flight Rules* are the hard-earned body of knowledge recorded in manuals that list, step-by-step, what to do if X
-> occurs, and why. Essentially, they are extremely detailed, scenario-specific standard operating procedures. [...]
-
-> NASA has been capturing our missteps, disasters and solutions since the early 1960s, when Mercury-era ground teams
-> first started gathering "lessons learned" into a compendium that now lists thousands of problematic situations, from
-> engine failure to busted hatch handles to computer glitches, and their solutions.
-
-&mdash; Chris Hadfield, *An Astronaut's Guide to Life*.
-
-_ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-flight-rules) project._
-
-----
-
-#### Table of Contents
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
 - [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant)
   - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant)
@@ -211,6 +55,34 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to debug my rules](#i-want-to-debug-my-rules)
 - [Pimcore](#pimcore)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
+  - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license-1)
+  - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant-1)
+  - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh-1)
+  - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh-1)
+  - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project-1)
+  - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version-1)
+  - [I want to update the database schema of bdp-core](#i-want-to-update-the-database-schema-of-bdp-core-1)
+- [Jenkins Pipelines](#jenkins-pipelines-1)
+  - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server-1)
+  - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server-1)
+- [Servers](#servers-1)
+  - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor-1)
+  - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws-1)
+  - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server-1)
+- [Documentation](#documentation-1)
+  - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file-1)
+- [Database](#database-1)
+  - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema-1)
+  - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data-1)
+    - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data-1)
+    - [I want to add a new user](#i-want-to-add-a-new-user-1)
+    - [I want to disable an existing user](#i-want-to-disable-an-existing-user-1)
+    - [I want to add a new role](#i-want-to-add-a-new-role-1)
+    - [I want to combine a role with users](#i-want-to-combine-a-role-with-users-1)
+    - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role-1)
+    - [I want to debug my rules](#i-want-to-debug-my-rules-1)
+- [Pimcore](#pimcore-1)
+  - [I want to update Pimcore](#i-want-to-update-pimcore-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -274,6 +146,7 @@ warranty information, as follows:
     You should have received a copy of the GNU General Public License
     along with this program (see LICENSE). If not, see
     <http://www.gnu.org/licenses/>.
+
 
 NB: Do not forget the SPDX identifier at the end. Add multiple `Copyright` lines, if you
 have more than one copyright holder over several years.
