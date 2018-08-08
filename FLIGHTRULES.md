@@ -164,9 +164,14 @@ project explicitely.
 An example could be as follows:
 
     Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-    Upstream-Name: idm-suedtirol/documentation
+    Upstream-Name: idm-suedtirol/opendatahub
     Upstream-Contact: Open Data Hub Team <info@opendatahub.bz.it>
-    Source: https://github.com/idm-suedtirol/documentation
+    Source: https://github.com/idm-suedtirol/opendatahub
+
+    Files: *
+    Copyright: 2000-2017 John Doe <jdoe@example.com>
+               2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
+    License: GPL-2.0-only
 
     Files: *.md
     Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
@@ -176,7 +181,10 @@ An example could be as follows:
     Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
     License: GPL-3.0-or-later
 
-
+This means, that per default files are licensed under `GPL-2.0-only`, except for files
+ending in `.md`, which are licensed with `CC-BY-SA-4.0`, and all ending with `.sh` as
+`GPL-3.0-or-later`. For details on how to write a `debian/copyright` file, see the
+[packaging manual](https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/).
 
 ### I want to make my multi-license project REUSE compliant
 
