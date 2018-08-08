@@ -129,6 +129,15 @@ Add the following lines as comment to each source code file:
 
     SPDX-License-Identifier: GPL-3.0
 
+If you use a version control system, like git, you can also use that history to declare copyright
+holders, by simply adding a header like this:
+
+    This file is part of the Open Data Hub project. It's copyrighted by
+    the contributors recorded in the version control history of the file,
+    available from its original location http://git.example.com/odh/filename.c
+
+    SPDX-License-Identifier: GPL-3.0
+
 Optionally, you can also add additional license information, like title, short description, and
 warranty information, as follows:
 
