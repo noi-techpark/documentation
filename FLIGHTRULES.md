@@ -26,9 +26,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Licensing](#licensing)
   - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant)
   - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant)
+  - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant)
   - [I want to add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
   - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
-  - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant)
 - [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
@@ -112,13 +112,35 @@ source code. Then, add the valid [SPDX license identifier](https://spdx.org/lice
     wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSE
     sed -i "1iValid-License-Identifier: GPL-3.0" LICENSE
 
-From here, you have two possibilities to continue:
+From here, you have three possibilities to continue:
 
   1) [Add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
   2) Use a `debian/copyright` file to [associate a license to various files](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
+  3) Use a combination of both (1) and (2)
 
 In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
 [practices](https://reuse.software/practices/2.0/).
+
+### I want to make my multi-license project REUSE compliant
+
+If you have more than one license, create a LICENSES folder and put your license texts there.
+
+    mkdir LICENSES
+    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSES/GPL-3.0.txt
+    wget https://raw.githubusercontent.com/spdx/license-list/master/CC-BY-SA-4.0.txt -O LICENSES/CC-BY-SA-4.0.txt
+
+The SPDX identifier is already encoded within the license file name, hence we do not need to add it
+to the head of the file itself.
+
+From here, you have three possibilities to continue:
+
+  1) [Add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
+  2) Use a `debian/copyright` file to [associate a license to various files](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
+  3) Use a combination of both (1) and (2)
+
+In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
+[practices](https://reuse.software/practices/2.0/).
+
 
 ### I want to add a comment header to each file
 
@@ -194,26 +216,6 @@ This means, that per default files are licensed under `GPL-2.0-only`, except for
 ending in `.md`, which are licensed with `CC-BY-SA-4.0`, and all ending with `.sh` as
 `GPL-3.0-or-later`. For details on how to write a `debian/copyright` file, see the
 [packaging manual](https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/).
-
-### I want to make my multi-license project REUSE compliant
-
-If you have more than one license, create a LICENSES folder and put your license texts there.
-
-    mkdir LICENSES
-    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSES/GPL-3.0.txt
-    wget https://raw.githubusercontent.com/spdx/license-list/master/CC-BY-SA-4.0.txt -O LICENSES/CC-BY-SA-4.0.txt
-
-The SPDX identifier is already encoded within the license file name, hence we do not need to add it
-to the head of the file itself.
-
-From here, you have two possibilities to continue:
-
-  1) [Add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
-  2) Use a `debian/copyright` file to [associate a license to various files](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
-
-In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
-[practices](https://reuse.software/practices/2.0/).
-
 
 ## Work Flow and Release Management
 
