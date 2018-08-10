@@ -23,12 +23,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Licensing](#licensing)
-  - [I want to check if my project is REUSE compliant](#i-want-to-check-if-my-project-is-reuse-compliant)
-  - [I want to make my GPL-3 project REUSE compliant](#i-want-to-make-my-gpl-3-project-reuse-compliant)
-  - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant)
-  - [I want to add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
-  - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
+- [Licensing and REUSE compliance](#licensing-and-reuse-compliance)
 - [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
@@ -44,20 +39,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
-- [Database](#database)
-  - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
-  - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
-    - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
-    - [I want to add a new user](#i-want-to-add-a-new-user)
-    - [I want to disable an existing user](#i-want-to-disable-an-existing-user)
-    - [I want to add a new role](#i-want-to-add-a-new-role)
-    - [I want to combine a role with users](#i-want-to-combine-a-role-with-users)
-    - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
-    - [I want to debug my rules](#i-want-to-debug-my-rules)
 - [Pimcore](#pimcore)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
-  - [I want to define a pattern to associate various files to a license](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license-1)
-  - [I want to make my multi-license project REUSE compliant](#i-want-to-make-my-multi-license-project-reuse-compliant-1)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh-1)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh-1)
   - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project-1)
@@ -72,150 +55,24 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server-1)
 - [Documentation](#documentation-1)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file-1)
-- [Database](#database-1)
-  - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema-1)
-  - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data-1)
-    - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data-1)
-    - [I want to add a new user](#i-want-to-add-a-new-user-1)
-    - [I want to disable an existing user](#i-want-to-disable-an-existing-user-1)
-    - [I want to add a new role](#i-want-to-add-a-new-role-1)
-    - [I want to combine a role with users](#i-want-to-combine-a-role-with-users-1)
-    - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role-1)
-    - [I want to debug my rules](#i-want-to-debug-my-rules-1)
-- [Pimcore](#pimcore-1)
-  - [I want to update Pimcore](#i-want-to-update-pimcore-1)
+- [Database](#database)
+  - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
+  - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
+    - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
+    - [I want to add a new user](#i-want-to-add-a-new-user)
+    - [I want to disable an existing user](#i-want-to-disable-an-existing-user)
+    - [I want to add a new role](#i-want-to-add-a-new-role)
+    - [I want to combine a role with users](#i-want-to-combine-a-role-with-users)
+    - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
+    - [I want to debug my rules](#i-want-to-debug-my-rules)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ----
 
-## Licensing
+## Licensing and REUSE compliance
 
-### I want to check if my project is REUSE compliant
-
-We use a tool called [reuse](https://reuse.gitlab.io) to see, if the project `my-example` follows the
-REUSE recommendations. First, we install it and then we execute it, to see
-which files are not compliant to the [REUSE Initiative](https://reuse.software/).
-
-    apt install python3-pygit2
-    pip3 install --user fsfe-reuse
-    cd my-example
-    reuse lint
-
-The result shows a list of files, that do not have licenses associated.
-
-### I want to make my GPL-3 project REUSE compliant
-
-Download the GPL-3 license from https://github.com/spdx/license-list to your project's
-source code. Then, add the valid [SPDX license identifier](https://spdx.org/licenses/).
-
-    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSE
-    sed -i "1iValid-License-Identifier: GPL-3.0" LICENSE
-
-From here, you have three possibilities to continue:
-
-  1) [Add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
-  2) Use a `debian/copyright` file to [associate a license to various files](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
-  3) Use a combination of both (1) and (2)
-
-In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
-[practices](https://reuse.software/practices/2.0/).
-
-### I want to make my multi-license project REUSE compliant
-
-If you have more than one license, create a LICENSES folder and put your license texts there.
-
-    mkdir LICENSES
-    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSES/GPL-3.0.txt
-    wget https://raw.githubusercontent.com/spdx/license-list/master/CC-BY-SA-4.0.txt -O LICENSES/CC-BY-SA-4.0.txt
-
-The SPDX identifier is already encoded within the license file name, hence we do not need to add it
-to the head of the file itself.
-
-From here, you have three possibilities to continue:
-
-  1) [Add a comment header to each file](#i-want-to-add-a-comment-header-to-each-file)
-  2) Use a `debian/copyright` file to [associate a license to various files](#i-want-to-define-a-pattern-to-associate-various-files-to-a-license)
-  3) Use a combination of both (1) and (2)
-
-In-depth information can be found within the *reuse* [documentation](https://reuse.gitlab.io/) or
-[practices](https://reuse.software/practices/2.0/).
-
-
-### I want to add a comment header to each file
-
-Add the following lines as comment to each source code file:
-
-    Copyright (C) 2015-2017 Mary Thomas (mary@example.com)
-    Copyright (C) 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
-
-    SPDX-License-Identifier: GPL-3.0
-
-If you use a version control system, like git, you can also use that history to declare copyright
-holders, by simply adding a header like this:
-
-    This file is part of the Open Data Hub project. It's copyrighted by
-    the contributors recorded in the version control history of the file,
-    available from its original location http://git.example.com/odh/filename.c
-
-    SPDX-License-Identifier: GPL-3.0
-
-Optionally, you can also add additional license information, like title, short description, and
-warranty information, as follows:
-
-    Open Data Hub - Data Writer for the Open Data Hub
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program (see LICENSE). If not, see
-    <http://www.gnu.org/licenses/>.
-
-
-NB: Do not forget the SPDX identifier at the end. Add multiple `Copyright` lines, if you
-have more than one copyright holder over several years.
-
-
-### I want to define a pattern to associate various files to a license
-
-For this you can use `debian/copyright` files, also if you are not writing software for the Debian
-project explicitely.
-
-    mkdir debian
-    vim debian/copyright
-
-An example could be as follows:
-
-    Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-    Upstream-Name: idm-suedtirol/opendatahub
-    Upstream-Contact: Open Data Hub Team <info@opendatahub.bz.it>
-    Source: https://github.com/idm-suedtirol/opendatahub
-
-    Files: *
-    Copyright: 2000-2017 John Doe <jdoe@example.com>
-               2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
-    License: GPL-2.0-only
-
-    Files: *.md
-    Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
-    License: CC-BY-SA-4.0
-
-    Files: *.sh
-    Copyright: 2018 IDM Südtirol - Alto Adige (info@idm-suedtirol.com)
-    License: GPL-3.0-or-later
-
-This means, that per default files are licensed under `GPL-2.0-only`, except for files
-ending in `.md`, which are licensed with `CC-BY-SA-4.0`, and all ending with `.sh` as
-`GPL-3.0-or-later`. For details on how to write a `debian/copyright` file, see the
-[packaging manual](https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/).
+See REUSE-specific [flight rules](https://github.com/idm-suedtirol/reuse).
 
 ## Work Flow and Release Management
 
@@ -555,120 +412,6 @@ Finally publish it with
     git commit -m "Docs: Update table of content for README.md"
     git push
 
-## Database
-
-### I want to diff two tables with the same schema
-
-The following SQL query gives the diff of two tables called `your-first-table` and `your-second-table`,
-or an empty result if both are equal.
-
-    WITH
-        table1 AS (table your-first-table),
-        table2 AS (table your-second-table)
-    SELECT * FROM (
-        (TABLE table1 EXCEPT ALL TABLE table2)
-        UNION
-        (TABLE table2 EXCEPT ALL TABLE table1)
-    ) temp;
-
-
-### I want to change visibility of mobility data
-
-This chapter explains how to add users and roles, and to define which data can be seen as
-open data, and what is closed.
-
-_Please note: Only API methods regarding measurements are restricted. Methods regarding
-stations and types are considered open-data due to their meta-data character, i.e.,
-`get-station`, `get-station-details`, or `get-data-types` always expose all data._
-
-#### I want to declare some records as open data
-
-Ex.1: Declare all records related to station `station xyz` open data.
-
-    INSERT INTO bdprules(role_id, station_id, type_id, period)
-        SELECT r.id, s.id, null, null FROM bdprole r, station s
-            WHERE r.name = 'GUEST' AND stationcode = 'station xyz';
-
-Ex.2: Make atmospheric pressure measurements of all meteorological stations open-data.
-
-    INSERT INTO bdprules(role_id, station_id, type_id, period)
-        SELECT r.id, s.id, t.id, null FROM bdprole r, station s, type t
-            WHERE r.name = 'GUEST' AND stationtype = 'Meteostation' AND cname = 'atmospheric-pressure';
-
-> NB: `GUEST` contains all open-data sources, just add rules for that role and you
-> will open it without the need of authentication through tokens, or username/password.
-
-Finally, refresh the materialized view to reflect the new changes:
-
-    REFRESH MATERIALIZED VIEW bdppermissions;
-
-#### I want to add a new user
-
-    INSERT INTO bdpuser(email, password) VALUES ('this_is_my@ema.il', 'top-S3CR3T');
-
-#### I want to disable an existing user
-
-    UPDATE bdpuser SET enabled = false WHERE email = 'this_is_my@ema.il';
-
-#### I want to add a new role
-
-    INSERT INTO bdprole(name) VALUES ('Role A');
-    INSERT INTO bdprole(name, parent_id)
-        VALUES ('Role B', (select id from bdprole where name = 'GUEST'));
-
-> Make sure that you define at least parent as `GUEST` (which is always present
-> and allows access to all open data sources); `ADMIN` is another default, but it
-> sees all data.
->> `Role A` cannot see anything at the moment, whereas `Role B` inherits everything
->> from `GUEST`.
-
-Finally, refresh the materialized view to reflect the new changes:
-
-    REFRESH MATERIALIZED VIEW bdppermissions;
-
-#### I want to combine a role with users
-
-    INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (
-        (SELECT id FROM bdpuser WHERE email = 'this_is_my@ema.il'),
-        (SELECT id FROM bdprole WHERE name = 'Role A')
-    );
-
-...or, if you know primary keys...
-
-    INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (2, 3);
-
-#### I want to define filter rules for a certain role
-
-    INSERT INTO bdprules(role_id, station_id, type_id, period)
-        SELECT r.id, s.id, null, null FROM bdprole r, station s
-            WHERE r.name = 'Role A' AND stationcode = 'station xyz';
-
-> This means, `Role A` can see any `(type,period)` combination for `station xyz`.
-
-Finally, refresh the materialized view to reflect the new changes:
-
-    REFRESH MATERIALIZED VIEW bdppermissions;
-
-Rule information:
-- If you define new filter rules for parents, all children automatically inherit them.
-- `(station, type, period)` is a hierarchical triple, that is, if you open `station`
-to all (`= NULL`), `type` and `period` are no longer considered.
-
-#### I want to debug my rules
-
-    SELECT * FROM bdppermissions;
-
-> This query, shows you the permissions view, which is a flattened representation of
-> all rules.
-
-*How to interpret the output?*
-This table consists of five columns `(uuid, role_id, station_id, type_id, period)`. It is a minimal set of rules,
-this means, that there are no overlapping rules. The `uuid` column is a primary key, not important for debugging. The
-rest defines the rule itself, for example, `(1,null,null,null)` means that a role with id `1` can see everything. A cell
-set to `null` stands for *no restriction*. Another example could be `(2,5,null,null)`, which means that role with id `2`
-sees all types and periods of station `5`. However, since `(station, type, period)` is a hierarchical triple (read from
-left-to-right), something like `(3,null,null,1)` is considered a erroneous permission rule.
-
 ## Pimcore
 
 ### I want to update Pimcore
@@ -681,23 +424,6 @@ It needs at least 2GB of RAM, consider to [enable a swap file](#i-want-to-use-a-
 due to low memory error.
 NB: Do not forget the SPDX identifier at the end, and to add multiple `Copyright` lines, if you
 have more than one copyright holder over several years.
-
-
-### I want to define a pattern to associate various files to a license
-
-**!!TODO!!**
-
-### I want to make my multi-license project REUSE compliant
-
-If you have more than one license, create a LICENSES folder and put your license texts there.
-
-    mkdir LICENSES
-    wget https://raw.githubusercontent.com/spdx/license-list/master/GPL-3.0.txt -O LICENSES/GPL-3.0.txt
-    wget https://raw.githubusercontent.com/spdx/license-list/master/CC-BY-SA-4.0.txt -O LICENSES/CC-BY-SA-4.0.txt
-
-The SPDX identifier is already encoded within the license file name, hence we do not need to add it
-to the head of the file itself.
-
 
 ### I want to create a project for ODH
 
@@ -1149,13 +875,3 @@ set to `null` stands for *no restriction*. Another example could be `(2,5,null,n
 sees all types and periods of station `5`. However, since `(station, type, period)` is a hierarchical triple (read from
 left-to-right), something like `(3,null,null,1)` is considered a erroneous permission rule.
 
-## Pimcore
-
-### I want to update Pimcore
-
-I want to update my Pimcore to version `5.3.1`.
-
-Run `/var/www/html/bin/console --update=5.3.1`
-
-It needs at least 2GB of RAM, consider to [enable a swap file](#i-want-to-use-a-swap-file-on-my-server), if it fails
-due to low memory error.
