@@ -37,8 +37,6 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
-- [Documentation](#documentation)
-  - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Pimcore](#pimcore)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh-1)
@@ -53,8 +51,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor-1)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws-1)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server-1)
-- [Documentation](#documentation-1)
-  - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file-1)
+- [Documentation](#documentation)
+  - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
   - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
   - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
@@ -387,30 +385,6 @@ Enable a 4GB swap file:
 
 A script can be found on our [server-deployment](https://github.com/idm-suedtirol/server-deployment/blob/master/utils/swap-file-create)
 repository.
-
-## Documentation
-
-### I want to add a table of contents to a markdown file
-
-Open the markdown file, i.e., README.md, where you want to add a the table of contents and
-add the following lines after the main title and initial paragraphs:
-
-    <!-- START doctoc -->
-    <!-- END doctoc -->
-
-Use the [doctoc](https://github.com/thlorenz/doctoc) command to update the markdown file. First install that command with
-
-    sudo npm install -g doctoc
-
-...then execute it
-
-    doctoc README.md --github --title '#### Table of Contents'
-
-Finally publish it with
-
-    git add README.md
-    git commit -m "Docs: Update table of content for README.md"
-    git push
 
 ## Pimcore
 
