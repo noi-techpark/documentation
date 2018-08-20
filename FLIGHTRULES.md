@@ -39,6 +39,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
+  - [I want to make my web server HTTPS compliant](#i-want-to-make-my-web-server-https-compliant)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -384,6 +385,54 @@ Enable a 4GB swap file:
 
 A script can be found on our [server-deployment](https://github.com/idm-suedtirol/server-deployment/blob/master/utils/swap-file-create)
 repository.
+
+### I want to make my web server HTTPS compliant
+
+I have a website reachable with http://www.davinci.bz.it or http://davinci.bz.it
+on an IP `34.247.202.9`, and want to make it HTTPS only.
+
+We use a proxy with Apache and [Let's Encrypt](https://letsencrypt.org/) for
+that. Let's assume the IP of that proxy is `1.2.3.4`. You need to point your DNS
+entry for both URLs above to that proxy, then login to it.
+
+    ssh admin@1.2.3.4
+
+Configure Apache with
+
+    sudo vim /etc/apache2/sites-available/davinci.bz.it.conf
+
+...with...
+
+	<VirtualHost *:80>
+		<Proxy *>
+			Order Allow,Deny
+			Allow from all
+		</Proxy>
+		ServerName davinci.bz.it
+		ServerAlias www.davinci.bz.it
+		ProxyPass / http://34.247.202.9/
+		ProxyPassReverse / http://34.247.202.9/
+		ProxyPreserveHost On
+		ErrorLog /var/log/apache2/davinci.bz.it
+	</VirtualHost>
+
+Enable the new configuration
+
+    cd /etc/apache2/sites-enabled/
+    sudo ln -s /etc/apache2/sites-available/davinci.bz.it.conf davinci.by.it.conf
+
+Finally, get your certificates and final configuration. Execute...
+
+	sudo /opt/cerbot-auto --apache
+
+	...
+	2: davinci.bz.it
+	3: www.davinci.bz.it
+	...
+
+Type, `2,3` to select both names for your new certificate, and choose
+`2: Redirect - Make all requests redirect to secure HTTPS access`.
+
 
 ## Documentation
 
