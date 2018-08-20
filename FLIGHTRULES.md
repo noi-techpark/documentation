@@ -419,7 +419,7 @@ Configure Apache with
 Enable the new configuration
 
     cd /etc/apache2/sites-enabled/
-    sudo ln -s /etc/apache2/sites-available/davinci.bz.it.conf davinci.by.it.conf
+    sudo ln -s /etc/apache2/sites-available/davinci.bz.it.conf davinci.bz.it.conf
 
 Finally, get your certificates and final configuration. Execute...
 
