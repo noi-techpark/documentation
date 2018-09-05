@@ -466,7 +466,7 @@ If not otherwise stated, all these chapters are about PostgreSQL.
 ### I want to create a read-only user (aka role)
 
     CREATE ROLE read_only_user WITH LOGIN PASSWORD 'your_strong_password';
-    GRANT CONNECT ON DATABASE bdp TO read_only_user;
+    GRANT CONNECT ON DATABASE your_database TO read_only_user;
     GRANT USAGE ON SCHEMA your_schema TO read_only_user;
     GRANT SELECT ON ALL TABLES IN SCHEMA your_schema TO read_only_user;
     GRANT SELECT ON ALL SEQUENCES IN SCHEMA your_schema TO read_only_user;
