@@ -43,6 +43,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
+  - [I want to create a read-only user (aka role)](#i-want-to-create-a-read-only-user-aka-role)
   - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
   - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
     - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
@@ -459,6 +460,17 @@ Finally publish it with
     git push
 
 ## Database
+
+If not otherwise stated, all these chapters are about PostgreSQL.
+
+### I want to create a read-only user (aka role)
+
+    CREATE ROLE read_only_user WITH LOGIN PASSWORD 'your_strong_password';
+    GRANT CONNECT ON DATABASE bdp TO read_only_user;
+    GRANT USAGE ON SCHEMA your_schema TO read_only_user;
+    GRANT SELECT ON ALL TABLES IN SCHEMA your_schema TO read_only_user;
+    GRANT SELECT ON ALL SEQUENCES IN SCHEMA your_schema TO read_only_user;
+    COMMENT ON ROLE read_only_user IS 'Read-only account for your_reason';
 
 ### I want to diff two tables with the same schema
 
