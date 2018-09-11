@@ -224,8 +224,6 @@ Run `/var/www/html/bin/console --update=5.3.1`
 
 It needs at least 2GB of RAM, consider to [enable a swap file](#i-want-to-use-a-swap-file-on-my-server), if it fails
 due to low memory error.
-NB: Do not forget the SPDX identifier at the end, and to add multiple `Copyright` lines, if you
-have more than one copyright holder over several years.
 
 ## Jenkins Pipelines
 
