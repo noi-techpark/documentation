@@ -299,7 +299,7 @@ environment with the actual production state.
 First, create a pipeline script inside `server-deployment` repository:
 
     git clone git@github.com:idm-suedtirol/server-deployment.git
-    cat Jenkinsfile-MyClone-Nightly-Clones << EOF
+    cat > Jenkinsfile-MyClone-Nightly-Clones << EOF
         pipeline {
             agent any
             environment {
