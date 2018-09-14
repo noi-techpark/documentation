@@ -35,7 +35,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Jenkins Pipelines](#jenkins-pipelines)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
+  - [I want to create a cron-job to clone AWS instances](#i-want-to-create-a-cron-job-to-clone-aws-instances)
 - [Servers](#servers)
+  - [I want to create a test clone of a server instance](#i-want-to-create-a-test-clone-of-a-server-instance)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
@@ -291,8 +293,65 @@ Test it with
 Make sure that `git config -l` shows a ssh protocol for `remote.origin.url`, i.e.,
 `git@github.com:your_username/your_project.git`. If not, change it inside `.git/config`.
 
+### I want to create a cron-job to clone AWS instances
+
+I want to create a clone of an instance each night at 3am, to have a test
+environment with the actual production state.
+
+First, create a pipeline script inside `server-deployment` repository:
+
+    git clone git@github.com:idm-suedtirol/server-deployment.git
+    cat Jenkinsfile-MyClone-Nightly-Clones << EOF
+        pipeline {
+            agent any
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('aws_ec2scripts_secret_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('aws_ec2scripts_secret_access_key')
+                AWS_DEFAULT_OUTPUT = 'json'
+                AWS_DEFAULT_REGION = 'eu-west-1'
+            }
+            stages {
+                stage('Clone DAVINCI/HACKATHON') {
+                    steps {
+                        sh '''
+                            cd utils
+                            SRC_INSTANCE_ID=i-0123456789abcde0 CLONE_INSTANCE_NAME=dolly ./aws-ec2-clone
+                        '''
+                    }
+                }
+            }
+        }
+    EOF
+    git commit -am "Add Jenkinsfile-MyClone-Nightly-Clones"
+    git push
+
+Create a new pipeline inside `Server Deployment` from template `Pipeline`.
+Activate `Build periodically` to a schedule `H 3 * * *` (`H` is a good idea to
+distribute it evenly from 3am to 4am).
+
+Use a `Pipeline script from SCM` definition, and set
+`https://github.com/idm-suedtirol/server-deployment.git` as repository URL.
+
+Set `Clean after/before checkout` and add your script path to
+`Jenkinsfile-MyClone-Nightly-Clones`.
+
 
 ## Servers
+
+### I want to create a test clone of a server instance
+
+I want to clone an AWS instance with ID `i-0123456789abcde0` to a new instance
+with name `dolly`.
+
+Checkout git@github.com:idm-suedtirol/server-deployment.git
+
+    git clone git@github.com:idm-suedtirol/server-deployment.git
+
+Use `utils/aws-ec2-clone` which needs `aws ec2` command-line tools. See this
+script's comments for further details on prerequisites.
+
+    cd utils
+    SRC_INSTANCE_ID=i-0123456789abcde0 CLONE_INSTANCE_NAME=dolly ./aws-ec2-clone
 
 ### I want to give server-access via SSH to an external contributor
 
