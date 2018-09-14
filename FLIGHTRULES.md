@@ -341,13 +341,11 @@ Set `Clean after/before checkout` and add your script path to
 I want to clone an AWS instance with ID `i-0123456789abcde0` to a new instance
 with name `dolly`.
 
-Checkout git@github.com:idm-suedtirol/server-deployment.git
+Use `utils/aws-ec2-clone` from `server-deployment.git` which needs `aws ec2`
+command-line tools. See this script's comments for further details and
+configuration options.
 
     git clone git@github.com:idm-suedtirol/server-deployment.git
-
-Use `utils/aws-ec2-clone` which needs `aws ec2` command-line tools. See this
-script's comments for further details on prerequisites.
-
     cd utils
     SRC_INSTANCE_ID=i-0123456789abcde0 CLONE_INSTANCE_NAME=dolly ./aws-ec2-clone
 
