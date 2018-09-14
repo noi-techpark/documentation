@@ -309,7 +309,7 @@ First, create a pipeline script inside `server-deployment` repository:
                 AWS_DEFAULT_REGION = 'eu-west-1'
             }
             stages {
-                stage('Clone DAVINCI/HACKATHON') {
+                stage('Clone') {
                     steps {
                         sh '''
                             cd utils
@@ -448,12 +448,11 @@ I have a website reachable with http://www.davinci.bz.it or http://davinci.bz.it
 on an IP `34.247.202.9`, and want to make it HTTPS only.
 
 We use a proxy with Apache and [Let's Encrypt](https://letsencrypt.org/) for
-that. Let's assume the IP of that proxy is `1.2.3.4`. You need to point your DNS
-entry for both URLs above to that proxy, then login to it.
+that. Let's assume the IP of that proxy is `1.2.3.4`.
 
     ssh admin@1.2.3.4
 
-Configure Apache with
+Configure Apache on `1.2.3.4` with
 
     sudo vim /etc/apache2/sites-available/davinci.bz.it.conf
 
@@ -489,6 +488,8 @@ Finally, get your certificates and final configuration. Execute...
 Type, `2,3` to select both names for your new certificate, and choose
 `2: Redirect - Make all requests redirect to secure HTTPS access`.
 
+Finally, tell your ICT guys to point the DNS entries for `davinci.bz.it` to
+the proxy.
 
 ## Documentation
 
