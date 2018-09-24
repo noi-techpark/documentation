@@ -478,7 +478,7 @@ Enable the new configuration
 
 Finally, get your certificates and final configuration. Execute...
 
-	sudo /opt/cerbot-auto --apache
+	sudo /opt/certbot-auto --apache
 
 	...
 	2: davinci.bz.it
