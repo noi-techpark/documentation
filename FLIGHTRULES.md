@@ -488,6 +488,16 @@ Finally, get your certificates and final configuration. Execute...
 Type, `2,3` to select both names for your new certificate, and choose
 `2: Redirect - Make all requests redirect to secure HTTPS access`.
 
+Define your firewall, such that only the proxy `1.2.3.4` can point to port `80` of
+`34.247.202.9`. On AWS refine the corresponding Security Group's inbound rule:
+
+    Type:         HTTP
+    Protocol:     TCP
+    Port:         80
+    Source:       1.2.3.4/32
+    Description:  LETS ENCRYPT PROXY
+
+
 Finally, tell your ICT guys to point the DNS entries for `davinci.bz.it` to
 the proxy.
 
