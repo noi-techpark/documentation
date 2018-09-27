@@ -585,7 +585,8 @@ Finally, refresh the materialized view to reflect the new changes:
 
 #### I want to add a new user
 
-    INSERT INTO bdpuser(email, password) VALUES ('this_is_my@ema.il', 'top-S3CR3T');
+    INSERT INTO bdpuser(email, password)
+        VALUES ('this_is_my@ema.il', crypt('top-S3CR3T', gen_salt('bf')));
 
 #### I want to disable an existing user
 
