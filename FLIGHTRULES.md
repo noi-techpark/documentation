@@ -42,6 +42,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
   - [I want to make my web server HTTPS compliant](#i-want-to-make-my-web-server-https-compliant)
+  - [I want to mount an aws s3 bucket on my server](#i-want-to-mount-an-aws-s3-bucket-on-my-server)
+    - [Prerequisit](#prerequisit)
+    - [Setup](#setup)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -501,6 +504,26 @@ Define your firewall, such that only the proxy `1.2.3.4` can point to port `80` 
 Finally, tell your ICT guys to point the DNS entries for `davinci.bz.it` to
 the proxy.
 
+### I want to mount an aws s3 bucket on my server
+
+#### Prerequisit
+- an aws s3 bucket with no dots in it's name
+- [s3fs](https://github.com/s3fs-fuse/s3fs-fuse)
+- AWS IAM user with (at least) read access to the specific bucket
+
+#### Setup
+
+Once everything is ready you should already be able to mount the bucket. The s3fs tool right now is not working properly when the bucket has dots in it's name.
+In your home directory create a file `.passwd-s3fs` and insert your aws user credentials in this form `ACCESS_KEY_ID:SECRET_ACCESS_KEY`.
+
+`umask` and `allow_other` are options which allow you to define permissions for other users, but can not break permissions set on the AWS IAM user.
+
+To mount the bucket do as follows:
+```
+s3fs bucketname:/ /mountFolder -o passwd_file=~/.passwd-s3fs -o umask=0222 -o allow_other
+```
+For more specific configurations and mount options refer to the manual page and the official documentation
+
 ## Documentation
 
 ### I want to add a table of contents to a markdown file
@@ -650,4 +673,3 @@ rest defines the rule itself, for example, `(1,null,null,null)` means that a rol
 set to `null` stands for *no restriction*. Another example could be `(2,5,null,null)`, which means that role with id `2`
 sees all types and periods of station `5`. However, since `(station, type, period)` is a hierarchical triple (read from
 left-to-right), something like `(3,null,null,1)` is considered a erroneous permission rule.
-
