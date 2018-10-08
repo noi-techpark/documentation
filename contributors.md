@@ -12,10 +12,8 @@ In the following documentation some example names are used. Please replace them 
 
 1. Navigate to the repository on GitHub (ex: [https://github.com/idm-suedtirol/bdp-core](https://github.com/idm-suedtirol/bdp-core))
 
-- Create a fork of the repository by clicking the button **Fork**
+- Create a fork of the repository by clicking the button **Fork** (and selecting the user where the fork should be created)
     ![Fork the repository](images/contributors/fork.png)
-
-- Select the user that should be used for storing the fork repository
 
 - Navigate to your forked repository on GitHub (ex: [https://github.com/your-username/bdp-core](https://github.com/your-username/bdp-core))
 
