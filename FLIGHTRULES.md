@@ -30,6 +30,10 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
   - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version)
   - [I want to update the database schema of bdp-core](#i-want-to-update-the-database-schema-of-bdp-core)
+- [GitHub](#github)
+  - [I want to create a repository](#i-want-to-create-a-repository)
+  - [I want to give access to a public repository](#i-want-to-give-access-to-a-public-repository)
+  - [I want to give access to a private repository](#i-want-to-give-access-to-a-private-repository)
 - [Pimcore](#pimcore)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
 - [Jenkins Pipelines](#jenkins-pipelines)
@@ -222,6 +226,40 @@ errors. If not, your ready for production.
 Finally, we no longer need the test database `__bdptest`, hence we can drop it:
 
     psql -U postgres -h localhost -p 5432 -c "DROP DATABASE __bdptest;"
+
+## GitHub
+
+### I want to create a repository
+
+Create a new GitHub repository (private or public).
+
+Create a `Jenkinsfile-CI` in the repository and specify the build steps.
+
+Create a new Jenkins pipeline at [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
+
+- Type: **Multibranch Pipeline**
+- Branch Sources: **GitHub**
+    - Attention: For **Discover pull requests from forks** the trust part must be set to **From users with Admin or Write permission** to only allow users with Admin or Write permissions to modify the Jenkinsfile
+- Build Configuration: Reference the Jenkinsfile with the continuous integration build steps
+- Properties: Enable **Enable project-based security** and set the following permissions
+
+### I want to give access to a public repository
+
+Provide authenticated users access to the Continuous Integration Jenkins Server:
+
+- Configure the Jenkins Pipeline for the repository at [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
+- Add **Read (Job)** permissions to authenticated users under Properties (project-based security)
+
+### I want to give access to a private repository
+
+Provide the contributor access to the GitHub repository:
+
+- Add the contributor with **read** permissions to the GitHub private repository.
+
+Provide the contributor access to the Continuous Integration Jenkins Server:
+
+- Configure the Jenkins Pipeline for the repository at [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
+- Add the contributors GitHub username under Properties (project-based security) and give him **Read (Job)** permissions
 
 ## Pimcore
 
