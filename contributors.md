@@ -22,7 +22,10 @@ In the following documentation some example names are used. Please replace them 
 
 ### Pull Request
 
-1. Create a new branch from the **master** branch locally on your machine:
+1. Checkout the **master** branch:
+    `git checkout master`
+
+- Create a new branch from the **master** branch locally on your machine:
     `git checkout -b feature-branch`
 
 - Make some initial changes to the repository and commit them:
