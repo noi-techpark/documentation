@@ -261,6 +261,20 @@ Provide the contributor access to the Continuous Integration Jenkins Server:
 - Configure the Jenkins Pipeline for the repository at [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
 - Add the contributors GitHub username under Properties (project-based security) and give him **Read (Job)** permissions
 
+### I want to prepare the CI for pull requests
+
+Due to security constraints, during the build of a pull request the Jenkinsfile of the target branch will be executed (ex. master).
+
+However, to still include CI steps for the pull request, the steps must be defined in the target branch (ex. master). To prevent that the CI is then failing for this target branch and succeeding for the pull request, an if statement can be added to only execute the tests when certain files exist.
+
+```
+stage('Test') {
+    steps {
+        sh 'if [ -d "path/to/file/of/new/part" ]; then ./testing-command-of-new-part; else true; fi'
+    }
+}
+```
+
 ## Pimcore
 
 ### I want to update Pimcore
