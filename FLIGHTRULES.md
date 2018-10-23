@@ -34,6 +34,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to create a repository](#i-want-to-create-a-repository)
   - [I want to give access to a public repository](#i-want-to-give-access-to-a-public-repository)
   - [I want to give access to a private repository](#i-want-to-give-access-to-a-private-repository)
+  - [I want to prepare the CI for pull requests](#i-want-to-prepare-the-ci-for-pull-requests)
 - [Pimcore](#pimcore)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
 - [Jenkins Pipelines](#jenkins-pipelines)
