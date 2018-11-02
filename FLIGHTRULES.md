@@ -141,7 +141,9 @@ wait for the next big release. Finally, we merge this new release into `master`,
 
     git checkout master
     git merge --no-ff release-1.1.0
-    git tag -a 1.1.0
+    git tag -a 1.1.0 -m 1.1.0
+    git push origin 1.1.0
+    git push
 
 We merge all changes also to `development`, and delete the release-branch, when done.
 
@@ -169,7 +171,9 @@ Merge it back into `master` (with a tag) and `development` (without tag).
 
     git checkout master
     git merge --no-ff hotfix-1.0.1
-    git tag -a 1.0.1
+    git tag -a 1.0.1 -m 1.0.1
+    git push origin 1.0.1
+    git push
     git checkout development
     git merge --no-ff hotfix-1.0.1
 
