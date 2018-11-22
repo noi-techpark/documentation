@@ -63,6 +63,10 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to combine a role with users](#i-want-to-combine-a-role-with-users)
     - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
     - [I want to debug my rules](#i-want-to-debug-my-rules)
+- [Maven](#maven)
+  - [ODH Maven repository](#odh-maven-repository)
+    - [I want to use an open source java library of the OpenDataHub](#i-want-to-use-an-open-source-java-library-of-the-opendatahub)
+    - [I want to upload an artifact to the odh maven repository](#i-want-to-upload-an-artifact-to-the-odh-maven-repository)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -730,3 +734,60 @@ rest defines the rule itself, for example, `(1,null,null,null)` means that a rol
 set to `null` stands for *no restriction*. Another example could be `(2,5,null,null)`, which means that role with id `2`
 sees all types and periods of station `5`. However, since `(station, type, period)` is a hierarchical triple (read from
 left-to-right), something like `(3,null,null,1)` is considered a erroneous permission rule.
+
+## Maven
+### ODH Maven repository
+#### I want to use an open source java library of the OpenDataHub
+Add the opendatahub repository to your pom.xml file
+```xml
+<repositories>
+	<repository>
+		<id>maven-repo.opendatahub.bz.it</id>
+		<url>http://it.bz.opendatahub.s3-website-eu-west-1.amazonaws.com/release</url>
+	</repository>
+</repositories>
+```
+and add the library you need as dependency eg.:
+``` xml
+<dependency>
+	<groupId>it.bz.idm.bdp</groupId>
+	<artifactId>dto</artifactId>
+	<version>1.3.0</version>
+</dependency>
+```
+
+#### I want to upload an artifact to the odh maven repository
+
+Add distribution management to your pom.xml:
+```xml
+<distributionManagement>
+  <snapshotRepository>
+     <id>maven-repo.opendatahub.bz.it</id>
+     <url>s3://it.bz.opendatahub/snapshot</url>
+  </snapshotRepository>
+  <repository>
+     <id>maven-repo.opendatahub.bz.it</id>
+     <url>s3://it.bz.opendatahub/release</url>
+  </repository>
+</distributionManagement>
+```
+Add a wagon which handles the transfer and deployment to the s3 bucket
+``` xml
+<extensions>
+  <extension>
+      <groupId>org.springframework.build</groupId>
+      <artifactId>aws-maven</artifactId>
+      <version>5.0.0.RELEASE</version>
+  </extension>
+</extensions>
+```
+Configure your maven repository to handle authentication towards s3 bucket. Go to settings.xml and configure a server like this:
+``` xml
+<server>
+ <id>maven-repo.opendatahub.bz.it</id>
+ <username>${aws_access_key_id}</username>
+ <password>${aws_secret_access_key}</password>
+</server>
+```
+Deploy your library through maven:
+		mvn deploy
