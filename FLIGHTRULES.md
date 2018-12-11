@@ -328,7 +328,8 @@ This gives:
 Finally you will see a `public key violation` error, but that's OK, because we do
 not have the private key available outside Jenkins' credentials module.
 
-Test it inside the Jenkins web-console and see what `Console Output` shows up.
+Test it inside the Jenkins web-console and see what `Console Output` shows up. If you do not get
+any ssh output for some time, check your firewall rules of the remote server.
 
 ### I want to execute git commands on the remote server
 
