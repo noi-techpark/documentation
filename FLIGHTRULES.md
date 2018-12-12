@@ -39,6 +39,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to add new Pimcore web page to an existing Pimcore machine](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
   - [I want to install a Pimcore, that needs a newer PHP version](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version)
+  - [I want to create Jenkinsfiles for an newly installed Pimcore webpage](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage)
 - [Jenkins Pipelines](#jenkins-pipelines)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
@@ -385,12 +386,52 @@ sudo apt-get -y install apache2 ntp mysql-server php7.2-fpm php7.2-gd \
 ```
 
 Configure and reload Apache:
-```ssh
+```shell
 sudo a2enmod actions proxy_fcgi setenvif alias rewrite expires headers
 sudo a2enconf php7.2-fpm
-
 sudo service apache2 reload
 ```
+
+### I want to create Jenkinsfiles for an newly installed Pimcore webpage
+
+You have a [newly installed
+project](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine)
+called `myproject.org` and you want to create Jenkins pipelines now. We do that
+with [remotely executed
+commands](#i-want-to-execute-arbitrary-commands-on-the-remote-server) via ssh.
+
+Copy the following snippet into two files located inside the root folder of your
+Pimcore webpage repository: `Jenkinsfile-production-deploy` and
+`Jenkinsfile-testserver-deploy`.
+
+```groovy
+pipeline {
+    agent any
+
+    environment {
+        KEY = credentials('your-servers-key.pem')
+    }
+
+    stages {
+        stage('Deploy') {
+            steps {
+                sh '''
+                    ssh -i ${KEY} www-data@123.123.123.123 \
+                        "set -xeo pipefail
+                         cd myprojectorg
+                         git fetch --all --prune
+                         git reset --hard origin/master
+                         git pull
+                         ./bin/console c:c -e dev
+                         ./bin/console c:c -e prod"
+                   '''
+            }
+        }
+    }
+}
+```
+
+Finally, you just need to create Pipelines inside Jenkins' web-frontend.
 
 ## Jenkins Pipelines
 
