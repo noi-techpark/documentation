@@ -36,7 +36,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to give access to a private repository](#i-want-to-give-access-to-a-private-repository)
   - [I want to prepare the CI for pull requests](#i-want-to-prepare-the-ci-for-pull-requests)
 - [Pimcore](#pimcore)
+  - [I want to add new Pimcore web page to an existing Pimcore machine](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
+  - [I want to install a Pimcore, that needs a newer PHP version](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version)
 - [Jenkins Pipelines](#jenkins-pipelines)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
@@ -283,14 +285,112 @@ stage('Test') {
 
 ## Pimcore
 
+### I want to add new Pimcore web page to an existing Pimcore machine
+
+We want to add a new Pimcore webpage, called `myproject.org`, to our
+multi-Pimcore server. However, Pimcore needs not just a bundle, but also
+database dumps and other binary data like images. We want to use PHP 7.2 and
+Pimcore 5.4.0 for that.
+
+`ssh` into your Pimcore server and
+[install](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version) `php 7.2`
+and dependencies, if needed.
+Download Pimcore management scripts from our [Pimcore Automation
+Repo](https://github.com/idm-suedtirol/pimcore-automation).
+You need at least 3GB for the next steps. Eventually, install a [swap
+file](#i-want-to-use-a-swap-file-on-my-server).
+
+Install and configure `myproject.org` with
+```shell
+sudo ./manage-project.sh add myproject.org 5.4.0 \
+    your_mysql_password your_pimcore_user your_pimcore_password
+```
+... this may take several minutes.
+
+Download the database dump onto your server (for instance, `myproject-dump.sql`)
+and restore it to the already setup MySQL database. Your MySQL user and database
+name is `myprojectorg`. It is the same as the folder in `/var/www`, a sanitized
+version of your previously defined domain `myproject.org`.
+
+```shell
+mysql --user myprojectorg -p myprojectorg < myproject-dump.sql
+```
+
+Download (for example, `myprojectshttpdocs.tar.gz`) and install a first version
+of the whole page directly into the web-root folder `/var/www/myprojectorg`.
+Clean it first.
+
+```shell
+sudo rm -rf /var/www/myprojectorg/*
+cd /var/www/myprojectorg
+tar xvzf myprojectshttpdocs.tar.gz
+sudo chown -R www-data:www-data .
+```
+
+Since we replaced our document root with new files given by external developers,
+we need to make sure the right credentials are set for Pimcore.
+
+```shell
+sudo vim /var/www/myprojectorg/var/config/system.php
+```
+
+Check if folders, files and permissions set inside of vhosts are set correctly
+inside `/etc/apache2/sites-enabled/myprojectorg.conf`. Create them in case they
+are not present yet.
+
+Clear Pimcore's chaches for `dev` and `prod` environments, and correct symbolic
+links.
+```shell
+cd /var/www/myprojectorg
+sudo -u www-data ./bin/console c:c -e dev
+sudo -u www-data ./bin/console c:c -e prod
+sudo -u www-data ./bin/console assets:install --symlink --relative
+```
+
+Normally this is enough! If some bundles need more, they should provide that
+information beforehand.
+
 ### I want to update Pimcore
 
-I want to update my Pimcore to version `5.3.1`.
+I want to update my Pimcore to version `5.4.0`.
 
-Run `/var/www/html/bin/console --update=5.3.1`
+Run `/var/www/html/bin/console --update=5.4.0`
 
-It needs at least 2GB of RAM, consider to [enable a swap file](#i-want-to-use-a-swap-file-on-my-server), if it fails
-due to low memory error.
+It needs at least 3GB of RAM, consider to [enable a swap
+file](#i-want-to-use-a-swap-file-on-my-server), if it fails due to low memory
+error.
+
+### I want to install a Pimcore, that needs a newer PHP version
+
+I want to install `PHP 7.2` on an existing Pimcore machine.
+
+`ssh` into your Pimcore server, and type `php -v`. See if the update is needed.
+
+If you have an older version, install `php 7.2` and dependencies.
+
+```shell
+sudo apt-get install apt-transport-https lsb-release ca-certificates
+sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
+    | sudo tee -a /etc/apt/sources.list.d/php.list > /dev/null
+sudo apt-get update
+
+sudo apt-get -y install apache2 ntp mysql-server php7.2-fpm php7.2-gd \
+                php7.2-mysql php7.2-curl unzip php7.2-xml php7.2-intl php7.2 \
+                php7.2-common php7.2-gd php7.2-mysql php7.2-imap php7.2-cli \
+                mcrypt imagemagick php7.2-curl php7.2-intl php7.2-pspell \
+                php7.2-recode php7.2-tidy php7.2-xmlrpc php7.2-xsl php-imagick \
+                php-gettext php7.2-zip php7.2-mbstring php7.2-soap php7.2-bz2 \
+                php7.2-apcu curl
+```
+
+Configure and reload Apache:
+```ssh
+sudo a2enmod actions proxy_fcgi setenvif alias rewrite expires headers
+sudo a2enconf php7.2-fpm
+
+sudo service apache2 reload
+```
 
 ## Jenkins Pipelines
 
