@@ -198,6 +198,7 @@ First of all, you need to understand if Hibernate can handle this change with it
 [bdp-core/dal](https://github.com/idm-suedtirol/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml)
 for further details. Best thing is, to run the newest bdp-core instance on the test server, and check schema diffs. Use
 a clone of the existing production database to be as similar as possible to the current production database state.
+
 ```shell
 pg_dump -U bdp -s bdp -h postgres-test-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-test-server.sql
 pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
@@ -211,26 +212,26 @@ environment, and create a migration script that updates that schema. See our off
 [database documentation](http://opendatahub.readthedocs.io/en/latest/guidelines/database.html) for details.
 ```shell
 pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
-createdb -U postgres -h localhost -p 5432 __bdptest
+createdb -U postgres -h localhost -p 5432 bdptest
 ```
 We need also `postgis`:
 ```shell
 apt install postgresql-9.5-postgis-2.4
-psql -U postgres -h localhost -p 5432 -d __bdptest -c "CREATE EXTENSION postgis with schema public;"
+psql -U postgres -h localhost -p 5432 -d bdptest -c "CREATE EXTENSION postgis with schema public;"
 ```
 Now, we are ready to import the production server schema, and test the migration script, for ex. `schema-1.0.0-1.1.0.sql`.
 ```shell
-psql -U postgres -h localhost -p 5432 -d __bdptest -1 -e -v ON_ERROR_STOP=1 < /tmp/schema-dump-postgres-prod-server.sql
-psql -U postgres -h localhost -p 5432 -d __bdptest -1 -e -v ON_ERROR_STOP=1 < schema-1.0.0-1.1.0.sql
+psql -U postgres -h localhost -p 5432 -d bdptest -1 -e -v ON_ERROR_STOP=1 < /tmp/schema-dump-postgres-prod-server.sql
+psql -U postgres -h localhost -p 5432 -d bdptest -1 -e -v ON_ERROR_STOP=1 < schema-1.0.0-1.1.0.sql
 ```
 NB: If something fails, solve each shown error by yourself, and repeat steps above. Update `schema-1.0.0-1.1.0.sql` accordingly.
 
 If you are satisfied with your schema migration script, test it on our test environment and see if Hibernate fills logs with
 errors. If not, your ready for production.
 
-Finally, we no longer need the test database `__bdptest`, hence we can drop it:
+Finally, we no longer need the test database `bdptest`, hence we can drop it:
 ```shell
-psql -U postgres -h localhost -p 5432 -c "DROP DATABASE __bdptest;"
+psql -U postgres -h localhost -p 5432 -c "DROP DATABASE bdptest;"
 ```
 ## GitHub
 
@@ -459,10 +460,10 @@ Run it
 Go to the AWS console and name the new EC2 `Instance`, `Volume`, `Elastic IP`, and `Security Group`. Use a prefix for
 all of them with a pattern like `<test|prod>-pimcore-detail`
 ```prop
-    Instance = prod-pimcore-hackathon
-    Volume = prod-pimcore-hackathon-volume
-    Elastic IP = prod-pimcore-hackathon-eip
-    Security Group = prod-pimcore-hackathon-sg
+Instance = prod-pimcore-hackathon
+Volume = prod-pimcore-hackathon-volume
+Elastic IP = prod-pimcore-hackathon-eip
+Security Group = prod-pimcore-hackathon-sg
 ```
 Get our pimcore-automation repository
 ```shell
@@ -651,14 +652,16 @@ stations and types are considered open-data due to their meta-data character, i.
 Ex.1: Declare all records related to station `station xyz` open data.
 ```sql
 INSERT INTO bdprules(role_id, station_id, type_id, period)
-    SELECT r.id, s.id, null, null FROM bdprole r, station s
-        WHERE r.name = 'GUEST' AND stationcode = 'station xyz';
+SELECT r.id, s.id, null, null
+FROM bdprole r, station s
+WHERE r.name = 'GUEST' AND stationcode = 'station xyz';
 ```
 Ex.2: Make atmospheric pressure measurements of all meteorological stations open-data.
 ```sql
 INSERT INTO bdprules(role_id, station_id, type_id, period)
-    SELECT r.id, s.id, t.id, null FROM bdprole r, station s, type t
-        WHERE r.name = 'GUEST' AND stationtype = 'Meteostation' AND cname = 'atmospheric-pressure';
+SELECT r.id, s.id, t.id, null
+FROM bdprole r, station s, type t
+WHERE r.name = 'GUEST' AND stationtype = 'Meteostation' AND cname = 'atmospheric-pressure';
 ```
 > NB: `GUEST` contains all open-data sources, just add rules for that role and you
 > will open it without the need of authentication through tokens, or username/password.
@@ -670,7 +673,7 @@ REFRESH MATERIALIZED VIEW bdppermissions;
 #### I want to add a new user
 ```sql
 INSERT INTO bdpuser(email, password)
-    VALUES ('this_is_my@ema.il', crypt('top-S3CR3T', gen_salt('bf')));
+VALUES ('this_is_my@ema.il', crypt('top-S3CR3T', gen_salt('bf')));
 ```
 #### I want to disable an existing user
 ```sql
@@ -680,7 +683,7 @@ UPDATE bdpuser SET enabled = false WHERE email = 'this_is_my@ema.il';
 ```sql
 INSERT INTO bdprole(name) VALUES ('Role A');
 INSERT INTO bdprole(name, parent_id)
-    VALUES ('Role B', (select id from bdprole where name = 'GUEST'));
+VALUES ('Role B', (select id from bdprole where name = 'GUEST'));
 ```
 > Make sure that you define at least parent as `GUEST` (which is always present
 > and allows access to all open data sources); `ADMIN` is another default, but it
@@ -706,8 +709,9 @@ INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (2, 3);
 #### I want to define filter rules for a certain role
 ```sql
 INSERT INTO bdprules(role_id, station_id, type_id, period)
-    SELECT r.id, s.id, null, null FROM bdprole r, station s
-        WHERE r.name = 'Role A' AND stationcode = 'station xyz';
+SELECT r.id, s.id, null, null
+FROM bdprole r, station s
+WHERE r.name = 'Role A' AND stationcode = 'station xyz';
 ```
 > This means, `Role A` can see any `(type,period)` combination for `station xyz`.
 
@@ -789,5 +793,4 @@ Configure your maven repository to handle authentication towards s3 bucket. Go t
  <password>${aws_secret_access_key}</password>
 </server>
 ```
-Deploy your library through maven:
-		mvn deploy
+Deploy your library through maven: `mvn deploy`
