@@ -456,20 +456,19 @@ pipeline {
 ```
 Upload the private key as secret file to Jenkins and give it the ID `private-key-123`.
 
-Jenkins needs to add this host to its `known_hosts` file. Open a ssh session to your
-Jenkins server, and allow that remote host.
+Jenkins needs to add this host to its `known_hosts` file. There are two possibilities 
+to do so:
+
+1) Automated via the Jenkins Job `Server Deployment/Reset Known Hosts File`. Click 
+`Run with parameters` and enter your IP address `1.2.3.4`.
+
+2) Manually via ssh within your Jenkins server.
 ```shell
 ssh admin@your-jenkins-server
 sudo -iu jenkins
-ssh user@1.2.3.4
+ssh-keyscan -H 1.2.3.4
 ```
-This gives:
-
-    The authenticity of host [...]
-    Are you sure you want to continue connecting (yes/no)? yes
-
-Finally you will see a `public key violation` error, but that's OK, because we do
-not have the private key available outside Jenkins' credentials module.
+If that IP address has already been used, you can clear it with `ssh-keygen -R 1.2.3.4` first.
 
 Test it inside the Jenkins web-console and see what `Console Output` shows up. If you do not get
 any ssh output for some time, check your firewall rules of the remote server.
