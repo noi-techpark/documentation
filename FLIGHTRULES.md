@@ -423,6 +423,7 @@ pipeline {
                          git fetch --all --prune
                          git reset --hard origin/master
                          git pull
+                         rm -fr var/cache/*
                          ./bin/console c:c -e dev
                          ./bin/console c:c -e prod"
                    '''
@@ -456,10 +457,10 @@ pipeline {
 ```
 Upload the private key as secret file to Jenkins and give it the ID `private-key-123`.
 
-Jenkins needs to add this host to its `known_hosts` file. There are two possibilities 
+Jenkins needs to add this host to its `known_hosts` file. There are two possibilities
 to do so:
 
-1) Automated via the Jenkins Job `Server Deployment/Reset Known Hosts File`. Click 
+1) Automated via the Jenkins Job `Server Deployment/Reset Known Hosts File`. Click
 `Run with parameters` and enter your IP address `1.2.3.4`.
 
 2) Manually via ssh within your Jenkins server.
