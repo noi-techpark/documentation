@@ -343,6 +343,7 @@ Clear Pimcore's chaches for `dev` and `prod` environments, and correct symbolic
 links.
 ```shell
 cd /var/www/myprojectorg
+sudo -u www-data rm -fr var/cache/*
 sudo -u www-data ./bin/console c:c -e dev
 sudo -u www-data ./bin/console c:c -e prod
 sudo -u www-data ./bin/console assets:install --symlink --relative
