@@ -585,6 +585,14 @@ In addition, if Chuck should be administrator on that server, add him to the sud
 sudo usermod -aG sudo chuck
 ```
 
+If no `sudo` group exists, do the following:
+```shell
+sudo touch /etc/sudoers.d/externals
+sudo chmod +w /etc/sudoers.d/externals
+echo "chuck ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/externals
+sudo chmod 440 /etc/sudoers.d/externals
+```
+
 ### I want to create a new Pimcore server instance on AWS
 
 Get our server-deployment repository
