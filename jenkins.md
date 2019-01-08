@@ -136,7 +136,7 @@ Jenkins
 
     **Note:** If you wish to choose a Git branch/tag, you have to install the `git-parameter` plugin.
 
-2. Setup the Jenkins job.
+2. Setup the Jenkins job, but mark it to use not "lightweight checkouts".
 
     **Note:** If you wish to run a specific branch/tag, you first have to reference the branch with the Jenkinsfile directly for the initial run.
 
