@@ -1,7 +1,13 @@
 Jenkins
 =======
 
-### Windows Agent
+## Table of Content
+
+- [Windows Agent](#windows-agent)
+- [Mac Agent](#mac-agent)
+- [Parameterized Builds](#parameterized-builds)
+
+## Windows Agent
 
 1. The Jenkins server must be directly accessible from the internet without a proxy and a custom port fo JNLP (49187)
 
@@ -58,7 +64,7 @@ Jenkins
     }
     ```
 
-### Mac Agent
+## Mac Agent
 
 1. Install the following tools:
     - Xcode
@@ -110,3 +116,49 @@ Jenkins
         - **ANDROID_HOME**: /Users/jenkins/Library/Android/sdk
 
 - Open Android Studio and install all dependencies.
+
+## Parameterized Builds
+
+1. Set all parameters in the Jenkinsfile
+
+    ```groovy
+    pipeline {
+        agent any
+
+        parameters {
+            string(name: 'tag', defaultValue: '1.0.0', description: 'Tag')
+            gitParameter name: 'branch', branchFilter: 'origin/(.*)', defaultValue: 'master', type: 'PT_BRANCH'
+        }
+
+        steps {}
+    }
+    ```
+
+    **Note:** If you wish to choose a Git branch/tag, you have to install the `git-parameter` plugin.
+
+2. Setup the Jenkins job.
+
+    **Note:** If you wish to run a specific branch/tag, you first have to reference the branch with the Jenkinsfile directly for the initial run.
+
+3. Execute the pipeline the first time even if Jenkins will not ask for the parameters. After one or two seconds stop the execution. Now Jenkins was able to read the Jenkinsfile and set up the parameters accordingly.
+
+4. Finally, adjust the Jenkinsfile and all other parts with the parameters.
+
+    ```groovy
+    {
+        agent any
+
+        parameters {}
+
+        stages {
+            stage('Stage') {
+                steps {
+                    sh "echo ${params.TAG}"
+                    sh "echo ${params.BRANCH}"
+                }
+            }
+        }
+    }
+    ```
+
+    **Note:** If you want to checkout a specific Git branch/tag, then you have to ajust the job settings an replace the value for the branch specifier from `*/master` to `${BRANCH}`.
