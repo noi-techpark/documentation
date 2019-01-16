@@ -36,6 +36,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to give access to a private repository](#i-want-to-give-access-to-a-private-repository)
   - [I want to prepare the CI for pull requests](#i-want-to-prepare-the-ci-for-pull-requests)
 - [Pimcore](#pimcore)
+  - [I want to send emails from my Pimcore instance](#i-want-to-send-emails-from-my-pimcore-instance)
   - [I want to add new Pimcore web page to an existing Pimcore machine](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
   - [I want to install a Pimcore, that needs a newer PHP version](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version)
@@ -286,6 +287,34 @@ stage('Test') {
 ```
 
 ## Pimcore
+
+### I want to send emails from my Pimcore instance
+
+We use `info@example.com` and an [AWS/SES SMTP
+server](#i-want-to-setup-an-smtp-server) for that, and configure Pimcore as
+follows (`Settings/System Settings/Email Settings/SMTP`):
+
+```
+Email Method: smtp
+SMTP Host: email-smtp.eu-west-1.amazonaws.com
+SMTP Transport Security: TLS
+SMTP Port: 587
+SMTP Name: info@example.com
+SMTP Authentication Method: LOGIN
+SMTP Username: (see your AWS/SES credentials)
+SMTP Passord: (see your AWS/SES credentials)
+```
+
+Test the configuration under Pimcore with `Tools/Email/Send
+Test-Email`.
+
+Clear the cache with `Settings/Cache/Clear Cache/Symfony Environment: all`.
+
+If it does not work, make sure you verified `info@example.com` in your AWS
+console. See [AWS/SES SMTP server details](#i-want-to-setup-an-smtp-server) for
+that. Pimcore logs can be found under `/var/logs/prod.log` and
+`/var/logs/php.log`.
+
 
 ### I want to add new Pimcore web page to an existing Pimcore machine
 
