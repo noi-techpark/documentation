@@ -45,6 +45,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
   - [I want to create a cron-job to clone AWS instances](#i-want-to-create-a-cron-job-to-clone-aws-instances)
 - [Servers](#servers)
+  - [I want to setup an SMTP server](#i-want-to-setup-an-smtp-server)
   - [I want to create a test clone of a server instance](#i-want-to-create-a-test-clone-of-a-server-instance)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
@@ -543,6 +544,32 @@ Set `Clean after/before checkout` and add your script path to
 
 
 ## Servers
+
+### I want to setup an SMTP server
+
+I want to send e-mails from our own SMTP server with an address called
+`info@example.com`. We use AWS/SES ([Simple Email
+Service](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html))
+for that.
+
+1) Get your SMTP credentials from
+[AWS](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/smtp-credentials.html).
+
+2) Enable `info@example.com` inside your AWS webconsole under `Simple Email
+Service/Email Addresses`
+
+3) Configure your client as follows:
+
+```
+Server name        : email-smtp.eu-west-1.amazonaws.com
+Server port        : 587
+User name          : (see SMTP credentials)
+Password           : (see SMTP credentials)
+SMTP name          : info@example.com
+Auth method        : Normal password (unencrypted) / LOGIN
+Connection security: STARTTLS (or sometimes just called TLS)
+```
+
 
 ### I want to create a test clone of a server instance
 
