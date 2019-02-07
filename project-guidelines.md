@@ -7,6 +7,7 @@ Project Guidelines
     - [Git](#git)
     - [Readme](#readme)
 - [Java](#java)
+- [Database](#database)
 - [Api](#api)
 - [Docker](#docker)
 
@@ -30,11 +31,15 @@ Templates of such license files can be found here: [https://opensource.org/licen
 
 ### Dependency Management
 
+All dependencies should be managed using [Maven](https://maven.apache.org/).
+
 ### Configuration
 
 ### Logging
 
 ### Testing
+
+## Database
 
 ## Api
 
