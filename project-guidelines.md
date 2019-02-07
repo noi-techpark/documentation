@@ -19,6 +19,8 @@ Project Guidelines
 
 ### Dependency Management
 
+### Configuration
+
 ### Logging
 
 ### Testing
