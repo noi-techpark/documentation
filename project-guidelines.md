@@ -7,6 +7,11 @@ Project Guidelines
     - [Git](#git)
     - [Readme](#readme)
 - [Java](#java)
+    - [Dependency Management](#dependency-management)
+    - [Configuration](#configuration)
+    - [Logging](#logging)
+    - [Testing](#testing)
+    - [Cron Jobs](#cron-jobs)
 - [Database](#database)
 - [Api](#api)
 - [Docker](#docker)
@@ -38,6 +43,8 @@ All dependencies should be managed using [Maven](https://maven.apache.org/).
 ### Logging
 
 ### Testing
+
+### Cron Jobs
 
 ## Database
 
