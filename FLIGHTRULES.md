@@ -79,25 +79,25 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ## Licensing and REUSE compliance
 
-See REUSE-specific [flight rules](https://github.com/idm-suedtirol/reuse).
+See REUSE-specific [flight rules](https://github.com/noi-techpark/reuse).
 
 ## Work Flow and Release Management
 
 ### I want to create a project for ODH
 
-Each project must be on our github `idm-suedtirol`. So, if you want to create a new repository, do:
+Each project must be on our github `noi-techpark`. So, if you want to create a new repository, do:
 ```shell
 cd your-project
 git init
 git add <some-files>
 git commit -m "Initial import"
-git remote add origin https://github.com/idm-suedtirol/<your-git-repository>.git
+git remote add origin https://github.com/noi-techpark/<your-git-repository>.git
 git push -u origin master
 ```
 ...or push an existing repository:
 ```shell
 cd your-project
-git remote add origin https://github.com/idm-suedtirol/<your-git-repository>.git
+git remote add origin https://github.com/noi-techpark/<your-git-repository>.git
 git push -u origin master
 ```
 Then, create a development branch and protect the master branch (See Github>Settings>Branches>Protected branches).
@@ -198,9 +198,9 @@ git branch -d hotfix-1.0.1
 
 ### I want to update the database schema of bdp-core
 
-I did something inside [bdp-core](https://github.com/idm-suedtirol/bdp-core), that involves a schema change.
+I did something inside [bdp-core](https://github.com/noi-techpark/bdp-core), that involves a schema change.
 First of all, you need to understand if Hibernate can handle this change with its `update` strategy. See
-[bdp-core/dal](https://github.com/idm-suedtirol/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml)
+[bdp-core/dal](https://github.com/noi-techpark/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml)
 for further details. Best thing is, to run the newest bdp-core instance on the test server, and check schema diffs. Use
 a clone of the existing production database to be as similar as possible to the current production database state.
 
@@ -327,7 +327,7 @@ Pimcore 5.4.0 for that.
 [install](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version) `php 7.2`
 and dependencies, if needed.
 Download Pimcore management scripts from our [Pimcore Automation
-Repo](https://github.com/idm-suedtirol/pimcore-automation).
+Repo](https://github.com/noi-techpark/pimcore-automation).
 You need at least 3GB for the next steps. Eventually, install a [swap
 file](#i-want-to-use-a-swap-file-on-my-server).
 
@@ -536,7 +536,7 @@ environment with the actual production state.
 
 First, create a pipeline script inside `server-deployment` repository:
 ```shell
-git clone git@github.com:idm-suedtirol/server-deployment.git
+git clone git@github.com:noi-techpark/server-deployment.git
 cat > Jenkinsfile-MyClone-Nightly-Clones << EOF
     pipeline {
         agent any
@@ -566,7 +566,7 @@ Activate `Build periodically` to a schedule `H 3 * * *` (`H` is a good idea to
 distribute it evenly from 3am to 4am).
 
 Use a `Pipeline script from SCM` definition, and set
-`https://github.com/idm-suedtirol/server-deployment.git` as repository URL.
+`https://github.com/noi-techpark/server-deployment.git` as repository URL.
 
 Set `Clean after/before checkout` and add your script path to
 `Jenkinsfile-MyClone-Nightly-Clones`.
@@ -609,7 +609,7 @@ Use `utils/aws-ec2-clone` from `server-deployment.git` which needs `aws ec2`
 command-line tools. See this script's comments for further details and
 configuration options.
 ```shell
-git clone git@github.com:idm-suedtirol/server-deployment.git
+git clone git@github.com:noi-techpark/server-deployment.git
 cd utils
 SRC_INSTANCE_ID=i-0123456789abcde0 CLONE_INSTANCE_NAME=dolly ./aws-ec2-clone
 ```
@@ -653,7 +653,7 @@ sudo chmod 440 /etc/sudoers.d/externals
 
 Get our server-deployment repository
 ```shell
-git clone git@github.com:idm-suedtirol/server-deployment.git
+git clone git@github.com:noi-techpark/server-deployment.git
 ```
 Configure the `utils/aws-launch-debian-pimcore` script. All needed information can be found inside the script.
 ```shell
@@ -673,7 +673,7 @@ Security Group = prod-pimcore-hackathon-sg
 ```
 Get our pimcore-automation repository
 ```shell
-git clone git@github.com:idm-suedtirol/pimcore-automation.git
+git clone git@github.com:noi-techpark/pimcore-automation.git
 ```
 Copy `install-pimcore.sh` to your new server instance:
 ```shell
@@ -711,7 +711,7 @@ sudo mkswap /mnt/4GB.swap
 sudo chmod 0600 /mnt/4GB.swap
 sudo swapon /mnt/4GB.swap
 ```
-A script can be found on our [server-deployment](https://github.com/idm-suedtirol/server-deployment/blob/master/utils/swap-file-create)
+A script can be found on our [server-deployment](https://github.com/noi-techpark/server-deployment/blob/master/utils/swap-file-create)
 repository.
 
 ### I want to make my web server HTTPS compliant
