@@ -757,24 +757,26 @@ I have a new Debian server `test-tomcat-whatever` with IP `11.22.33.44`, and wan
 
 Go to [Jenkins Credential management > Server Credentials](https://jenkins.testingmachine.eu/credentials/store/system/domain/server-credentials/) and add the private key as secret file, with description and ID equal to `key-tomcat-whatever`.
 
+Add `11.22.33.44` as a known host to Jenkins via [Reset Known Hosts File](https://jenkins.testingmachine.eu/job/server-deployment/job/Reset%20Known%20Hosts%20File/) (for details, see [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)).
+
 Open the Jenkins pipeline [Jenkinsfile-ServerUpdates](https://github.com/noi-techpark/server-deployment/blob/master/Jenkinsfile-ServerUpdates) on our server-deployment repository.
 
 Add a new line inside `environment`, like:
 ```shell
-    KEYTOMCATWHATEVER = credentials('key-tomcat-whatever')
+KEYTOMCATWHATEVER = credentials('key-tomcat-whatever')
 ```
 
 Add a new stage called `test-tomcat-whatever` as follows:
 
 ```shell
-    ssh -i "$KEYTOMCATWHATEVER" admin@11.22.33.44 "\
-        set -xeuo pipefail
-        uname -a
-        sudo apt-get update
-        sudo apt-get -y upgrade
-        sudo apt-get autoremove
-        sudo service apache2 status | grep running
-    "
+ssh -i "$KEYTOMCATWHATEVER" admin@11.22.33.44 "\
+    set -xeuo pipefail
+    uname -a
+    sudo apt-get update
+    sudo apt-get -y upgrade
+    sudo apt-get autoremove
+    sudo service apache2 status | grep running
+"
 ```
 
 Make sure, that the command bails out as soon as possible on failure (`set -xeuo pipefail`), update the machine and perform a final check (`sudo service apache2 status | grep running`).
