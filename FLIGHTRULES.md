@@ -766,17 +766,21 @@ Add a new line inside `environment`, like:
 KEYTOMCATWHATEVER = credentials('key-tomcat-whatever')
 ```
 
-Add a new stage called `test-tomcat-whatever` as follows:
+Add a new stage called `test-tomcat-whatever` (it should always be the same as in AWS) as follows:
 
 ```shell
-ssh -i "$KEYTOMCATWHATEVER" admin@11.22.33.44 "\
-    set -xeuo pipefail
-    uname -a
-    sudo apt-get update
-    sudo apt-get -y upgrade
-    sudo apt-get autoremove
-    sudo service apache2 status | grep running
-"
+stage('test-tomcat-whatever') {
+    steps {
+        ssh -i "$KEYTOMCATWHATEVER" admin@11.22.33.44 "\
+            set -xeuo pipefail
+            uname -a
+            sudo apt-get update
+            sudo apt-get -y upgrade
+            sudo apt-get autoremove
+            sudo service apache2 status | grep running
+        "
+    }
+}
 ```
 
 Make sure, that the command bails out as soon as possible on failure (`set -xeuo pipefail`), update the machine and perform a final check (`sudo service apache2 status | grep running`).
