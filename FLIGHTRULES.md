@@ -753,9 +753,9 @@ For more specific configurations and mount options refer to the manual page and 
 
 ### I want to automate server updates
 
-I have a new Debian server `test-tomcat-whatever` with IP `11.22.33.44`, and want to update it with a Jenkins script. We access the server via SSH with a key called `key-tomcat-whatever`.
+I have a new Debian server `test-tomcat-whatever` with IP `11.22.33.44`, and want to update it with a Jenkins script. We access the server via SSH with a key called `key-test-tomcat-whatever`.
 
-Go to [Jenkins Credential management > Server Credentials](https://jenkins.testingmachine.eu/credentials/store/system/domain/server-credentials/) and add the private key as secret file, with description and ID equal to `key-tomcat-whatever`.
+Go to [Jenkins Credential management > Server Credentials](https://jenkins.testingmachine.eu/credentials/store/system/domain/server-credentials/) and add the private key as secret file, with description and ID equal to `key-test-tomcat-whatever`.
 
 Add `11.22.33.44` as a known host to Jenkins via [Reset Known Hosts File](https://jenkins.testingmachine.eu/job/server-deployment/job/Reset%20Known%20Hosts%20File/) (for details, see [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)).
 
@@ -763,7 +763,7 @@ Open the Jenkins pipeline [Jenkinsfile-ServerUpdates](https://github.com/noi-tec
 
 Add a new line inside `environment`, like:
 ```shell
-KEYTOMCATWHATEVER = credentials('key-tomcat-whatever')
+KEYTOMCATWHATEVER = credentials('key-test-tomcat-whatever')
 ```
 
 Add a new stage called `test-tomcat-whatever` (it should always be the same as in AWS) as follows:
