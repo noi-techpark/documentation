@@ -49,6 +49,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to setup an SMTP server](#i-want-to-setup-an-smtp-server)
   - [I want to create a test clone of a server instance](#i-want-to-create-a-test-clone-of-a-server-instance)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
+  - [I want to create a new Tomcat server instance on AWS for Testing](#i-want-to-create-a-new-tomcat-server-instance-on-aws-for-testing)
+  - [I want to create a new Tomcat server instance on AWS Elasticbeanstalk for Production](#i-want-to-create-a-new-tomcat-server-instance-on-aws-elasticbeanstalk-for-production)
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
   - [I want to make my web server HTTPS compliant](#i-want-to-make-my-web-server-https-compliant)
@@ -647,6 +649,160 @@ sudo touch /etc/sudoers.d/externals
 sudo chmod +w /etc/sudoers.d/externals
 echo "chuck ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/externals
 sudo chmod 440 /etc/sudoers.d/externals
+```
+
+### I want to create a new Tomcat server instance on AWS for Testing
+
+Install all dependencies:
+
+```bash
+apt-get install tomcat8 tomcat8-admin
+```
+
+Adjust the `/etc/tomcat8/server.xml` configuration and add all hosts (`<Host>...</Host>`) served by this Tomcat instance:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+<Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+<Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+<Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+<Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+<Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+<GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+            type="org.apache.catalina.UserDatabase"
+            description="User database that can be updated and saved"
+            factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+            pathname="conf/tomcat-users.xml" />
+</GlobalNamingResources>
+
+<Service name="Catalina">
+    <Connector port="8080" protocol="HTTP/1.1"
+            connectionTimeout="20000"
+            redirectPort="8443" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+    <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+            resourceName="UserDatabase"/>
+    </Realm>
+
+    <Host name="bigdata4tourism.tomcat02.testingmachine.eu"  appBase="webapps/bigdata4tourism.tomcat02.testingmachine.eu"
+            unpackWARs="true" autoDeploy="true">
+
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+            prefix="bigdata4tourism.tomcat02.testingmachine.eu_access_log" suffix=".txt"
+            pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+    </Host>
+    </Engine>
+</Service>
+</Server>
+```
+
+Add a user that can upload/deploy applications using the maven deploy feature in the `/etc/tomcat8/tomcat-users.xml` file:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<tomcat-users xmlns="http://tomcat.apache.org/xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd" version="1.0">
+    <role rolename="admin-gui"/>
+    <role rolename="manager-gui"/>
+    <user name="jenkins" password="..." roles="manager-script,manager-gui" />
+</tomcat-users>
+```
+
+Enable the manager for the new host that is resposible for uploading/deploying applications:
+
+```bash
+cp -rfT /etc/tomcat8/Catalina/localhost /etc/tomcat8/Catalina/bigdata4tourism.tomcat02.testingmachine.eu
+```
+
+Create a folder in the webapps folder for every host:
+
+```bash
+mkdir -p /var/lib/tomcat8/webapps/localhost
+chown -R tomcat8: /var/lib/tomcat8/webapps/localhost
+chmod -R 775 /var/lib/tomcat8/webapps/localhost
+
+mkdir -p /var/lib/tomcat8/webapps/bigdata4tourism.tomcat02.testingmachine.eu
+chown -R tomcat8: /var/lib/tomcat8/webapps/bigdata4tourism.tomcat02.testingmachine.eu
+chmod -R 775 /var/lib/tomcat8/webapps/bigdata4tourism.tomcat02.testingmachine.eu
+```
+
+Finally, restart Tomcat:
+
+```bash
+service tomcat8 restart
+```
+
+### I want to create a new Tomcat server instance on AWS Elasticbeanstalk for Production
+
+Create an ebextension and add all hosts (`<Host>...</Host>`) served by this Tomcat instance:
+
+```xml
+files:
+  "/etc/tomcat8/server.xml":
+      owner: root
+      group: tomcat
+      mode: "000644"
+      content : |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <Server port="8005" shutdown="SHUTDOWN">
+        <Listener className="org.apache.catalina.startup.VersionLoggerListener"
+        logArgs="false" logEnv="false" logProps="false" />
+        <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+        <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+        <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+        <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+        <GlobalNamingResources>
+            <Resource name="UserDatabase" auth="Container"
+                    type="org.apache.catalina.UserDatabase"
+                    description="User database that can be updated and saved"
+                    factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+                    pathname="conf/tomcat-users.xml" />
+        </GlobalNamingResources>
+
+        <Service name="Catalina">
+            <Connector port="8080" protocol="HTTP/1.1"
+                    URIEncoding="UTF-8"
+                    connectionTimeout="20000" />
+            <Engine name="Catalina" defaultHost="localhost">
+                <Realm className="org.apache.catalina.realm.LockOutRealm">
+                    <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+                        resourceName="UserDatabase"/>
+                </Realm>
+
+                <Host name="localhost"  appBase="webapps/ROOT/localhost"
+                        unpackWARs="true" autoDeploy="true">
+                        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+                        prefix="localhost_access_log" suffix=".txt" rotatable="false"
+                        pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+                        <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="X-Forwarded-Proto" internalProxies="10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|169\.254\.\d+\.\d+|127\.\d+\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+" />
+                </Host>
+
+                <Host name="bigdata4tourism.tomcat02.opendatahub.bz.it"  appBase="webapps/ROOT/bigdata4tourism.tomcat02.opendatahub.bz.it"
+                        unpackWARs="true" autoDeploy="true">
+                        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+                        prefix="bigdata4tourism.tomcat02.opendatahub.bz.it_access_log" suffix=".txt" rotatable="false"
+                        pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+                        <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="X-Forwarded-Proto" internalProxies="10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|169\.254\.\d+\.\d+|127\.\d+\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+" />
+                </Host>
+            </Engine>
+        </Service>
+        </Server>
+
+```
+
+Place all war file in the specified subfolders of the hosts before running `eb deploy`:
+
+```bash
+mkdir -p localhost
+
+mkdir -p bigdata4tourism.tomcat02.opendatahub.bz.it
+cp ../../ROOT.war bigdata4tourism.tomcat02.opendatahub.bz.it/
 ```
 
 ### I want to create a new Pimcore server instance on AWS
