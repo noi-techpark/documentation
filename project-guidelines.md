@@ -38,6 +38,12 @@ Templates of such license files can be found here: [https://opensource.org/licen
 
 All dependencies should be managed using [Maven](https://maven.apache.org/).
 
+### Boilerplate
+
+### War Files
+
+### Java Doc
+
 ### Configuration
 
 ### Logging
@@ -48,7 +54,11 @@ All dependencies should be managed using [Maven](https://maven.apache.org/).
 
 ## Database
 
+### Flyway
+
 ## Api
+
+### Rest
 
 ### Swagger
 
@@ -57,5 +67,11 @@ All dependencies should be managed using [Maven](https://maven.apache.org/).
 ### Response Structure
 
 ### HTTP Status Codes
+
+## Testing
+
+### Unit Tests
+
+### Integration Tests
 
 ## Docker
