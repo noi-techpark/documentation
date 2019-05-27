@@ -74,6 +74,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [ODH Maven repository](#odh-maven-repository)
     - [I want to use an open source java library of the OpenDataHub](#i-want-to-use-an-open-source-java-library-of-the-opendatahub)
     - [I want to upload an artifact to the odh maven repository](#i-want-to-upload-an-artifact-to-the-odh-maven-repository)
+- [App Development](#app-development)
+  - [Anroid](#anroid)
+    - [I want to add a new tester to an App on Google Play](#i-want-to-add-a-new-tester-to-an-app-on-google-play)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1152,3 +1155,22 @@ Configure your maven repository to handle authentication towards s3 bucket. Go t
 </server>
 ```
 Deploy your library through maven: `mvn deploy`
+
+
+## App Development
+
+### Anroid
+
+#### I want to add a new tester to an App on Google Play
+
+I want to add `pinky@example.com` to our new `Beacon App` alpha tester crowd.
+We assume, that the alpha release has already been made.
+
+- Login to `https://play.google.com/apps/publish`
+- Choose `Beacon App`
+- Go to Release Management > App releases
+- Click on *MANAGE* within the "Closed Tracks Alpha" block
+- Add `pinky@example.com` to an existing list or create a new list
+- Activate that list and save it
+- Send an email to your testers (if not already done automatically) with the opt-in URL
+
