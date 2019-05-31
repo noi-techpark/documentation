@@ -75,7 +75,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to use an open source java library of the OpenDataHub](#i-want-to-use-an-open-source-java-library-of-the-opendatahub)
     - [I want to upload an artifact to the odh maven repository](#i-want-to-upload-an-artifact-to-the-odh-maven-repository)
 - [App Development](#app-development)
-  - [Anroid](#anroid)
+  - [Android](#android)
     - [I want to add a new tester to an App on Google Play](#i-want-to-add-a-new-tester-to-an-app-on-google-play)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -1159,7 +1159,7 @@ Deploy your library through maven: `mvn deploy`
 
 ## App Development
 
-### Anroid
+### Android
 
 #### I want to add a new tester to an App on Google Play
 
