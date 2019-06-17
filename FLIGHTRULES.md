@@ -37,6 +37,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Pimcore](#pimcore)
   - [I want to send emails from my Pimcore instance](#i-want-to-send-emails-from-my-pimcore-instance)
   - [I want to add new Pimcore web page to an existing Pimcore machine](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine)
+  - [I want to add a test environment of a new Pimcore installation](#i-want-to-add-a-test-environment-of-a-new-pimcore-installation)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
   - [I want to install a Pimcore, that needs a newer PHP version](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version)
   - [I want to create Jenkinsfiles for an newly installed Pimcore webpage](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage)
@@ -344,6 +345,38 @@ sudo -u www-data ./bin/console assets:install --symlink --relative
 
 Normally this is enough! If some bundles need more, they should provide that
 information beforehand.
+
+### I want to add a test environment of a new Pimcore installation
+
+We [added `davinci.bz.it` to a multi-Pimcore instance](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine) and want now a test environment
+reachable with `https://test.davinci.bz.it`, which gets cloned during night and updated
+each time a new commit gets pushed to the davinci repository.
+
+First, go to AWS/Route53 and add `test.davinci.bz.it` to the `davinci.bz.it` domain
+```
+Name : test.davinci.bz.it
+Type : CNAME
+TTL  : 300
+Value: proxy.opendatahub.bz.it
+```
+
+Second, login to the our letsencrypt proxy and make `test.davinci.bz.it` [https compliant](#i-want-to-make-my-web-server-https-compliant).
+
+Third, go to our [server deployment repository](https://github.com/noi-techpark/server-deployment)
+and add a new stage to `Jenkinsfile-Pimcore-Nightly-Clones` as follows:
+```groovy
+stage('davinci.bz.it') {
+    steps {
+        sh './utils/pimcore-update-domain $KEY $SERVER_IP test.davinci.bz.it davinci/html davinci.conf'
+    }
+}
+```
+...where `$KEY` is the ssh key, the `$SERVER_IP` is the pimcore test server (clone of the
+multi-pimcore production machine), `test.davinci.bz.it` is the domain, `davinci/html` is the
+document root folder inside `/var/www` and `davinci.conf` is the Apache2 configuration inside
+`/etc/apache2/sites-enabled/`. See [server-deployment.git/utils/pimcore-update-domain](https://github.com/noi-techpark/server-deployment/blob/master/utils/pimcore-update-domain) for details.
+
+Finally, create a [Jenkins deployment](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage) script inside the davinci repository.
 
 ### I want to update Pimcore
 
