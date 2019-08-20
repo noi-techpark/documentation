@@ -29,7 +29,6 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
   - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
   - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version)
-  - [I want to update the database schema of bdp-core](#i-want-to-update-the-database-schema-of-bdp-core)
 - [GitHub](#github)
   - [I want to create a repository](#i-want-to-create-a-repository)
   - [I want to give access to a public repository](#i-want-to-give-access-to-a-public-repository)
@@ -38,6 +37,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Pimcore](#pimcore)
   - [I want to send emails from my Pimcore instance](#i-want-to-send-emails-from-my-pimcore-instance)
   - [I want to add new Pimcore web page to an existing Pimcore machine](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine)
+  - [I want to add a test environment of a new Pimcore installation](#i-want-to-add-a-test-environment-of-a-new-pimcore-installation)
   - [I want to update Pimcore](#i-want-to-update-pimcore)
   - [I want to install a Pimcore, that needs a newer PHP version](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version)
   - [I want to create Jenkinsfiles for an newly installed Pimcore webpage](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage)
@@ -57,6 +57,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to mount an aws s3 bucket on my server](#i-want-to-mount-an-aws-s3-bucket-on-my-server)
     - [Prerequisit](#prerequisit)
     - [Setup](#setup)
+  - [I want to automate server updates](#i-want-to-automate-server-updates)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -74,6 +75,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [ODH Maven repository](#odh-maven-repository)
     - [I want to use an open source java library of the OpenDataHub](#i-want-to-use-an-open-source-java-library-of-the-opendatahub)
     - [I want to upload an artifact to the odh maven repository](#i-want-to-upload-an-artifact-to-the-odh-maven-repository)
+- [App Development](#app-development)
+  - [Android](#android)
+    - [I want to add a new tester to an App on Google Play](#i-want-to-add-a-new-tester-to-an-app-on-google-play)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -81,25 +85,25 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ## Licensing and REUSE compliance
 
-See REUSE-specific [flight rules](https://github.com/idm-suedtirol/reuse).
+See REUSE-specific [flight rules](https://github.com/noi-techpark/reuse).
 
 ## Work Flow and Release Management
 
 ### I want to create a project for ODH
 
-Each project must be on our github `idm-suedtirol`. So, if you want to create a new repository, do:
+Each project must be on our github `noi-techpark`. So, if you want to create a new repository, do:
 ```shell
 cd your-project
 git init
 git add <some-files>
 git commit -m "Initial import"
-git remote add origin https://github.com/idm-suedtirol/<your-git-repository>.git
+git remote add origin https://github.com/noi-techpark/<your-git-repository>.git
 git push -u origin master
 ```
 ...or push an existing repository:
 ```shell
 cd your-project
-git remote add origin https://github.com/idm-suedtirol/<your-git-repository>.git
+git remote add origin https://github.com/noi-techpark/<your-git-repository>.git
 git push -u origin master
 ```
 Then, create a development branch and protect the master branch (See Github>Settings>Branches>Protected branches).
@@ -198,48 +202,6 @@ We do not need the `hotfix` branch any longer.
 git branch -d hotfix-1.0.1
 ```
 
-### I want to update the database schema of bdp-core
-
-I did something inside [bdp-core](https://github.com/idm-suedtirol/bdp-core), that involves a schema change.
-First of all, you need to understand if Hibernate can handle this change with its `update` strategy. See
-[bdp-core/dal](https://github.com/idm-suedtirol/bdp-core/blob/master/dal/src/main/resources/META-INF/persistence.xml)
-for further details. Best thing is, to run the newest bdp-core instance on the test server, and check schema diffs. Use
-a clone of the existing production database to be as similar as possible to the current production database state.
-
-```shell
-pg_dump -U bdp -s bdp -h postgres-test-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-test-server.sql
-pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
-diff /tmp/schema-dump-postgres-test-server.sql /tmp/schema-dump-postgres-prod-server.sql
-```
-If it is simple and log files do not show any issues with the new change, install the new bdp-core on the production environment
-and let Hibernate handle all schema changes.
-
-However, if the change is more complex, like new views or functions, dump the original schema from the production
-environment, and create a migration script that updates that schema. See our official
-[database documentation](http://opendatahub.readthedocs.io/en/latest/guidelines/database.html) for details.
-```shell
-pg_dump -U bdp -s bdp -h postgres-prod-server.example.com -p 5432 -n intime > /tmp/schema-dump-postgres-prod-server.sql
-createdb -U postgres -h localhost -p 5432 bdptest
-```
-We need also `postgis`:
-```shell
-apt install postgresql-9.5-postgis-2.4
-psql -U postgres -h localhost -p 5432 -d bdptest -c "CREATE EXTENSION postgis with schema public;"
-```
-Now, we are ready to import the production server schema, and test the migration script, for ex. `schema-1.0.0-1.1.0.sql`.
-```shell
-psql -U postgres -h localhost -p 5432 -d bdptest -1 -e -v ON_ERROR_STOP=1 < /tmp/schema-dump-postgres-prod-server.sql
-psql -U postgres -h localhost -p 5432 -d bdptest -1 -e -v ON_ERROR_STOP=1 < schema-1.0.0-1.1.0.sql
-```
-NB: If something fails, solve each shown error by yourself, and repeat steps above. Update `schema-1.0.0-1.1.0.sql` accordingly.
-
-If you are satisfied with your schema migration script, test it on our test environment and see if Hibernate fills logs with
-errors. If not, your ready for production.
-
-Finally, we no longer need the test database `bdptest`, hence we can drop it:
-```shell
-psql -U postgres -h localhost -p 5432 -c "DROP DATABASE bdptest;"
-```
 ## GitHub
 
 ### I want to create a repository
@@ -329,7 +291,7 @@ Pimcore 5.4.0 for that.
 [install](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version) `php 7.2`
 and dependencies, if needed.
 Download Pimcore management scripts from our [Pimcore Automation
-Repo](https://github.com/idm-suedtirol/pimcore-automation).
+Repo](https://github.com/noi-techpark/pimcore-automation).
 You need at least 3GB for the next steps. Eventually, install a [swap
 file](#i-want-to-use-a-swap-file-on-my-server).
 
@@ -383,6 +345,38 @@ sudo -u www-data ./bin/console assets:install --symlink --relative
 
 Normally this is enough! If some bundles need more, they should provide that
 information beforehand.
+
+### I want to add a test environment of a new Pimcore installation
+
+We [added `davinci.bz.it` to a multi-Pimcore instance](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine) and want now a test environment
+reachable with `https://test.davinci.bz.it`, which gets cloned during night and updated
+each time a new commit gets pushed to the davinci repository.
+
+First, go to AWS/Route53 and add `test.davinci.bz.it` to the `davinci.bz.it` domain
+```
+Name : test.davinci.bz.it
+Type : CNAME
+TTL  : 300
+Value: proxy.opendatahub.bz.it
+```
+
+Second, login to the our letsencrypt proxy and make `test.davinci.bz.it` [https compliant](#i-want-to-make-my-web-server-https-compliant).
+
+Third, go to our [server deployment repository](https://github.com/noi-techpark/server-deployment)
+and add a new stage to `Jenkinsfile-Pimcore-Nightly-Clones` as follows:
+```groovy
+stage('davinci.bz.it') {
+    steps {
+        sh './utils/pimcore-update-domain $KEY $SERVER_IP test.davinci.bz.it davinci/html davinci.conf'
+    }
+}
+```
+...where `$KEY` is the ssh key, the `$SERVER_IP` is the pimcore test server (clone of the
+multi-pimcore production machine), `test.davinci.bz.it` is the domain, `davinci/html` is the
+document root folder inside `/var/www` and `davinci.conf` is the Apache2 configuration inside
+`/etc/apache2/sites-enabled/`. See [server-deployment.git/utils/pimcore-update-domain](https://github.com/noi-techpark/server-deployment/blob/master/utils/pimcore-update-domain) for details.
+
+Finally, create a [Jenkins deployment](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage) script inside the davinci repository.
 
 ### I want to update Pimcore
 
@@ -538,7 +532,7 @@ environment with the actual production state.
 
 First, create a pipeline script inside `server-deployment` repository:
 ```shell
-git clone git@github.com:idm-suedtirol/server-deployment.git
+git clone git@github.com:noi-techpark/server-deployment.git
 cat > Jenkinsfile-MyClone-Nightly-Clones << EOF
     pipeline {
         agent any
@@ -568,7 +562,7 @@ Activate `Build periodically` to a schedule `H 3 * * *` (`H` is a good idea to
 distribute it evenly from 3am to 4am).
 
 Use a `Pipeline script from SCM` definition, and set
-`https://github.com/idm-suedtirol/server-deployment.git` as repository URL.
+`https://github.com/noi-techpark/server-deployment.git` as repository URL.
 
 Set `Clean after/before checkout` and add your script path to
 `Jenkinsfile-MyClone-Nightly-Clones`.
@@ -611,7 +605,7 @@ Use `utils/aws-ec2-clone` from `server-deployment.git` which needs `aws ec2`
 command-line tools. See this script's comments for further details and
 configuration options.
 ```shell
-git clone git@github.com:idm-suedtirol/server-deployment.git
+git clone git@github.com:noi-techpark/server-deployment.git
 cd utils
 SRC_INSTANCE_ID=i-0123456789abcde0 CLONE_INSTANCE_NAME=dolly ./aws-ec2-clone
 ```
@@ -809,7 +803,7 @@ cp ../../ROOT.war bigdata4tourism.tomcat02.opendatahub.bz.it/
 
 Get our server-deployment repository
 ```shell
-git clone git@github.com:idm-suedtirol/server-deployment.git
+git clone git@github.com:noi-techpark/server-deployment.git
 ```
 Configure the `utils/aws-launch-debian-pimcore` script. All needed information can be found inside the script.
 ```shell
@@ -829,7 +823,7 @@ Security Group = prod-pimcore-hackathon-sg
 ```
 Get our pimcore-automation repository
 ```shell
-git clone git@github.com:idm-suedtirol/pimcore-automation.git
+git clone git@github.com:noi-techpark/pimcore-automation.git
 ```
 Copy `install-pimcore.sh` to your new server instance:
 ```shell
@@ -867,7 +861,7 @@ sudo mkswap /mnt/4GB.swap
 sudo chmod 0600 /mnt/4GB.swap
 sudo swapon /mnt/4GB.swap
 ```
-A script can be found on our [server-deployment](https://github.com/idm-suedtirol/server-deployment/blob/master/utils/swap-file-create)
+A script can be found on our [server-deployment](https://github.com/noi-techpark/server-deployment/blob/master/utils/swap-file-create)
 repository.
 
 ### I want to make my web server HTTPS compliant
@@ -948,6 +942,44 @@ To mount the bucket do as follows:
 s3fs bucketname:/ /mountFolder -o passwd_file=~/.passwd-s3fs -o umask=0222 -o allow_other
 ```
 For more specific configurations and mount options refer to the manual page and the official documentation
+
+### I want to automate server updates
+
+I have a new Debian server `test-tomcat-whatever` with IP `11.22.33.44`, and want to update it with a Jenkins script. We access the server via SSH with a key called `key-test-tomcat-whatever`.
+
+Go to [Jenkins Credential management > Server Credentials](https://jenkins.testingmachine.eu/credentials/store/system/domain/server-credentials/) and add the private key as secret file, with description and ID equal to `key-test-tomcat-whatever`.
+
+Add `11.22.33.44` as a known host to Jenkins via [Reset Known Hosts File](https://jenkins.testingmachine.eu/job/server-deployment/job/Reset%20Known%20Hosts%20File/) (for details, see [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)).
+
+Open the Jenkins pipeline [Jenkinsfile-ServerUpdates](https://github.com/noi-techpark/server-deployment/blob/master/Jenkinsfile-ServerUpdates) on our server-deployment repository.
+
+Add a new line inside `environment`, like:
+```shell
+KEYTOMCATWHATEVER = credentials('key-test-tomcat-whatever')
+```
+
+Add a new stage called `test-tomcat-whatever` (it should always be the same as in AWS) as follows:
+
+```shell
+stage('test-tomcat-whatever') {
+    steps {
+        ssh -i "$KEYTOMCATWHATEVER" admin@11.22.33.44 "\
+            set -xeuo pipefail
+            uname -a
+            sudo apt-get update
+            sudo apt-get -y upgrade
+            sudo apt-get autoremove
+            sudo service apache2 status | grep running
+        "
+    }
+}
+```
+
+Make sure, that the command bails out as soon as possible on failure (`set -xeuo pipefail`), update the machine and perform a final check (`sudo service apache2 status | grep running`).
+
+Commit and push your changes.
+
+Run the pipeline inside Jenkins.
 
 ## Documentation
 
@@ -1156,3 +1188,22 @@ Configure your maven repository to handle authentication towards s3 bucket. Go t
 </server>
 ```
 Deploy your library through maven: `mvn deploy`
+
+
+## App Development
+
+### Android
+
+#### I want to add a new tester to an App on Google Play
+
+I want to add `pinky@example.com` to our new `Beacon App` alpha tester crowd.
+We assume, that the alpha release has already been made.
+
+- Login to `https://play.google.com/apps/publish`
+- Choose `Beacon App`
+- Go to Release Management > App releases
+- Click on *MANAGE* within the "Closed Tracks Alpha" block
+- Add `pinky@example.com` to an existing list or create a new list
+- Activate that list and save it
+- Send an email to your testers (if not already done automatically) with the opt-in URL
+
