@@ -58,6 +58,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [Prerequisit](#prerequisit)
     - [Setup](#setup)
   - [I want to automate server updates](#i-want-to-automate-server-updates)
+  - [I want to install the CloudWatch Agent on a Linux machine](#i-want-to-install-the-cloudwatch-agent-on-a-linux-machine)
+  - [I want to install the CloudWatch Agent on a Windows machine](#i-want-to-install-the-cloudwatch-agent-on-a-windows-machine)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -980,6 +982,30 @@ Make sure, that the command bails out as soon as possible on failure (`set -xeuo
 Commit and push your changes.
 
 Run the pipeline inside Jenkins.
+
+### I want to install the CloudWatch Agent on a Linux machine
+
+1. Attach the Role "Monitoring" to the EC2 Instance. The Role should include the following Permissions:
+    - CloudWatchAgentServerPolicy
+2. Check your Linux Distribution: `cat /etc/*-release`
+3. Download and Install the CloudWatch Agent Package depending on your Linux Distribution: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-commandline-fleet.html
+    - `wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/arm64/latest/amazon-cloudwatch-agent.rpm`
+    -  `rpm -U ./amazon-cloudwatch-agent.rpm` or `dpkg -i -E ./amazon-cloudwatch-agent.deb`
+4. Copy the Basic Linux Monitoring Configuration from the Amazon System Manager: `amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-LinuxBasic -s`
+5. Check if the CloudWatch Agent Service is running: `service amazon-cloudwatch-agent status`
+6. Check the Logs if everything works as expected: `/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log`
+
+### I want to install the CloudWatch Agent on a Windows machine
+
+1. Attach the Role "Monitoring" to the EC2 Instance. The Role should include the following Permissions:
+    - CloudWatchAgentServerPolicy
+2. Download and Install the CloudWatch Agent Package: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-commandline-fleet.html
+    - https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi
+    - `msiexec /i amazon-cloudwatch-agent.msi`
+3. Copy the Basic Windows Monitoring Configuration from the Amazon System Manager:
+    - `cd 'C:\Program Files\Amazon\AmazonCloudWatchAgent'`
+    - `./amazon-cloudwatch-agent-ctl.ps1 -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-WindowsBasic -s`
+4. Check if the CloudWatch Agent Service is running in the Windows Services: AmazonCloudWatchAgent
 
 ## Documentation
 
