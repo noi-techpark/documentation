@@ -80,6 +80,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [App Development](#app-development)
   - [Android](#android)
     - [I want to add a new tester to an App on Google Play](#i-want-to-add-a-new-tester-to-an-app-on-google-play)
+  - [iOS](#ios)
+    - [I want to renew the development and distribution certificates](#i-want-to-renew-the-development-and-distribution-certificates)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1233,3 +1235,29 @@ We assume, that the alpha release has already been made.
 - Activate that list and save it
 - Send an email to your testers (if not already done automatically) with the opt-in URL
 
+### iOS
+
+#### I want to renew the development and distribution certificates
+
+1. Go to the repository where the certificates are stored
+2. Delete certificates (ex. the development profile)
+    - `rm certs/development/*.cer`
+    - `rm certs/development/*.p12`
+    - `rm profiles/development/*.mobileprovision`
+3. Optionally open Apple Developer and delete the certificates and profiles
+    - https://developer.apple.com/account/resources/profiles/list
+    - https://developer.apple.com/account/resources/certificates/list
+4. Go to the repository of the iOS app
+5. Create a new certificate
+    - `fastlane match development --username p.bertolla@noi.bz.it`
+    - `fastlane match appstore --username p.bertolla@noi.bz.it`
+6. Adjust the fastlane settings of the project
+    - Configure the new profile name `profile_name` in the `Fastfile`
+7. Deploy new version
+    - If the build fails, go to the node and run `security set-key-partition-list -S apple-tool:,apple: -s ~/Library/Keychains/login.keychain-db`
+
+If you have any issues, check these links out:
+    - https://samwize.com/2019/05/02/how-to-renew-cert-for-fastlane-match/
+    - https://github.com/fastlane/fastlane/issues/10589
+
+The step 7 is currently a workaround. It could be that this step can be avoided in the future with a new version of fastlane.
