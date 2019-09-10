@@ -6,6 +6,7 @@ Documentation for Contributors
 - [Create a Pull Request](#create-a-pull-request)
 - [Syncing a Fork](#syncing-a-fork)
 - [Resolving Merge Conflicts](#resolving-merge-conflicts)
+- [Combine Two Separate Unrelated Git Repositories](#combine-two-Separate-Unrelated-Git-Repositories)
 
 ## Prerequisites
 
@@ -16,7 +17,7 @@ In the following documentation some example names are used. Please replace them 
 
 ## Project Checkout
 
-1. Navigate to the repository on GitHub (ex: [https://github.com/idm-suedtirol/bdp-core](https://github.com/idm-suedtirol/bdp-core))
+1. Navigate to the repository on GitHub (ex: [https://github.com/noi-techpark/bdp-core](https://github.com/noi-techpark/bdp-core))
 
 2. Create a fork of the repository by clicking the button **Fork** (and selecting the user where the fork should be created)
     ![Fork the repository](images/contributors/fork.png)
@@ -72,7 +73,7 @@ Before you can sync your fork with the original repository (an upstream reposito
 
 2. Specify a new remote upstream repository that will be synced with the fork.
     ```bash
-    git remote add upstream https://github.com/idm-suedtirol/bdp-core.git
+    git remote add upstream https://github.com/noi-techpark/bdp-core.git
     ```
 
 3. Verify the new upstream repository you've specified for your fork.
@@ -139,3 +140,39 @@ To resolve merge conflicts, the following steps must be performed.
     ![Merge Conflicts Resolved](images/contributors/merge-conflicts-resolved-development.png)
 
 A more detailed description can be found [here](https://help.github.com/articles/resolving-a-merge-conflict-using-the-command-line/).
+
+## Combine Two Separate Unrelated Git Repositories
+
+Sometimes it can happen that a team already starts developing a project before it receives the official repository. Later, when then the NOI team creates a GitHub repository it is hard for them to combine the two separate repositories into one repository with a common history.
+
+To do so, let's suppose that you already have your private repository of the project checked out locally on your machine and you start from there:
+
+1. Go to GitHub and create a fork of the repository from the NOI team
+
+2. Add the fork as upstream to your locally cloned version:
+
+    ```bash
+    git remote add upstream git@github.com:username/project.git
+    ```
+
+3. Pull the changes from the upstream repository to your local repository's master branch:
+
+    ```bash
+    git pull upstream master --allow-unrelated-histories
+    ```
+
+4. If there are some conflicts, fix them and commit the changes
+
+    ```bash
+    git add -A
+    git commit -m "Merging the two repositories"
+    ```
+
+5. Push the changes two both repositories
+
+    ```bash
+    git push upstream master
+    git push origin master
+    ```
+
+From now on the two repositories are in sync and you can continue working like normal.
