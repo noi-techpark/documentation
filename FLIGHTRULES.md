@@ -24,6 +24,10 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 
 - [Licensing and REUSE compliance](#licensing-and-reuse-compliance)
+- [OAuth](#oauth)
+  - [I want to get an access token from our OAuth 2.0 Identity Server](#i-want-to-get-an-access-token-from-our-oauth-20-identity-server)
+  - [I want to know all configuration options from our OAuth 2.0 Identity Server](#i-want-to-know-all-configuration-options-from-our-oauth-20-identity-server)
+  - [I want to know the public key of the OAuth 2.0 Identity Server to verify a token](#i-want-to-know-the-public-key-of-the-oauth-20-identity-server-to-verify-a-token)
 - [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
@@ -90,6 +94,35 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 ## Licensing and REUSE compliance
 
 See REUSE-specific [flight rules](https://github.com/noi-techpark/reuse).
+
+## OAuth
+
+### I want to get an access token from our OAuth 2.0 Identity Server
+
+We have an OAuth server at `https://auth.opendatahub.bz.it` and a user called
+`myuser` with a password `s3cr3t`, a client `user` with a secret `secret`, a
+scope `api1` and we want to use the grant type `Password Credentials`, then the
+`curl` call would look like this:
+
+```sh
+curl -X POST \
+  https://auth.opendatahub.bz.it/connect/token \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=password&client_secret=secret&client_id=user&scope=api1&username=myuser&password=s3cr3t'
+```
+
+Testing? You can see the contents of this token with https://jwt.io.
+
+### I want to know all configuration options from our OAuth 2.0 Identity Server
+
+We want to know which options are available:
+https://auth.opendatahub.bz.it/.well-known/openid-configuration
+
+### I want to know the public key of the OAuth 2.0 Identity Server to verify a token
+
+Open https://auth.opendatahub.bz.it/.well-known/openid-configuration/jwks and
+copy the `x5c` field, which is a chain of keys.
+
 
 ## Work Flow and Release Management
 
