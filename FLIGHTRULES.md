@@ -69,6 +69,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Database](#database)
   - [I want to create a read-only user (aka role)](#i-want-to-create-a-read-only-user-aka-role)
   - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
+- [Open Data Hub Mobility](#open-data-hub-mobility)
+  - [I want to create links between stations](#i-want-to-create-links-between-stations)
+  - [I want to delete an link/edge between stations](#i-want-to-delete-an-linkedge-between-stations)
   - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
     - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
     - [I want to add a new user](#i-want-to-add-a-new-user)
@@ -1093,6 +1096,74 @@ SELECT * FROM (
     (TABLE table2 EXCEPT ALL TABLE table1)
 ) temp;
 ```
+
+## Open Data Hub Mobility
+
+### I want to create links between stations
+
+For that to work we use the an edge, two nodes and an edge description. The edge
+is represented by the `edge` table and the stations and edge description by
+three entries within the `station` table.
+
+I have an already existing station `siemens` and a station `proma` of type
+`BluetoothStation`, and want to create a link between them. The link will be
+named `Siemens->Ponte Roma` and the unique identifier is called
+`siemens->proma`. The type of the edge is `BluetoothStationLink`.
+
+Execute the following code with `psql` or any other PostgreSQL aware tool:
+
+```sql
+with
+a as (
+	select * from station
+    where stationcode = 'siemens' and stationtype = 'BluetoothStation'
+)
+, b as (
+	select * from station
+    where stationcode = 'proma' and stationtype = 'BluetoothStation'
+)
+, ins1 as (
+	insert into station (active, available, name, stationcode, stationtype)
+	select true, true, a.name || '->' || b.name, a.stationcode || '->' || b.stationcode, 'BluetoothStationLink'
+    from a, b
+	returning id as link_station_id
+)
+, ins2 as (
+	insert into edge (directed, origin_id, destination_id, edge_data_id)
+	select true, a.id, b.id, link_station_id from a, b, ins1
+	returning id as edge_id
+)
+select * from ins2;
+```
+
+### I want to delete an link/edge between stations
+
+I want to delete an edge between the two stations `siemens` and `proma`, with
+name `siemens->proma` and type `BluetoothStationLink`.
+
+```sql
+delete from edge
+where edge_data_id = (
+    select id from station
+    where stationcode = 'siemens->proma' and stationtype = 'BluetoothStationLink'
+);
+
+delete from station
+where stationcode = 'siemens->proma' and stationtype = 'BluetoothStationLink';
+```
+
+NB: If you do not know the stationcode, search for it with:
+
+```sql
+select * from edge
+join station org on ed.origin_id = org.id
+join station dst on ed.destination_id = dst.id
+join station lnk on ed.edge_data_id = lnk.id
+where lnk.stationtype = 'BluetoothStationLink'
+and org.stationcode = 'siemens'
+and dst.stationcode = 'proma'
+```
+
 ### I want to change visibility of mobility data
 
 This chapter explains how to add users and roles, and to define which data can be seen as
