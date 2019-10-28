@@ -906,17 +906,30 @@ repository.
 
 ### I want to make my web server HTTPS compliant
 
-I have a website reachable with http://www.davinci.bz.it or http://davinci.bz.it
-on an IP `34.247.202.9`, and want to make it HTTPS only.
+I have a website reachable with http://davinci.bz.it on an IP `34.247.202.9:80`,
+and want to make it HTTPS only. If that domain does not exist, tell your ICT
+guys to point the DNS entries for `davinci.bz.it` to `proxy.opendatahub.bz.it`,
+or add a subdomain as `CNAME` to your `AWS/Route53` configuration, if you own
+the domain. Use a TTL of `300` and `proxy.opendatahub.bz.it` as `VALUE`.
 
 We use a proxy with Apache and [Let's Encrypt](https://letsencrypt.org/) for
 that. Let's assume the IP of that proxy is `1.2.3.4`.
 ```shell
 ssh admin@1.2.3.4
 ```
+
+Execute the script for a new apache/certbot configuration:
+```shell
+/home/admin/newsite.sh davinci.bz.it 34.247.202.9:80
+```
+
+This generates the most simple configuration with https redirects. If you need
+something more specific (for example, a server alias `www.davinci.bz.it`),
+here are the manual steps:
+
 Configure Apache on `1.2.3.4` with
 ```shell
-sudo vim /etc/apache2/sites-available/davinci.bz.it.conf
+sudo vim /etc/apache2/sites-available/it.bz.davinci.conf
 ```
 ...with...
 ``` xml
@@ -927,16 +940,16 @@ sudo vim /etc/apache2/sites-available/davinci.bz.it.conf
 	</Proxy>
 	ServerName davinci.bz.it
 	ServerAlias www.davinci.bz.it
-	ProxyPass / http://34.247.202.9/
-	ProxyPassReverse / http://34.247.202.9/
+	ProxyPass / http://34.247.202.9:80/
+	ProxyPassReverse / http://34.247.202.9:80/
 	ProxyPreserveHost On
-	ErrorLog /var/log/apache2/davinci.bz.it
+	ErrorLog /var/log/apache2/it.bz.davinci
 </VirtualHost>
 ```
 Enable the new configuration
 ```shell
 cd /etc/apache2/sites-enabled/
-sudo ln -s /etc/apache2/sites-available/davinci.bz.it.conf davinci.bz.it.conf
+sudo ln -s /etc/apache2/sites-available/it.bz.davinci.conf it.bz.davinci.conf
 ```
 Finally, get your certificates and final configuration. Execute...
 ```shell
@@ -959,9 +972,6 @@ Define your firewall, such that only the proxy `1.2.3.4` can point to port `80` 
     Source:       1.2.3.4/32
     Description:  LETS ENCRYPT PROXY
 
-
-Finally, tell your ICT guys to point the DNS entries for `davinci.bz.it` to
-the proxy.
 
 ### I want to mount an aws s3 bucket on my server
 
