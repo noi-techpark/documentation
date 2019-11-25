@@ -1107,6 +1107,33 @@ SELECT * FROM (
 ) temp;
 ```
 
+### I want to backup and restore specific schemas
+First of all you need to be sure to have access to the database and you have postgres installed so you can use "pg_dump,pg_restore".
+Try to do this on a server and not on your local machine. Use a screen session to avoid a crash/timeout after you disconnect.
+`screen`
+
+Once your in the screen session, start your backup like this:
+```
+pg_dump -O -Fc -n <schema name> -n <another schema name> -f <filename of dump> -h <databasehost> -U <your username> <database name>
+
+- O ... do not save ownership of data *
+- Fc ... compress data *
+
+* check man pg_restore / man pg_dump for better doc
+```
+It might take just seconds or even days, depending on the amount of data. So detach from your screen session doing `CTRL+A, CTRL-D`.
+Once the backup is done you can start with the restore. Connect to the server and resume your screen session:`screen -r`.
+Start your restore by doing:
+
+```
+pg_restore -O --role=<role name to associate data with> -h <hostname> -Upbertolla -d <database name> <filename of dump>
+- O ... do not take ownership of data if there is association
+- role ... use this option to set owner of this data in the target db
+
+```
+Disconnect from screen session again and wait till restore is finished
+
+
 ## Open Data Hub Mobility
 
 ### I want to create links between stations
