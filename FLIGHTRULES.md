@@ -45,6 +45,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to update Pimcore](#i-want-to-update-pimcore)
   - [I want to install a Pimcore, that needs a newer PHP version](#i-want-to-install-a-pimcore-that-needs-a-newer-php-version)
   - [I want to create Jenkinsfiles for an newly installed Pimcore webpage](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage)
+  - [I want to upload files to Pimcore greater than 2MB](#i-want-to-upload-files-to-pimcore-greater-than-2mb)
 - [Jenkins Pipelines](#jenkins-pipelines)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
@@ -69,6 +70,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Database](#database)
   - [I want to create a read-only user (aka role)](#i-want-to-create-a-read-only-user-aka-role)
   - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
+  - [I want to backup and restore specific schemas](#i-want-to-backup-and-restore-specific-schemas)
 - [Open Data Hub Mobility](#open-data-hub-mobility)
   - [I want to create links between stations](#i-want-to-create-links-between-stations)
   - [I want to delete an link/edge between stations](#i-want-to-delete-an-linkedge-between-stations)
@@ -486,10 +488,15 @@ pipeline {
                     ssh -i ${KEY} www-data@123.123.123.123 \
                         "set -xeo pipefail
                          cd myprojectorg
+                         cp var/config/website-settings.php ../website-settings.php
                          git fetch --all --prune
                          git reset --hard origin/master
                          git pull
-                         rm -fr var/cache/*
+                         ### Change settings in system.php (mostly just for test environments), like:
+                         ### sed -ie 's/\\(\\"domain\\" => \\)\\([^,]*\\)/\\1\\"test.davinci.bz.it\\"/' var/config/system.php
+                         rm -rf var/cache/*
+                         chmod +x ./bin/console
+                         cp -f ../website-settings.php var/config/website-settings.php
                          ./bin/console c:c -e dev
                          ./bin/console c:c -e prod"
                    '''
@@ -500,6 +507,23 @@ pipeline {
 ```
 
 Finally, you just need to create Pipelines inside Jenkins' web-frontend.
+
+### I want to upload files to Pimcore greater than 2MB
+
+Login to the server with `ssh` and check which upload limits are set within the
+different `php.ini` files:
+```sh
+grep -inr upload_max_filesize /etc/php/*/fpm/php.in
+```
+Assume we have PHP 7.0 and 7.2 installed. Add the new limit in MB and restart
+all php services:
+```sh
+sudo vim /etc/php/7.0/fpm/php.ini
+sudo vim /etc/php/7.2/fpm/php.ini
+
+sudo service php7.0-fpm restart
+sudo service php7.2-fpm restart
+```
 
 ## Jenkins Pipelines
 
