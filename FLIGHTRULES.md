@@ -83,6 +83,10 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
     - [I want to debug my rules](#i-want-to-debug-my-rules)
 - [Maven](#maven)
+  - [I want to run maven without tests](#i-want-to-run-maven-without-tests)
+  - [I want to run maven in a non-interactive mode without output colors](#i-want-to-run-maven-in-a-non-interactive-mode-without-output-colors)
+  - [I want to force maven to always update dependencies](#i-want-to-force-maven-to-always-update-dependencies)
+  - [I want to use maven to deploy on a tomcat server](#i-want-to-use-maven-to-deploy-on-a-tomcat-server)
   - [ODH Maven repository](#odh-maven-repository)
     - [I want to use an open source java library of the OpenDataHub](#i-want-to-use-an-open-source-java-library-of-the-opendatahub)
     - [I want to upload an artifact to the odh maven repository](#i-want-to-upload-an-artifact-to-the-odh-maven-repository)
@@ -1327,6 +1331,47 @@ sees all types and periods of station `5`. However, since `(station, type, perio
 left-to-right), something like `(3,null,null,1)` is considered a erroneous permission rule.
 
 ## Maven
+
+### I want to run maven without tests
+If you run your tests already in a former stage, you can skip tests as follows:
+```sh
+mvn -Dmaven.test.skip=true ...
+```
+
+### I want to run maven in a non-interactive mode without output colors
+This is useful for scripting.
+```sh
+mvn -B ...
+```
+
+### I want to force maven to always update dependencies
+This is useful for scripting.
+```sh
+mvn -U ...
+```
+
+### I want to use maven to deploy on a tomcat server
+We have a tomcat server with a running tomcat manager and credentials in our environment:
+```sh
+TESTSERVER_TOMCAT_ENDPOINT = "http://pagebuilder.tomcat02.testingmachine.eu:8080/manager/text"
+TESTSERVER_TOMCAT_CREDENTIALS = "testserver-tomcat8-credentials-s3cr3t"
+```
+
+Configure access credentials for your tomcat server inside the `~/.m2/settings.xml`.
+For instance, as follows:
+```sh
+sed -i -e "s/<\\/settings>$//g\" ~/.m2/settings.xml
+echo "    <servers>" >> ~/.m2/settings.xml
+echo "        ${TESTSERVER_TOMCAT_CREDENTIALS}" >> ~/.m2/settings.xml
+echo "    </servers>" >> ~/.m2/settings.xml
+echo "</settings>" >> ~/.m2/settings.xml
+```
+
+Then run:
+```sh
+mvn -B -U tomcat:redeploy -Dmaven.tomcat.url=${TESTSERVER_TOMCAT_ENDPOINT} -Dmaven.tomcat.server=testServer -Dmaven.tomcat.path=/
+```
+
 ### ODH Maven repository
 #### I want to use an open source java library of the OpenDataHub
 Add the opendatahub repository to your pom.xml file
