@@ -691,7 +691,7 @@ sudo adduser chuck
 ```
 Store Chuck's public ssh key in the `authorized_keys` file
 ```shell
-sudo -u chuck bash
+sudo -iu chuck bash
 mkdir .ssh
 chmod 700 .ssh
 touch .ssh/authorized_keys
