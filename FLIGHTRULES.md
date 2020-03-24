@@ -25,7 +25,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 - [Licensing and REUSE compliance](#licensing-and-reuse-compliance)
 - [OAuth](#oauth)
-  - [I want to get an access token from our OAuth 2.0 Identity Server](#i-want-to-get-an-access-token-from-our-oauth-20-identity-server)
+  - [I want to access the console of Keycloak as regular user](#i-want-to-access-the-console-of-keycloak-as-regular-user)
+  - [I want to access the console of Keycloak as user "admin"](#i-want-to-access-the-console-of-keycloak-as-user-admin)
+  - [I want to get an access token from our OAuth 2.0 Keycloak Server](#i-want-to-get-an-access-token-from-our-oauth-20-keycloak-server)
   - [I want to know all configuration options from our OAuth 2.0 Identity Server](#i-want-to-know-all-configuration-options-from-our-oauth-20-identity-server)
   - [I want to know the public key of the OAuth 2.0 Identity Server to verify a token](#i-want-to-know-the-public-key-of-the-oauth-20-identity-server-to-verify-a-token)
 - [Work Flow and Release Management](#work-flow-and-release-management)
@@ -76,8 +78,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to delete an link/edge between stations](#i-want-to-delete-an-linkedge-between-stations)
   - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
     - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
-    - [I want to add a new user](#i-want-to-add-a-new-user)
-    - [I want to disable an existing user](#i-want-to-disable-an-existing-user)
+    - [I want to add or disable a new user to be used in V1](#i-want-to-add-or-disable-a-new-user-to-be-used-in-v1)
+    - [I want to add a new user to be used in V2](#i-want-to-add-a-new-user-to-be-used-in-v2)
+    - [I want to retrieve closed data in V2](#i-want-to-retrieve-closed-data-in-v2)
     - [I want to add a new role](#i-want-to-add-a-new-role)
     - [I want to combine a role with users](#i-want-to-combine-a-role-with-users)
     - [I want to define filter rules for a certain role](#i-want-to-define-filter-rules-for-a-certain-role)
@@ -106,19 +109,41 @@ See REUSE-specific [flight rules](https://github.com/noi-techpark/reuse).
 
 ## OAuth
 
-### I want to get an access token from our OAuth 2.0 Identity Server
+### I want to access the console of Keycloak as regular user
 
-We have an OAuth server at `https://auth.opendatahub.bz.it` and a user called
-`myuser` with a password `s3cr3t`, a client `user` with a secret `secret`, a
-scope `api1` and we want to use the grant type `Password Credentials`, then the
-`curl` call would look like this:
+Go to https://auth.opendatahub.bz.it/auth/admin/noi/console and login with
+"yourname/password..."
 
+Test server is https://auth.opendatahub.testingmachine.eu/auth/admin/noi/console
+
+### I want to access the console of Keycloak as user "admin"
+
+Go to https://auth.opendatahub.bz.it and login with "admin/password..."
+
+Test server is https://auth.opendatahub.testingmachine.eu
+
+### I want to get an access token from our OAuth 2.0 Keycloak Server
+
+There are two methods, first with `grant_type=password`:
 ```sh
-curl -X POST \
-  https://auth.opendatahub.bz.it/connect/token \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
-  -d 'grant_type=password&client_secret=secret&client_id=user&scope=api1&username=myuser&password=s3cr3t'
+curl -X POST -L -H 'Content-Type:application/x-www-form-urlencoded' \
+    "https://auth.opendatahub.bz.it/auth/realms/noi/protocol/openid-connect/token" \
+    -d 'grant_type=password&username=***&password=****&client_id=your-client-id'
 ```
+
+...and second, with `grant_type=refresh_token`, which you should have got with
+the call above.
+```sh
+curl -X POST -L -H 'Content-Type:application/x-www-form-urlencoded' \
+    "https://auth.opendatahub.bz.it/auth/realms/noi/protocol/openid-connect/token" \
+     -d 'grant_type=refresh_token&refresh_token=*****&client_id=your-client-id'
+```
+
+Example: `client_id=odh-mobility-v2` to access the mobility Ninja API. To find
+your `client_id` go to [keycloak/noi/clients](https://auth.opendatahub.bz.it/auth/admin/noi/console/#/realms/noi/clients).
+
+NB: Use `https://auth.opendatahub.testingmachine.eu`, if you want to get tokens from our
+Keycloak test server.
 
 Testing? You can see the contents of this token with https://jwt.io.
 
@@ -1166,9 +1191,8 @@ Disconnect from screen session again and wait till restore is finished
 
 ### I want to create links between stations
 
-For that to work we use the an edge, two nodes and an edge description. The edge
-is represented by the `edge` table and the stations and edge description by
-three entries within the `station` table.
+The edge is represented by the `edge` table and the start and end stations and
+the edge description by three entries within the `station` table.
 
 I have an already existing station `siemens` and a station `proma` of type
 `BluetoothStation`, and want to create a link between them. The link will be
@@ -1261,15 +1285,39 @@ Finally, refresh the materialized view to reflect the new changes:
 ```sql
 REFRESH MATERIALIZED VIEW bdppermissions;
 ```
-#### I want to add a new user
+#### I want to add or disable a new user to be used in V1
+
 ```sql
 INSERT INTO bdpuser(email, password)
 VALUES ('this_is_my@ema.il', crypt('top-S3CR3T', gen_salt('bf')));
 ```
-#### I want to disable an existing user
+
+To disable the user, do
 ```sql
 UPDATE bdpuser SET enabled = false WHERE email = 'this_is_my@ema.il';
 ```
+
+#### I want to add a new user to be used in V2
+
+Add a new user to the OAuth server. Go to
+[Keycloak/noi/users](https://auth.opendatahub.bz.it/auth/admin/noi/console/#/realms/noi/users)
+and add a new user. Then, under `Role Mappings` click on `Client Roles` and
+choose `odh-mobility-v2`. Select available roles and assign them.
+
+#### I want to retrieve closed data in V2
+
+See [I want to get an access token from our OAuth 2.0 Keycloak
+Server](#i-want-to-get-an-access-token-from-our-oauth-20-keycloak-server) and
+use `client_id=odh-mobility-v2` to get an access token.
+
+Use that access token then with the API:
+
+```sh
+curl -X GET 'https://mobility.api.opendatahub.bz.it/v2/api/flat/VMS/*?select=sname,mvalue' \
+    -H 'content-type: application/json' \
+    -H 'Authorization: bearer your-access-token'
+```
+
 #### I want to add a new role
 ```sql
 INSERT INTO bdprole(name) VALUES ('Role A');
@@ -1287,6 +1335,8 @@ Finally, refresh the materialized view to reflect the new changes:
 REFRESH MATERIALIZED VIEW bdppermissions;
 ```
 #### I want to combine a role with users
+
+In V1 you must do this through SQL, as follows:
 ```sql
 INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (
     (SELECT id FROM bdpuser WHERE email = 'this_is_my@ema.il'),
@@ -1297,6 +1347,10 @@ INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (
 ```sql
 INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (2, 3);
 ```
+
+In V2 this step is not necessary, because the mapping gets done in Keycloak
+already.
+
 #### I want to define filter rules for a certain role
 ```sql
 INSERT INTO bdprules(role_id, station_id, type_id, period)
