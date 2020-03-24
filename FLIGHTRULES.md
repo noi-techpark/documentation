@@ -1334,6 +1334,13 @@ Finally, refresh the materialized view to reflect the new changes:
 ```sql
 REFRESH MATERIALIZED VIEW bdppermissions;
 ```
+
+In V2 you need also to add the same role prefixed with `BDP_` to Keycloak roles.
+Go to
+[keycloak/noi/clients](https://auth.opendatahub.bz.it/auth/admin/noi/console/#/realms/noi/clients)
+and then to "Roles > Add Role". If the role is called `MUNICIPALITY` inside the
+table `bdprole`, then it must be called `BDP_MUNICIPALITY` inside Keycloak.
+
 #### I want to combine a role with users
 
 In V1 you must do this through SQL, as follows:
@@ -1348,8 +1355,10 @@ INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (
 INSERT INTO bdpusers_bdproles(user_id, role_id) VALUES (2, 3);
 ```
 
-In V2 this step is not necessary, because the mapping gets done in Keycloak
-already.
+In V2 the SQL step is not necessary, because the mapping gets done in Keycloak. Go to
+[Keycloak/noi/users](https://auth.opendatahub.bz.it/auth/admin/noi/console/#/realms/noi/users)
+and choose an existing user. Then, under `Role Mappings` click on `Client Roles`
+and choose `odh-mobility-v2`. Select available roles and assign them.
 
 #### I want to define filter rules for a certain role
 ```sql
