@@ -28,8 +28,6 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to access the console of Keycloak as regular user](#i-want-to-access-the-console-of-keycloak-as-regular-user)
   - [I want to access the console of Keycloak as user "admin"](#i-want-to-access-the-console-of-keycloak-as-user-admin)
   - [I want to get an access token from our OAuth 2.0 Keycloak Server](#i-want-to-get-an-access-token-from-our-oauth-20-keycloak-server)
-  - [I want to know all configuration options from our OAuth 2.0 Identity Server](#i-want-to-know-all-configuration-options-from-our-oauth-20-identity-server)
-  - [I want to know the public key of the OAuth 2.0 Identity Server to verify a token](#i-want-to-know-the-public-key-of-the-oauth-20-identity-server-to-verify-a-token)
 - [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
@@ -146,17 +144,6 @@ NB: Use `https://auth.opendatahub.testingmachine.eu`, if you want to get tokens 
 Keycloak test server.
 
 Testing? You can see the contents of this token with https://jwt.io.
-
-### I want to know all configuration options from our OAuth 2.0 Identity Server
-
-We want to know which options are available:
-https://auth.opendatahub.bz.it/.well-known/openid-configuration
-
-### I want to know the public key of the OAuth 2.0 Identity Server to verify a token
-
-Open https://auth.opendatahub.bz.it/.well-known/openid-configuration/jwks and
-copy the `x5c` field, which is a chain of keys.
-
 
 ## Work Flow and Release Management
 
