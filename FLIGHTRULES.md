@@ -28,6 +28,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to access the console of Keycloak as regular user](#i-want-to-access-the-console-of-keycloak-as-regular-user)
   - [I want to access the console of Keycloak as user "admin"](#i-want-to-access-the-console-of-keycloak-as-user-admin)
   - [I want to get an access token from our OAuth 2.0 Keycloak Server](#i-want-to-get-an-access-token-from-our-oauth-20-keycloak-server)
+  - [I get an error called o.k.adapters.RequestAuthenticator: SSL is required to authenticate](#i-get-an-error-called-okadaptersrequestauthenticator-ssl-is-required-to-authenticate)
 - [Work Flow and Release Management](#work-flow-and-release-management)
   - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
   - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
@@ -144,6 +145,22 @@ NB: Use `https://auth.opendatahub.testingmachine.eu`, if you want to get tokens 
 Keycloak test server.
 
 Testing? You can see the contents of this token with https://jwt.io.
+
+### I get an error called o.k.adapters.RequestAuthenticator: SSL is required to authenticate
+
+Since we use the API behind our Lets Encrypt Proxy, the proxy itself handles SSL termination.
+The connection between the proxy and the API is not secure by definition, hence we need to
+deactivate it for Keycloak otherwise we get an error
+
+```
+o.k.adapters.RequestAuthenticator : SSL is required to authenticate. Remote address 34.255.139.75 is secure: false, SSL required for: EXTERNAL .'
+```
+
+Set `KEYCLOAK_SSL_REQUIRED=none`
+
+Possible values: 'none', 'external', 'all'
+Source:
+https://www.keycloak.org/docs/latest/securing_apps/index.html#_java_adapter_config
 
 ## Work Flow and Release Management
 
