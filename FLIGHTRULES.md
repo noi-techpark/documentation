@@ -1157,6 +1157,9 @@ https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Re
 and the [I run out of disk space on an AWS/RDS Postgres
 instance](#i-run-out-of-disk-space-on-an-awsrds-postgres-instance) chapter.
 
+An example application is our [Virtual Knowledge
+Graph](https://github.com/noi-techpark/odh-vkg).
+
 ### I want to create a read-only user (aka role)
 ```sql
 CREATE ROLE read_only_user WITH LOGIN PASSWORD 'your_strong_password';
