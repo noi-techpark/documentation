@@ -69,6 +69,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
+  - [I run out of disk space on an AWS/RDS Postgres instance](#i-run-out-of-disk-space-on-an-awsrds-postgres-instance)
+  - [I want to enable logical replication on an AWS/RDS Postgres instance](#i-want-to-enable-logical-replication-on-an-awsrds-postgres-instance)
   - [I want to create a read-only user (aka role)](#i-want-to-create-a-read-only-user-aka-role)
   - [I want to diff two tables with the same schema](#i-want-to-diff-two-tables-with-the-same-schema)
   - [I want to backup and restore specific schemas](#i-want-to-backup-and-restore-specific-schemas)
@@ -1139,6 +1141,21 @@ git push
 ## Database
 
 If not otherwise stated, all these chapters are about PostgreSQL.
+
+### I run out of disk space on an AWS/RDS Postgres instance
+
+See https://aws.amazon.com/premiumsupport/knowledge-center/diskfull-error-rds-postgresql/.
+
+If you have logical replication enabled and PITR, it could be that the WAL logs
+are kept forever, so you will run out of diskspace. Disable PITR, if you can or
+cleanup unnecessary publication slots (see link above for details).
+
+### I want to enable logical replication on an AWS/RDS Postgres instance
+
+See
+https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Replication.Logical.html
+and the [I run out of disk space on an AWS/RDS Postgres
+instance](#i-run-out-of-disk-space-on-an-awsrds-postgres-instance) chapter.
 
 ### I want to create a read-only user (aka role)
 ```sql
