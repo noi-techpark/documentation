@@ -1241,7 +1241,8 @@ the edge description by three entries within the `station` table.
 I have an already existing station `siemens` and a station `proma` of type
 `BluetoothStation`, and want to create a link between them. The link will be
 named `Siemens->Ponte Roma` and the unique identifier is called
-`siemens->proma`. The type of the edge is `BluetoothStationLink`.
+`siemens->proma`. The type of the edge is `BluetoothStationLink`, and the origin is
+`NOI`, because we are the authors of this edge.
 
 Execute the following code with `psql` or any other PostgreSQL aware tool:
 
@@ -1256,8 +1257,8 @@ a as (
     where stationcode = 'proma' and stationtype = 'BluetoothStation'
 )
 , ins1 as (
-	insert into station (active, available, name, stationcode, stationtype)
-	select true, true, a.name || '->' || b.name, a.stationcode || '->' || b.stationcode, 'BluetoothStationLink'
+	insert into station (origin, active, available, name, stationcode, stationtype)
+	select 'NOI', true, true, a.name || '->' || b.name, a.stationcode || '->' || b.stationcode, 'BluetoothStationLink'
     from a, b
 	returning id as link_station_id
 )
