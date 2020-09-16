@@ -66,6 +66,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to automate server updates](#i-want-to-automate-server-updates)
   - [I want to install the CloudWatch Agent on a Linux machine](#i-want-to-install-the-cloudwatch-agent-on-a-linux-machine)
   - [I want to install the CloudWatch Agent on a Windows machine](#i-want-to-install-the-cloudwatch-agent-on-a-windows-machine)
+  - [I want to monitor a website using Heartbeat](#i-want-to-monitor-a-website-using-heartbeat)
 - [Documentation](#documentation)
   - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
 - [Database](#database)
@@ -1113,6 +1114,15 @@ Run the pipeline inside Jenkins.
     - `cd 'C:\Program Files\Amazon\AmazonCloudWatchAgent'`
     - `./amazon-cloudwatch-agent-ctl.ps1 -a fetch-config -m ec2 -c ssm:AmazonCloudWatch-WindowsBasic -s`
 4. Check if the CloudWatch Agent Service is running in the Windows Services: AmazonCloudWatchAgent
+
+### I want to monitor a website using Heartbeat
+
+1. SSH into the server where Heartbeat is installed and who performs the recurring checks
+    - Grafana: 34.247.135.46
+2. Change to the folder `/var/heartbeat/config`
+3. Modify the configuration
+    - Every .yml file inside this folder will be read and included
+    - Changes to the .yml files will be picked up immediately automatically
 
 ## Documentation
 
