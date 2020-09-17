@@ -1251,7 +1251,7 @@ the edge description by three entries within the `station` table.
 I have an already existing station `siemens` and a station `proma` of type
 `BluetoothStation`, and want to create a link between them. The link will be
 named `Siemens->Ponte Roma` and the unique identifier is called
-`siemens->proma`. The type of the edge is `BluetoothStationLink`, and the origin is
+`siemens->proma`. The type of the edge is `LinkStation`, and the origin is
 `NOI`, because we are the authors of this edge.
 
 Execute the following code with `psql` or any other PostgreSQL aware tool:
@@ -1268,7 +1268,7 @@ a as (
 )
 , ins1 as (
 	insert into station (origin, active, available, name, stationcode, stationtype)
-	select 'NOI', true, true, a.name || '->' || b.name, a.stationcode || '->' || b.stationcode, 'BluetoothStationLink'
+	select 'NOI', true, true, a.name || '->' || b.name, a.stationcode || '->' || b.stationcode, 'LinkStation'
     from a, b
 	returning id as link_station_id
 )
@@ -1283,17 +1283,17 @@ select * from ins2;
 ### I want to delete an link/edge between stations
 
 I want to delete an edge between the two stations `siemens` and `proma`, with
-name `siemens->proma` and type `BluetoothStationLink`.
+name `siemens->proma` and type `LinkStation`.
 
 ```sql
 delete from edge
 where edge_data_id = (
     select id from station
-    where stationcode = 'siemens->proma' and stationtype = 'BluetoothStationLink'
+    where stationcode = 'siemens->proma' and stationtype = 'LinkStation'
 );
 
 delete from station
-where stationcode = 'siemens->proma' and stationtype = 'BluetoothStationLink';
+where stationcode = 'siemens->proma' and stationtype = 'LinkStation';
 ```
 
 NB: If you do not know the stationcode, search for it with:
@@ -1303,7 +1303,7 @@ select * from edge
 join station org on ed.origin_id = org.id
 join station dst on ed.destination_id = dst.id
 join station lnk on ed.edge_data_id = lnk.id
-where lnk.stationtype = 'BluetoothStationLink'
+where lnk.stationtype = 'LinkStation'
 and org.stationcode = 'siemens'
 and dst.stationcode = 'proma'
 ```
