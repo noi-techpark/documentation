@@ -1313,9 +1313,13 @@ and dst.stationcode = 'proma'
 This chapter explains how to add users and roles, and to define which data can be seen as
 open data, and what is closed.
 
-_Please note: Only API methods regarding measurements are restricted. Methods regarding
-stations and types are considered open-data due to their meta-data character, i.e.,
-`get-station`, `get-station-details`, or `get-data-types` always expose all data._
+_Please note: Only API methods regarding measurements are restricted. Methods
+regarding stations and types are considered open-data due to their meta-data
+character, so they always expose all data._
+
+**!! All rules are defined inside
+[opendatarules.sql](https://github.com/noi-techpark/bdp-core/blob/master/dal/src/main/resources/META-INF/sql/opendatarules.sql)
+of the Big Data Platform Core Repo !!**
 
 #### I want to declare some records as open data
 
