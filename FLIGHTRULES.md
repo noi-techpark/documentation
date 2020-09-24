@@ -687,7 +687,7 @@ apt -y install git binutils
 git clone https://github.com/aws/efs-utils
 cd efs-utils
 ./build-deb.sh
-apt -y install ./build/amazon-efs-utils-1.27.1-1_all.deb
+apt -y install ./build/amazon-efs-utils-*_all.deb
 ```
 
 Then, create a mountpoint:
