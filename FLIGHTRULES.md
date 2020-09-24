@@ -52,6 +52,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
   - [I want to create a cron-job to clone AWS instances](#i-want-to-create-a-cron-job-to-clone-aws-instances)
 - [Servers](#servers)
+  - [I want to setup a new Docker Server](#i-want-to-setup-a-new-docker-server)
+  - [I want to mount an AWS/EFS endpoint inside Debian 10](#i-want-to-mount-an-awsefs-endpoint-inside-debian-10)
   - [I want to setup an SMTP server](#i-want-to-setup-an-smtp-server)
   - [I want to create a test clone of a server instance](#i-want-to-create-a-test-clone-of-a-server-instance)
   - [I want to give server-access via SSH to an external contributor](#i-want-to-give-server-access-via-ssh-to-an-external-contributor)
@@ -669,6 +671,33 @@ Set `Clean after/before checkout` and add your script path to
 
 
 ## Servers
+
+### I want to setup a new Docker Server
+Create a EC2 Instance with Debian 10, add a IAM role called `docker` and assign
+corresponding security groups for SSH, and add either the security group
+`test-docker-sg` or `prod-docker-sg`.
+
+Then install the docker playbook, described in our [infrastructure ansible playbooks repository](https://github.com/noi-techpark/infrastructure/tree/master/ansible).
+
+### I want to mount an AWS/EFS endpoint inside Debian 10
+
+As admin install the EFS tools:
+```sh
+apt -y install git binutils
+git clone https://github.com/aws/efs-utils
+cd efs-utils
+./build-deb.sh
+apt -y install ./build/amazon-efs-utils-1.27.1-1_all.deb
+```
+
+Then, create a mountpoint:
+```sh
+mkdir -p /mnt/whatever
+echo "fs-9a7da250:/ /mnt/whatever efs _netdev,tls,accesspoint=fsap-0974963b0bab587c3 0 0" >> /etc/fstab
+mount -a
+```
+
+Further reading: [Installing the EFS tools](https://docs.aws.amazon.com/efs/latest/ug/installing-amazon-efs-utils.html), [Mounting EFS](https://docs.aws.amazon.com/efs/latest/ug/mounting-fs.html).
 
 ### I want to setup an SMTP server
 
