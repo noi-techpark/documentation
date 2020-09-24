@@ -693,7 +693,7 @@ apt -y install ./build/amazon-efs-utils-1.27.1-1_all.deb
 Then, create a mountpoint:
 ```sh
 mkdir -p /mnt/whatever
-echo "fs-9a7da250:/ /mnt/whatever efs _netdev,tls,accesspoint=fsap-0974963b0bab587c3 0 0" >> /etc/fstab
+echo "fs-abc123456:/ /mnt/whatever efs _netdev,tls,accesspoint=fsap-0974961234567b587c3 0 0" >> /etc/fstab
 mount -a
 ```
 
