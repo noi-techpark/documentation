@@ -1,4 +1,4 @@
-# Flight rules for ODH
+# Flight rules for the Core Team of the Open Data Hub
 
 #### What are "flight rules"?
 
