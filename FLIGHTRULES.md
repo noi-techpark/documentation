@@ -23,6 +23,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Docker](#docker)
+  - [I want to install some packages inside an debian-based container](#i-want-to-install-some-packages-inside-an-debian-based-container)
 - [Licensing and REUSE compliance](#licensing-and-reuse-compliance)
 - [OAuth](#oauth)
   - [I want to access the console of Keycloak as regular user](#i-want-to-access-the-console-of-keycloak-as-regular-user)
@@ -48,6 +50,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to create Jenkinsfiles for an newly installed Pimcore webpage](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage)
   - [I want to upload files to Pimcore greater than 2MB](#i-want-to-upload-files-to-pimcore-greater-than-2mb)
 - [Jenkins Pipelines](#jenkins-pipelines)
+  - [I want to show ansi colors](#i-want-to-show-ansi-colors)
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
   - [I want to create a cron-job to clone AWS instances](#i-want-to-create-a-cron-job-to-clone-aws-instances)
