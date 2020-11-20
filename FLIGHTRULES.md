@@ -107,6 +107,19 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ----
 
+## Docker
+
+### I want to install some packages inside an debian-based container
+
+To have a minimal image use the following:
+```docker
+RUN apt-get update \
+    && apt-get -y upgrade \
+    && apt-get -y install --no-install-recommends <package-list> \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+```
+
 ## Licensing and REUSE compliance
 
 See REUSE-specific [flight rules](https://github.com/noi-techpark/reuse).
@@ -564,6 +577,14 @@ sudo service php7.2-fpm restart
 ```
 
 ## Jenkins Pipelines
+
+### I want to show ansi colors
+Add the following lines as block inside `pipeline{ ... }`:
+```groovy
+options {
+    ansiColor('xterm')
+}
+```
 
 ### I want to execute arbitrary commands on the remote server
 
