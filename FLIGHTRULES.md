@@ -65,6 +65,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
   - [I want to make my web server HTTPS compliant](#i-want-to-make-my-web-server-https-compliant)
+  - [I want to fix the proxy error 'Size of a request header field exceeds server limit'](#i-want-to-fix-the-proxy-error-size-of-a-request-header-field-exceeds-server-limit)
+  - [An error on the proxy shows a wrong server URL](#an-error-on-the-proxy-shows-a-wrong-server-url)
   - [I want to mount an aws s3 bucket on my server](#i-want-to-mount-an-aws-s3-bucket-on-my-server)
     - [Prerequisit](#prerequisit)
     - [Setup](#setup)
@@ -1061,8 +1063,7 @@ sudo vim /etc/apache2/sites-available/it.bz.davinci.conf
 ```
 Enable the new configuration
 ```shell
-cd /etc/apache2/sites-enabled/
-sudo ln -s /etc/apache2/sites-available/it.bz.davinci.conf it.bz.davinci.conf
+sudo a2ensite it.bz.davinci.conf
 ```
 Finally, get your certificates and final configuration. Execute...
 ```shell
@@ -1085,6 +1086,43 @@ Define your firewall, such that only the proxy `1.2.3.4` can point to port `80` 
     Source:       1.2.3.4/32
     Description:  LETS ENCRYPT PROXY
 
+
+### I want to fix the proxy error 'Size of a request header field exceeds server limit'
+
+Increase the `LimitRequestFieldSize` in your first virtual host configuration
+(the error shows a server name which is the first virtual host configuration):
+
+For example (`0` means unlimited; `8190` is the default):
+```
+LimitRequestFieldSize 16380
+```
+
+See [Apache Docs](https://httpd.apache.org/docs/2.2/mod/core.html#limitrequestfieldsize)
+
+
+### An error on the proxy shows a wrong server URL
+
+The first host configuration could be just a random server config, which is
+misleading, when a general proxy server occurs.
+
+Solution: Configure the first virtual host (`000-default.conf` on Debian) as
+follows:
+
+```
+<VirtualHost *:80>
+	ServerName proxy.opendatahub.bz.it
+	ServerAdmin help@opendatahub.bz.it
+	DocumentRoot /var/www/html
+	ErrorLog ${APACHE_LOG_DIR}/it.bz.opendatahub.proxy.error.log
+	CustomLog ${APACHE_LOG_DIR}/it.bz.opendatahub.proxy.access.log combined
+	LimitRequestFieldSize 16380
+</VirtualHost>
+```
+
+Run LetsEncrypt to add https support:
+```shell
+sudo /opt/certbot-auto --apache
+```
 
 ### I want to mount an aws s3 bucket on my server
 
