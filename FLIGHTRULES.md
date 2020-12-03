@@ -1245,8 +1245,6 @@ If not otherwise stated, all these chapters are about PostgreSQL.
 
 ### I run out of disk space on an AWS/RDS Postgres instance
 
-See https://aws.amazon.com/premiumsupport/knowledge-center/diskfull-error-rds-postgresql/.
-
 If you see a continues increase in storage, it is possible that PITR prevents
 the cleaning of WAL logs. See [AWS RDS
 Docs](https://aws.amazon.com/premiumsupport/knowledge-center/diskfull-error-rds-postgresql/).
@@ -1271,15 +1269,9 @@ To free storage, you can also drop the underlying slot:
 SELECT pg_drop_replication_slot('Your_slotname_name');
 ```
 
-### I want to enable logical replication on an AWS/RDS Postgres instance
+### I want to enable logical replication on an AWS/RDS or regular Postgres instance
 
-See
-https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Replication.Logical.html
-and the [I run out of disk space on an AWS/RDS Postgres
-instance](#i-run-out-of-disk-space-on-an-awsrds-postgres-instance) chapter.
-
-An example application is our [Virtual Knowledge
-Graph](https://github.com/noi-techpark/odh-vkg).
+See our logical replication specific [flight rules](logical-replication.md).
 
 ### I want to create a read-only user (aka role)
 ```sql
