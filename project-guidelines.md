@@ -1,20 +1,36 @@
 Project Guidelines
 ==================
 
-## Table of Content
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
 
 - [Basics](#basics)
-    - [Git](#git)
-    - [Readme](#readme)
+  - [Git](#git)
+  - [Readme](#readme)
 - [Java](#java)
-    - [Dependency Management](#dependency-management)
-    - [Configuration](#configuration)
-    - [Logging](#logging)
-    - [Testing](#testing)
-    - [Cron Jobs](#cron-jobs)
+  - [Dependency Management](#dependency-management)
+  - [Boilerplate](#boilerplate)
+  - [War Files](#war-files)
+  - [Java Doc](#java-doc)
+  - [Configuration](#configuration)
+  - [Logging](#logging)
+  - [Testing](#testing)
+  - [Cron Jobs](#cron-jobs)
 - [Database](#database)
+  - [Flyway](#flyway)
 - [Api](#api)
+  - [Rest](#rest)
+  - [Swagger](#swagger)
+  - [Request Structure](#request-structure)
+  - [Response Structure](#response-structure)
+  - [HTTP Status Codes](#http-status-codes)
+- [Testing](#testing-1)
+  - [Unit Tests](#unit-tests)
+  - [Integration Tests](#integration-tests)
 - [Docker](#docker)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Basics
 

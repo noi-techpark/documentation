@@ -1,7 +1,6 @@
 # Logical Replication on Postgres
 
-Inspired by https://blog.raveland.org/post/postgresql_lr_en/ and [Aurora PostgreSQL Replication for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Replication.Logical.html)
-
+Inspired by a [Raveland Blog Post](https://blog.raveland.org/post/postgresql_lr_en) and [Aurora PostgreSQL Replication for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Replication.Logical.html).
 An example application is our [Virtual Knowledge Graph](https://github.com/noi-techpark/odh-vkg).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -47,7 +46,9 @@ On the Source database, one needs to create a dedicated role for replication (he
 tables to the dedicated role.
 ```sql
 CREATE ROLE replication_user WITH LOGIN PASSWORD 's3cret' REPLICATION;
+COMMENT ON ROLE replication_user IS 'Role with the privileges to replicate data for the ABC project';
 CREATE PUBLICATION my_publication FOR ALL TABLES;
+ALTER PUBLICATION my_publication SET (publish = ''); -- Make it a read-only publication by default
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO replication_user;
 ```
 
@@ -69,8 +70,10 @@ On the Source database, one needs to create a dedicated role for replication (he
 tables to the dedicated role.
 ```sql
 CREATE ROLE replication_user WITH LOGIN PASSWORD 's3cret';
+COMMENT ON ROLE replication_user IS 'Role with the privileges to replicate data for the ABC project';
 GRANT rds_replication TO replication_user;
 CREATE PUBLICATION my_publication FOR ALL TABLES;
+ALTER PUBLICATION my_publication SET (publish = ''); -- Make it a read-only publication by default
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO replication_user;
 ```
 
@@ -90,15 +93,15 @@ Check firewall rules.
 
 Let the Subscriber database subscribe to the publication:
 ```sql
-CREATE SUBSCRIPTION my_subscription 
-  CONNECTION 'host=odh-tourism-db1 dbname=tourismuser user=replication_user password=s3cret' 
+CREATE SUBSCRIPTION my_subscription
+  CONNECTION 'host=odh-tourism-db1 dbname=tourismuser user=replication_user password=s3cret'
   PUBLICATION my_publication
   WITH (enabled = false);
 ```
 Note that the subscription `my_subscription` must not already exist (otherwise
 give it another name). In addition, it should not be enabled when you plan to
 add triggers or other mechanisms first, that will perform actions on every CRUD
-operation. Start the logical replication then with 
+operation. Start the logical replication then with
 
 ```SQL
 ALTER SUBSCRIPTION my_subscription ENABLE;
@@ -135,7 +138,7 @@ ALTER SUBSCRIPTION my_subscription ENABLE;
 ### JSON level
 
 #### Key added
-A new JSON key is first safely ignored. 
+A new JSON key is first safely ignored.
 
 #### Key removed
 However, one should plan to remove soon the mapping entries using that key.

@@ -1,12 +1,15 @@
 Jenkins
 =======
 
-## Table of Content
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
 
 - [Windows Agent](#windows-agent)
 - [Mac Agent](#mac-agent)
 - [Parameterized Builds](#parameterized-builds)
 
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Windows Agent
 
 1. The Jenkins server must be directly accessible from the internet without a proxy and a custom port fo JNLP (49187)

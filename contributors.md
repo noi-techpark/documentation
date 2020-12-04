@@ -1,13 +1,18 @@
 Documentation for Contributors
 ==============================
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
 - [Prerequisites](#prerequisites)
 - [Project Checkout](#project-checkout)
 - [Create a Pull Request](#create-a-pull-request)
 - [Syncing a Fork](#syncing-a-fork)
 - [Resolving Merge Conflicts](#resolving-merge-conflicts)
-- [Combine Two Separate Unrelated Git Repositories](#combine-two-Separate-Unrelated-Git-Repositories)
+- [Combine Two Separate Unrelated Git Repositories](#combine-two-separate-unrelated-git-repositories)
 
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Prerequisites
 
 In the following documentation some example names are used. Please replace them with your names:
