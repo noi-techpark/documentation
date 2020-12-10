@@ -49,6 +49,7 @@ CREATE ROLE replication_user WITH LOGIN PASSWORD 's3cret' REPLICATION;
 COMMENT ON ROLE replication_user IS 'Role with the privileges to replicate data for the ABC project';
 CREATE PUBLICATION my_publication FOR ALL TABLES;
 ALTER PUBLICATION my_publication SET (publish = ''); -- Make it a read-only publication by default
+GRANT USAGE ON SCHEMA public to replication_user;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO replication_user;
 ```
 
@@ -74,6 +75,7 @@ COMMENT ON ROLE replication_user IS 'Role with the privileges to replicate data 
 GRANT rds_replication TO replication_user;
 CREATE PUBLICATION my_publication FOR ALL TABLES;
 ALTER PUBLICATION my_publication SET (publish = ''); -- Make it a read-only publication by default
+GRANT USAGE ON SCHEMA public to replication_user;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO replication_user;
 ```
 
@@ -106,6 +108,8 @@ operation. Start the logical replication then with
 ```SQL
 ALTER SUBSCRIPTION my_subscription ENABLE;
 ```
+
+Limitation of Postgres: The schema must have the same name as on the publication server.
 
 ### Unsubscribing
 
