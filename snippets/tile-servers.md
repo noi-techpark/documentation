@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Tile Server](#tile-server)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Tile Server
 
 - Normally we use a free plan on CartoDB
