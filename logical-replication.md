@@ -63,8 +63,8 @@ SHOW wal_level;
 ```
 
 If it is not already `logical`, do: Create a new "parameter group" and within
-that, set the instance parameter `rds.logical_replication` to `1` and reboot
-your instance.
+that, set the instance parameter `rds.logical_replication` to `1` and
+`max_wal_senders` to `15`, then reboot your instance.
 
 On the Source database, one needs to create a dedicated role for replication (here
 `replication_user`), create a publication (here `my_publication`) and grant access to the
