@@ -84,6 +84,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to backup and restore specific schemas](#i-want-to-backup-and-restore-specific-schemas)
 - [Open Data Hub Mobility](#open-data-hub-mobility)
   - [I want to create links between stations](#i-want-to-create-links-between-stations)
+    - [1) For edges with start- and end-stations](#1-for-edges-with-start--and-end-stations)
+    - [2) For edges without start- and end-stations](#2-for-edges-without-start--and-end-stations)
   - [I want to delete an link/edge between stations](#i-want-to-delete-an-linkedge-between-stations)
   - [I want to change visibility of mobility data](#i-want-to-change-visibility-of-mobility-data)
     - [I want to declare some records as open data](#i-want-to-declare-some-records-as-open-data)
@@ -1337,7 +1339,10 @@ named `Siemens->Ponte Roma` and the unique identifier is called
 `siemens->proma`. The type of the edge is `LinkStation`, and the origin is
 `NOI`, because we are the authors of this edge.
 
-Execute the following code with `psql` or any other PostgreSQL aware tool:
+Execute one of the following code with `psql` or any other PostgreSQL aware
+tool:
+
+#### 1) For edges with start- and end-stations
 
 ```sql
 with
@@ -1362,6 +1367,26 @@ a as (
 )
 select * from ins2;
 ```
+
+#### 2) For edges without start- and end-stations
+
+Create a new LinkStation, if you need:
+```sql
+insert into station (origin, active, available, name, stationcode, stationtype)
+	values ('NOI', true, true, 'your-choosen-name', 'your-choosen-stationcode', 'LinkStation');
+```
+
+Create a new edge with that LinkStation:
+```sql
+insert into edge (directed, linegeometry, edge_data_id)
+	select false, public.st_polygon('LINESTRING(2 2, 3 3, 4 4, 2 2)'::public.geometry, 25832), s.id
+    from station s
+    where s.stationcode = 'your-choosen-stationcode'
+    and s.stationtype = 'LinkStation';
+```
+
+The linegeometry `public.st_polygon('LINESTRING(2 2, 3 3, 4 4, 2 2)'::public.geometry, 25832)`
+is just an example, please add whatever you like here.
 
 ### I want to delete an link/edge between stations
 
