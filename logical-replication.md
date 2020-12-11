@@ -81,35 +81,50 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO replication_user;
 
 ## Subscriber database configuration
 
-If the Source database is a Docker container on the same machine, one must make
-sure they are on the same Docker network than the Source database container.
+Make sure, that the subscriber database `replica_db` can access the Source
+database via TCP. Check firewall rules.
 
-Connect to the shell and open `psql`
-```sh
-docker exec -it my_Subscriber database_db /bin/sh
-psql -U tourismuser
+We need a superuser `vkguser`, that will run all creation scripts (for instance
+with Flyway), and a read-only user `vkguser_readonly` that will access the data
+with less privileges for security.
+
+```sql
+CREATE ROLE vkguser WITH LOGIN PASSWORD 's3cret';
+COMMENT ON ROLE vkguser IS 'Admin account to access the virtual knowledge graph';
+GRANT CONNECT ON DATABASE replica_db TO vkguser;
+GRANT CREATE ON SCHEMA public TO vkguser;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO vkguser;
+GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO vkguser;
+ALTER ROLE vkguser SET statement_timeout TO '360s';
+
+CREATE ROLE vkguser_readonly WITH LOGIN PASSWORD 's3cret';
+COMMENT ON ROLE vkguser_readonly IS 'Read-only account to access the virtual knowledge graph';
+GRANT CONNECT ON DATABASE replica_db TO vkguser_readonly;
+GRANT USAGE ON SCHEMA public TO vkguser_readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO vkguser_readonly;
+GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO vkguser_readonly;
+ALTER ROLE vkguser_readonly SET statement_timeout TO '360s';
 ```
-
-Make sure, that the Subscriber database can access the Source database via TCP.
-Check firewall rules.
 
 Let the Subscriber database subscribe to the publication:
 ```sql
+-- run with role vkguser
 CREATE SUBSCRIPTION my_subscription
-  CONNECTION 'host=odh-tourism-db1 dbname=tourismuser user=replication_user password=s3cret'
+  CONNECTION 'host=original-database-ip-or-url dbname=database-name user=replication_user password=s3cret'
   PUBLICATION my_publication
   WITH (enabled = false);
 ```
 Note that the subscription `my_subscription` must not already exist (otherwise
 give it another name). In addition, it should not be enabled when you plan to
 add triggers or other mechanisms first, that will perform actions on every CRUD
-operation. Start the logical replication then with
+operation. Start the logical replication afterwards with
 
 ```SQL
+-- run with role vkguser
 ALTER SUBSCRIPTION my_subscription ENABLE;
 ```
 
-Limitation of Postgres: The schema must have the same name as on the publication server.
+> Limitation of Postgres: The schema must have the same name as on the publication server.
 
 ### Unsubscribing
 
