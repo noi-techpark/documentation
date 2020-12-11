@@ -1331,7 +1331,8 @@ Disconnect from screen session again and wait till restore is finished
 ### I want to create links between stations
 
 The edge is represented by the `edge` table and the start and end stations and
-the edge description by three entries within the `station` table.
+the edge description by three entries within the `station` table. Start and
+ending stations are optional.
 
 I have an already existing station `siemens` and a station `proma` of type
 `BluetoothStation`, and want to create a link between them. The link will be
