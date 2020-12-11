@@ -1386,7 +1386,7 @@ insert into edge (directed, linegeometry, edge_data_id)
 ```
 
 The linegeometry `public.st_polygon('LINESTRING(2 2, 3 3, 4 4, 2 2)'::public.geometry, 25832)`
-is just an example, please add whatever you like here.
+is just an example, please add whatever you like here (also `NULL`).
 
 ### I want to delete an link/edge between stations
 
