@@ -27,6 +27,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to install some packages inside an debian-based container](#i-want-to-install-some-packages-inside-an-debian-based-container)
 - [Licensing and REUSE compliance](#licensing-and-reuse-compliance)
 - [OAuth](#oauth)
+  - [I want to configure various applications to use Keycloak for login](#i-want-to-configure-various-applications-to-use-keycloak-for-login)
   - [I want to access the console of Keycloak as regular user](#i-want-to-access-the-console-of-keycloak-as-regular-user)
   - [I want to access the console of Keycloak as user "admin"](#i-want-to-access-the-console-of-keycloak-as-user-admin)
   - [I want to get an access token from our OAuth 2.0 Keycloak Server](#i-want-to-get-an-access-token-from-our-oauth-20-keycloak-server)
@@ -132,6 +133,10 @@ RUN apt-get update \
 See REUSE-specific [flight rules](https://github.com/noi-techpark/reuse).
 
 ## OAuth
+
+### I want to configure various applications to use Keycloak for login
+
+See [authentication-server/docs](https://github.com/noi-techpark/authentication-server/blob/master/docs/applications.md).
 
 ### I want to access the console of Keycloak as regular user
 
