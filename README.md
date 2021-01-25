@@ -716,7 +716,6 @@ I want to copy an artifact from the source pipeline
 On source grant access to the other pipelines:
 ```groovy
     options {
-        ansiColor('xterm')
         copyArtifactPermission('/it.bz.beacon/upload-that-artifact, /project2')
     }
 ```
