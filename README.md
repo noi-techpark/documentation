@@ -720,7 +720,7 @@ On source grant access to the other pipelines:
     }
 ```
 
-On destination copy the artifact if last build succeeded:
+On destination copy last successful build artifact:
 ```groovy
     copyArtifacts projectName: '/it.bz.beacon/the-project-with-the-artifact',
                     target: 'build',
