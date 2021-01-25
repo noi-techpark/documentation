@@ -55,6 +55,10 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
   - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
   - [I want to create a cron-job to clone AWS instances](#i-want-to-create-a-cron-job-to-clone-aws-instances)
+  - [I want to copy artifacts from another job](#i-want-to-copy-artifacts-from-another-job)
+  - [I want to rename artifacts](#i-want-to-rename-artifacts)
+  - [I want to upload all files of a directory to an s3 bucket](#i-want-to-upload-all-files-of-a-directory-to-an-s3-bucket)
+  - [I want to have a static list of a directory as html on s3](#i-want-to-have-a-static-list-of-a-directory-as-html-on-s3)
 - [Servers](#servers)
   - [I want to setup a new Docker Server](#i-want-to-setup-a-new-docker-server)
   - [I want to mount an AWS/EFS endpoint inside Debian 10](#i-want-to-mount-an-awsefs-endpoint-inside-debian-10)
@@ -701,6 +705,79 @@ Use a `Pipeline script from SCM` definition, and set
 
 Set `Clean after/before checkout` and add your script path to
 `Jenkinsfile-MyClone-Nightly-Clones`.
+
+
+### I want to copy artifacts from another job
+
+I want to copy an artifact from the source pipeline
+`/it.bz.beacon/the-project-with-the-artifact` to the destinations
+`/it.bz.beacon/upload-that-artifact` and `/project2`
+
+On source grant access to the other pipelines:
+```groovy
+    options {
+        ansiColor('xterm')
+        copyArtifactPermission('/it.bz.beacon/upload-that-artifact, /project2')
+    }
+```
+
+On destination copy the artifact if last build succeeded:
+```groovy
+    copyArtifacts projectName: '/it.bz.beacon/the-project-with-the-artifact',
+                    target: 'build',
+                    flatten: true,
+                    selector: lastSuccessful(),
+                    fingerprintArtifacts: true
+```
+
+If the source project is a multibranch pipeline, you must also add the branch
+name to the projectName, like
+`/it.bz.beacon/the-project-with-the-artifact/development`.
+
+### I want to rename artifacts
+
+That is actually not possible directly, the workaround with a build-number is as
+follows:
+
+```groovy
+    stage('Archive') {
+        steps {
+            sh 'mv path-to-file/app-xxx.apk app-build${BUILD_NUMBER}.apk'
+            archiveArtifacts \
+                artifacts: "app-build${BUILD_NUMBER}.apk",
+                onlyIfSuccessful: true
+        }
+    }
+```
+
+### I want to upload all files of a directory to an s3 bucket
+
+Upload all files inside `build/` to the remote bucket `it.bz.beacon.webapp-test`
+to the remote folder `attic/`.
+
+```groovy
+    stage('Upload') {
+        steps {
+            s3Upload(
+                bucket: 'it.bz.beacon.webapp-test',
+                path: 'attic/',
+                acl: 'PublicRead',
+                workingDir: "build",
+                includePathPattern: "*"
+            )
+        }
+    }
+```
+### I want to have a static list of a directory as html on s3
+
+Execute inside a pipeline, and then upload the `index.html` file to that bucket.
+
+```sh
+    cd your-folder
+    tree -H '.' -L 1 --noreport --charset utf-8 -P "*.apk" > index.html
+```
+
+Example: https://admin.beacon.testingmachine.eu/attic/
 
 
 ## Servers
