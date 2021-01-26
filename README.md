@@ -70,6 +70,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [I want to create a new Pimcore server instance on AWS](#i-want-to-create-a-new-pimcore-server-instance-on-aws)
   - [I want to use a swap file on my server](#i-want-to-use-a-swap-file-on-my-server)
   - [I want to make my web server HTTPS compliant](#i-want-to-make-my-web-server-https-compliant)
+  - [I want to show different content on GET as of POST requests](#i-want-to-show-different-content-on-get-as-of-post-requests)
   - [I want to fix the proxy error 'Size of a request header field exceeds server limit'](#i-want-to-fix-the-proxy-error-size-of-a-request-header-field-exceeds-server-limit)
   - [An error on the proxy shows a wrong server URL](#an-error-on-the-proxy-shows-a-wrong-server-url)
   - [I want to mount an aws s3 bucket on my server](#i-want-to-mount-an-aws-s3-bucket-on-my-server)
@@ -1168,6 +1169,38 @@ Define your firewall, such that only the proxy `1.2.3.4` can point to port `80` 
     Port:         80
     Source:       1.2.3.4/32
     Description:  LETS ENCRYPT PROXY
+
+
+### I want to show different content on GET as of POST requests
+
+We can do a rewrite rule on Apache for that:
+
+Example taken from `alpinebits.opendatahub.testingmachine.eu-le-ssl.conf`:
+```apache
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+  <Proxy *>
+    Order Allow,Deny
+    Allow from all
+  </Proxy>
+  ServerName alpinebits.opendatahub.testingmachine.eu
+  SSLProxyEngine On
+  RewriteEngine On
+  ProxyPass / http://alpinebits-server.tomcat02.testingmachine.eu:8080/ Keepalive=On
+  ProxyPassReverse / http://alpinebits-server.tomcat02.testingmachine.eu:8080/
+  ErrorLog /var/log/apache2/eu.testingmachine.opendatahub.alpinebits
+
+  RewriteCond %{REQUEST_METHOD}  =GET
+  RewriteRule    "/AlpineBits$"  http://alpinebits.lp-test.s3-website-eu-west-1.amazonaws.com [P,END]
+  RewriteCond %{REQUEST_METHOD}  =GET
+  RewriteRule    ^  http://alpinebits.lp-test.s3-website-eu-west-1.amazonaws.com%{REQUEST_URI} [P]
+
+  SSLCertificateFile /etc/letsencrypt/live/alpinebits.opendatahub.testingmachine.eu/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/alpinebits.opendatahub.testingmachine.eu/privkey.pem
+  Include /etc/letsencrypt/options-ssl-apache.conf
+</VirtualHost>
+</IfModule>
+```
 
 
 ### I want to fix the proxy error 'Size of a request header field exceeds server limit'
