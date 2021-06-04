@@ -25,6 +25,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
       - [Table of Contents](#table-of-contents)
   - [Docker](#docker)
     - [I want to install some packages inside an debian-based container](#i-want-to-install-some-packages-inside-an-debian-based-container)
+    - [I want to test entrypoint scripts easily](#i-want-to-test-entrypoint-scripts-easily)
   - [Licensing and REUSE compliance](#licensing-and-reuse-compliance)
   - [OAuth](#oauth)
     - [I want to configure various applications to use Keycloak for login](#i-want-to-configure-various-applications-to-use-keycloak-for-login)
@@ -131,6 +132,26 @@ RUN apt-get update \
     && apt-get -y install --no-install-recommends <package-list> \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+```
+
+### I want to test entrypoint scripts easily
+
+First, mount your local development folder into the container. Add these lines to
+your `docker-compose.yml` service:
+
+```yml
+        ports:
+            - 8999:80
+        volumes:
+            - ./:/code
+```
+
+Second, overwrite the entrypoint, and allow port forwarding also for the
+`docker-compose run` command.
+
+```
+docker-compose run --service-ports --entrypoint /bin/bash service-name \
+    -c '/code/path-to-script-inside-container/entrypoint.sh'
 ```
 
 ## Licensing and REUSE compliance
@@ -889,7 +910,7 @@ sudo chmod 440 /etc/sudoers.d/externals
 Install all dependencies:
 
 ```bash
-apt-get install tomcat8 tomcat8-admin
+apt install tomcat8 tomcat8-admin
 ```
 
 Adjust the `/etc/tomcat8/server.xml` configuration and add all hosts (`<Host>...</Host>`) served by this Tomcat instance:
