@@ -52,6 +52,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to create Jenkinsfiles for an newly installed Pimcore webpage](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage)
     - [I want to upload files to Pimcore greater than 2MB](#i-want-to-upload-files-to-pimcore-greater-than-2mb)
   - [Jenkins Pipelines](#jenkins-pipelines)
+    - [I want to run docker as jenkins user](#i-want-to-run-docker-as-jenkins-user)
     - [I want to show ansi colors](#i-want-to-show-ansi-colors)
     - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
     - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
@@ -615,6 +616,40 @@ sudo service php7.2-fpm restart
 ```
 
 ## Jenkins Pipelines
+
+### I want to run docker as jenkins user
+
+Example dockerfile for an `alpine` image:
+```dockerfile
+FROM maven:3-jdk-8-alpine
+ARG JENKINS_GROUP_ID=1000
+ARG JENKINS_USER_ID=1000
+RUN addgroup -g $JENKINS_GROUP_ID jenkins && \
+    adduser -D -u $JENKINS_USER_ID -G jenkins jenkins
+COPY infrastructure/docker/java-entrypoint.sh /entrypoint-java.sh
+ENTRYPOINT [ "/entrypoint-java.sh" ]
+```
+
+Example dockerfile for an `debian` or `ubuntu` image (`addgroup` and `adduser` differ):
+```dockerfile
+FROM maven:3-jdk-8
+ARG JENKINS_GROUP_ID=1000
+ARG JENKINS_USER_ID=1000
+RUN addgroup --gid $JENKINS_GROUP_ID jenkins && \
+    adduser --uid $JENKINS_USER_ID --ingroup jenkins jenkins
+COPY infrastructure/docker/java-entrypoint.sh /entrypoint-java.sh
+ENTRYPOINT [ "/entrypoint-java.sh" ]
+```
+
+... and the `agent` configuration inside a Jenkins pipeline:
+```groovy
+agent {
+    dockerfile {
+        filename 'infrastructure/docker/java.dockerfile'
+        additionalBuildArgs '--build-arg JENKINS_USER_ID=$(id -u jenkins) --build-arg JENKINS_GROUP_ID=$(id -g jenkins)'
+    }
+}
+```
 
 ### I want to show ansi colors
 Add the following lines as block inside `pipeline{ ... }`:
