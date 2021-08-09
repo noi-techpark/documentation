@@ -635,8 +635,8 @@ Example dockerfile for an `debian` or `ubuntu` image (`addgroup` and `adduser` d
 FROM maven:3-jdk-8
 ARG JENKINS_GROUP_ID=1000
 ARG JENKINS_USER_ID=1000
-RUN addgroup --gid $JENKINS_GROUP_ID jenkins && \
-    adduser --uid $JENKINS_USER_ID --ingroup jenkins jenkins
+RUN groupadd -g $JENKINS_GROUP_ID jenkins && \
+    useradd -ms /bin/bash --no-user-group -g $JENKINS_GROUP_ID -u $JENKINS_USER_ID jenkins
 COPY infrastructure/docker/java-entrypoint.sh /entrypoint-java.sh
 ENTRYPOINT [ "/entrypoint-java.sh" ]
 ```
