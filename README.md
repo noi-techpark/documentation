@@ -82,6 +82,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to install the CloudWatch Agent on a Linux machine](#i-want-to-install-the-cloudwatch-agent-on-a-linux-machine)
     - [I want to install the CloudWatch Agent on a Windows machine](#i-want-to-install-the-cloudwatch-agent-on-a-windows-machine)
     - [I want to monitor a website using Heartbeat](#i-want-to-monitor-a-website-using-heartbeat)
+    - [I want to extend a non-root disk formatted with EXT4 on AWS](#i-want-to-extend-a-non-root-disk-formatted-with-ext4-on-aws)
   - [Documentation](#documentation)
     - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
   - [Database](#database)
@@ -1386,6 +1387,18 @@ Run the pipeline inside Jenkins.
 3. Modify the configuration
     - Every .yml file inside this folder will be read and included
     - Changes to the .yml files will be picked up immediately automatically
+
+### I want to extend a non-root disk formatted with EXT4 on AWS
+
+1. Go to your instance on AWS/EC2
+2. Select the volume you want to resize
+3. Optionally, create a snapshot of the volume to restore it on error
+4. Actions > Modify Volume -> Set the new size
+5. Reboot the instance
+6. SSH into the instance
+7. `lsblk` to see which block devices are attached to your instance
+8. `sudo umount /dev/nvme1n1` (optional, but safer)
+8. `sudo resize2fs /dev/nvme1n1`
 
 ## Documentation
 
