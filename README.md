@@ -1398,7 +1398,9 @@ Run the pipeline inside Jenkins.
 6. SSH into the instance
 7. `lsblk` to see which block devices are attached to your instance
 8. `sudo umount /dev/nvme1n1` (optional, but safer)
-8. `sudo resize2fs /dev/nvme1n1`
+9. `sudo resize2fs /dev/nvme1n1`
+
+More info: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html
 
 ## Documentation
 
