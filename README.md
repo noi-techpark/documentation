@@ -1452,7 +1452,7 @@ delete from edge where id in (
 );
 ```
 
-Now, we want to set the unique constraint, such that does duplicate cannot be
+Now, we want to set the unique constraint, such that duplicates cannot be
 inserted anymore.
 ```sql
 ALTER TABLE edge ADD CONSTRAINT uc_edge_edge_data_id UNIQUE (edge_data_id);
