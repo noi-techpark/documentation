@@ -1,6 +1,6 @@
 # Flight rules for the Core Team of the Open Data Hub
 
-#### What are "flight rules"?
+**What are "flight rules"?**
 
 A [guide for astronauts](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (now, programmers contributing to the
 Open Data Hub) about what to do when things go wrong, _or must be executed with no delay_.
@@ -18,11 +18,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 
 ----
 
-#### Table of Contents
+**Table of Contents**
 
 - [Flight rules for the Core Team of the Open Data Hub](#flight-rules-for-the-core-team-of-the-open-data-hub)
-      - [What are "flight rules"?](#what-are-flight-rules)
-      - [Table of Contents](#table-of-contents)
   - [Docker](#docker)
     - [I want to install some packages inside an debian-based container](#i-want-to-install-some-packages-inside-an-debian-based-container)
     - [I want to test entrypoint scripts easily](#i-want-to-test-entrypoint-scripts-easily)
@@ -86,6 +84,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [Documentation](#documentation)
     - [I want to add a table of contents to a markdown file](#i-want-to-add-a-table-of-contents-to-a-markdown-file)
   - [Database](#database)
+    - [I want to find duplicates in a table](#i-want-to-find-duplicates-in-a-table)
+    - [I want to delete duplicates, but keep one record each time](#i-want-to-delete-duplicates-but-keep-one-record-each-time)
     - [I run out of disk space on an AWS/RDS Postgres instance](#i-run-out-of-disk-space-on-an-awsrds-postgres-instance)
     - [I want to enable logical replication on an AWS/RDS or regular Postgres instance](#i-want-to-enable-logical-replication-on-an-awsrds-or-regular-postgres-instance)
     - [I want to create a read-only user (aka role)](#i-want-to-create-a-read-only-user-aka-role)
@@ -1429,6 +1429,34 @@ git push
 ## Database
 
 If not otherwise stated, all these chapters are about PostgreSQL.
+
+### I want to find duplicates in a table
+
+We want to find all duplicates in the table `edge` within the column `edge_data_id`.
+```sql
+select * from edge e1
+where (select count(*) from edge e2
+where e1.edge_data_id = e2.edge_data_id) > 1;
+```
+
+### I want to delete duplicates, but keep one record each time
+
+We want to delete all duplicates in the table `edge` within the column `edge_data_id`,
+but keep one for each group.
+```sql
+delete from edge where id in (
+	select id from (
+		select *, row_number() over (partition by edge_data_id order by id) as rn
+		from edge
+	) as subedge where subedge.rn > 1
+);
+```
+
+Now, we want to set the unique constraint, such that does duplicate cannot be
+inserted anymore.
+```sql
+ALTER TABLE edge ADD CONSTRAINT uc_edge_edge_data_id UNIQUE (edge_data_id);
+```
 
 ### I run out of disk space on an AWS/RDS Postgres instance
 
