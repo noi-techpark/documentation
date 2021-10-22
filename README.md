@@ -21,6 +21,8 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
 **Table of Contents**
 
 - [Flight rules for the Core Team of the Open Data Hub](#flight-rules-for-the-core-team-of-the-open-data-hub)
+  - [Terraform](#terraform)
+    - [I want to import a terraform provider](#i-want-to-import-a-terraform-provider)
   - [Docker](#docker)
     - [I want to install some packages inside an debian-based container](#i-want-to-install-some-packages-inside-an-debian-based-container)
     - [I want to test entrypoint scripts easily](#i-want-to-test-entrypoint-scripts-easily)
@@ -122,6 +124,26 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
       - [I want to renew the development and distribution certificates](#i-want-to-renew-the-development-and-distribution-certificates)
 
 ----
+
+## Terraform
+
+### I want to import a terraform provider
+
+For example, `aws`:
+```terraform
+terraform {
+  required_providers {
+    aws = {
+      source = "aws"
+      version = "~> 2.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "eu-west-1"
+}
+```
 
 ## Docker
 
