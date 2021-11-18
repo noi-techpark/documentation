@@ -53,6 +53,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to upload files to Pimcore greater than 2MB](#i-want-to-upload-files-to-pimcore-greater-than-2mb)
   - [Jenkins Pipelines](#jenkins-pipelines)
     - [I want to run docker as jenkins user](#i-want-to-run-docker-as-jenkins-user)
+    - [I want to directly debug a Jenkins pipeline running in a docker container](#i-want-to-directly-debug-a-jenkins-pipeline-running-in-a-docker-container)
     - [I want to show ansi colors](#i-want-to-show-ansi-colors)
     - [I want to execute arbitrary commands on the remote server](#i-want-to-execute-arbitrary-commands-on-the-remote-server)
     - [I want to execute git commands on the remote server](#i-want-to-execute-git-commands-on-the-remote-server)
@@ -673,6 +674,13 @@ agent {
     }
 }
 ```
+
+### I want to directly debug a Jenkins pipeline running in a docker container
+- Put `sleep 1000000` into some part of your Jenkinsfile, and execute the script.
+- SSH into jenkins
+- `sudo -iu jenkins`
+- Find the docker container ID with `docker ps`, compare it with the logs in the Jenkins output
+- Enter the docker container with `docker exec -it <container-id> bash`
 
 ### I want to show ansi colors
 Add the following lines as block inside `pipeline{ ... }`:
