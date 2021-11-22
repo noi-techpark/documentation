@@ -24,6 +24,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
   - [Terraform](#terraform)
     - [I want to import a terraform provider](#i-want-to-import-a-terraform-provider)
   - [Docker](#docker)
+    - [A docker host computer needs is nearly full](#a-docker-host-computer-needs-is-nearly-full)
     - [I want to install some packages inside an debian-based container](#i-want-to-install-some-packages-inside-an-debian-based-container)
     - [I want to test entrypoint scripts easily](#i-want-to-test-entrypoint-scripts-easily)
   - [Licensing and REUSE compliance](#licensing-and-reuse-compliance)
@@ -147,6 +148,26 @@ provider "aws" {
 ```
 
 ## Docker
+
+### A docker host computer needs is nearly full
+
+Check free disk space with `df -h`...
+
+Delete stopped containers, that exited without being deleted.
+
+```
+docker container ls -a
+docker container prune
+```
+
+List and delete tangling images (that is, images that are not tagged on your
+system. They are created when you build a Docker image with the same tag again
+and again):
+
+```
+docker image ls -f "dangling=true"
+docker image prune
+```
 
 ### I want to install some packages inside an debian-based container
 
