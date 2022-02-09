@@ -53,6 +53,7 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to create Jenkinsfiles for an newly installed Pimcore webpage](#i-want-to-create-jenkinsfiles-for-an-newly-installed-pimcore-webpage)
     - [I want to upload files to Pimcore greater than 2MB](#i-want-to-upload-files-to-pimcore-greater-than-2mb)
   - [Jenkins Pipelines](#jenkins-pipelines)
+    - [I want to get all credentials stored in Jenkins](#i-want-to-get-all-credentials-stored-in-jenkins)
     - [I want to run docker as jenkins user](#i-want-to-run-docker-as-jenkins-user)
     - [I want to directly debug a Jenkins pipeline running in a docker container](#i-want-to-directly-debug-a-jenkins-pipeline-running-in-a-docker-container)
     - [I want to show ansi colors](#i-want-to-show-ansi-colors)
@@ -661,6 +662,29 @@ sudo service php7.2-fpm restart
 ```
 
 ## Jenkins Pipelines
+
+### I want to get all credentials stored in Jenkins
+
+Go to https://jenkins.testingmachine.eu/script and run the following snippet:
+```groovy
+def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+        com.cloudbees.plugins.credentials.Credentials.class,
+        Jenkins.instance,
+        null,
+        null
+);
+for (c in creds) {
+  if (c instanceof org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl) {
+    println(String.format("id=%s::::desc=%s::::secret=%s\n", c.id, c.description, c.secret))
+  }
+  if(c instanceof com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey){
+    println(String.format("id=%s::::desc=%s::::key=%s\n", c.id, c.description, c.privateKeySource.getPrivateKeys()))
+  }
+  if (c instanceof com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl){
+    println(String.format("id=%s::::desc=%s::::user=%s:::::pass=%s\n", c.id, c.description, c.username, c.password))
+  }
+}
+```
 
 ### I want to run docker as jenkins user
 
