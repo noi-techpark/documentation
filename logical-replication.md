@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: NOI Techpark <digital@noi.bz.it>
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 # Logical Replication on Postgres
 
 Inspired by a [Raveland Blog Post](https://blog.raveland.org/post/postgresql_lr_en) and [Aurora PostgreSQL Replication for Amazon RDS](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Replication.Logical.html).

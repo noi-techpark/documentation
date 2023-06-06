@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: documentation
+Upstream-Contact: NOI Techpark <digital@noi.bz.it>
+Source: https://github.com/noi-techpark/documentation
+
+Files: images/* .editorconfig .gitignore
+Copyright: (c) NOI Techpark <digital@noi.bz.it>
+License: CC-BY-SA-4.0

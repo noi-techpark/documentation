@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: NOI Techpark <digital@noi.bz.it>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 set -xeo pipefail
 
 # Remove trailing whitespace characters
