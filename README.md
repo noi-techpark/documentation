@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: NOI Techpark <digital@noi.bz.it>
+SPDX-FileCopyrightText: NOI Techpark <digital@noi.com>
 
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
@@ -213,14 +213,14 @@ See [authentication-server/docs](https://github.com/noi-techpark/authentication-
 
 ### I want to access the console of Keycloak as regular user
 
-Go to https://auth.opendatahub.bz.it/auth/admin/noi/console and login with
+Go to https://auth.opendatahub.com/auth/admin/noi/console and login with
 "yourname/password..."
 
 Test server is https://auth.opendatahub.testingmachine.eu/auth/admin/noi/console
 
 ### I want to access the console of Keycloak as user "admin"
 
-Go to https://auth.opendatahub.bz.it and login with "admin/password..."
+Go to https://auth.opendatahub.com and login with "admin/password..."
 
 Test server is https://auth.opendatahub.testingmachine.eu
 
@@ -229,7 +229,7 @@ Test server is https://auth.opendatahub.testingmachine.eu
 There are two methods, first with `grant_type=password`:
 ```sh
 curl -X POST -L -H 'Content-Type:application/x-www-form-urlencoded' \
-    "https://auth.opendatahub.bz.it/auth/realms/noi/protocol/openid-connect/token" \
+    "https://auth.opendatahub.com/auth/realms/noi/protocol/openid-connect/token" \
     -d 'grant_type=password&username=***&password=****&client_id=your-client-id'
 ```
 
@@ -237,12 +237,12 @@ curl -X POST -L -H 'Content-Type:application/x-www-form-urlencoded' \
 the call above.
 ```sh
 curl -X POST -L -H 'Content-Type:application/x-www-form-urlencoded' \
-    "https://auth.opendatahub.bz.it/auth/realms/noi/protocol/openid-connect/token" \
+    "https://auth.opendatahub.com/auth/realms/noi/protocol/openid-connect/token" \
      -d 'grant_type=refresh_token&refresh_token=*****&client_id=your-client-id'
 ```
 
 Example: `client_id=odh-mobility-v2` to access the mobility Ninja API. To find
-your `client_id` go to [keycloak/noi/clients](https://auth.opendatahub.bz.it/auth/admin/noi/console/#/realms/noi/clients).
+your `client_id` go to [keycloak/noi/clients](https://auth.opendatahub.com/auth/admin/noi/console/#/realms/noi/clients).
 
 NB: Use `https://auth.opendatahub.testingmachine.eu`, if you want to get tokens from our
 Keycloak test server.
@@ -388,7 +388,7 @@ Create a new GitHub repository (private or public).
 
 Create a `Jenkinsfile-CI` in the repository and specify the build steps.
 
-Create a new Jenkins pipeline at [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
+Create a new Jenkins pipeline at [https://ci.opendatahub.com](https://ci.opendatahub.com)
 
 - Type: **Multibranch Pipeline**
 - Branch Sources: **GitHub**
@@ -400,7 +400,7 @@ Create a new Jenkins pipeline at [https://ci.opendatahub.bz.it](https://ci.opend
 
 Provide authenticated users access to the Continuous Integration Jenkins Server:
 
-- Configure the Jenkins Pipeline for the repository at [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
+- Configure the Jenkins Pipeline for the repository at [https://ci.opendatahub.com](https://ci.opendatahub.com)
 - Add **Read (Job)** permissions to authenticated users under Properties (project-based security)
 
 ### I want to give access to a private repository
@@ -411,7 +411,7 @@ Provide the contributor access to the GitHub repository:
 
 Provide the contributor access to the Continuous Integration Jenkins Server:
 
-- Configure the Jenkins Pipeline for the repository at [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
+- Configure the Jenkins Pipeline for the repository at [https://ci.opendatahub.com](https://ci.opendatahub.com)
 - Add the contributors GitHub username under Properties (project-based security) and give him **Read (Job)** permissions
 
 ### I want to prepare the CI for pull requests
@@ -526,31 +526,31 @@ information beforehand.
 
 ### I want to add a test environment of a new Pimcore installation
 
-We [added `davinci.bz.it` to a multi-Pimcore instance](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine) and want now a test environment
-reachable with `https://test.davinci.bz.it`, which gets cloned during night and updated
+We [added `davinci.com` to a multi-Pimcore instance](#i-want-to-add-new-pimcore-web-page-to-an-existing-pimcore-machine) and want now a test environment
+reachable with `https://test.davinci.com`, which gets cloned during night and updated
 each time a new commit gets pushed to the davinci repository.
 
-First, go to AWS/Route53 and add `test.davinci.bz.it` to the `davinci.bz.it` domain
+First, go to AWS/Route53 and add `test.davinci.com` to the `davinci.com` domain
 ```
-Name : test.davinci.bz.it
+Name : test.davinci.com
 Type : CNAME
 TTL  : 300
-Value: proxy.opendatahub.bz.it
+Value: proxy.opendatahub.com
 ```
 
-Second, login to the our letsencrypt proxy and make `test.davinci.bz.it` [https compliant](#i-want-to-make-my-web-server-https-compliant).
+Second, login to the our letsencrypt proxy and make `test.davinci.com` [https compliant](#i-want-to-make-my-web-server-https-compliant).
 
 Third, go to our [server deployment repository](https://github.com/noi-techpark/server-deployment)
 and add a new stage to `Jenkinsfile-Pimcore-Nightly-Clones` as follows:
 ```groovy
-stage('davinci.bz.it') {
+stage('davinci.com') {
     steps {
-        sh './utils/pimcore-update-domain $KEY $SERVER_IP test.davinci.bz.it davinci/html davinci.conf'
+        sh './utils/pimcore-update-domain $KEY $SERVER_IP test.davinci.com davinci/html davinci.conf'
     }
 }
 ```
 ...where `$KEY` is the ssh key, the `$SERVER_IP` is the pimcore test server (clone of the
-multi-pimcore production machine), `test.davinci.bz.it` is the domain, `davinci/html` is the
+multi-pimcore production machine), `test.davinci.com` is the domain, `davinci/html` is the
 document root folder inside `/var/www` and `davinci.conf` is the Apache2 configuration inside
 `/etc/apache2/sites-enabled/`. See [server-deployment.git/utils/pimcore-update-domain](https://github.com/noi-techpark/server-deployment/blob/master/utils/pimcore-update-domain) for details.
 
@@ -1148,10 +1148,10 @@ files:
                         <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="X-Forwarded-Proto" internalProxies="10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|169\.254\.\d+\.\d+|127\.\d+\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+" />
                 </Host>
 
-                <Host name="bigdata4tourism.tomcat02.opendatahub.bz.it"  appBase="webapps/ROOT/bigdata4tourism.tomcat02.opendatahub.bz.it"
+                <Host name="bigdata4tourism.tomcat02.opendatahub.com"  appBase="webapps/ROOT/bigdata4tourism.tomcat02.opendatahub.com"
                         unpackWARs="true" autoDeploy="true">
                         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
-                        prefix="bigdata4tourism.tomcat02.opendatahub.bz.it_access_log" suffix=".txt" rotatable="false"
+                        prefix="bigdata4tourism.tomcat02.opendatahub.com_access_log" suffix=".txt" rotatable="false"
                         pattern="%h %l %u %t &quot;%r&quot; %s %b" />
                         <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="X-Forwarded-Proto" internalProxies="10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|169\.254\.\d+\.\d+|127\.\d+\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+" />
                 </Host>
@@ -1166,8 +1166,8 @@ Place all war file in the specified subfolders of the hosts before running `eb d
 ```bash
 mkdir -p localhost
 
-mkdir -p bigdata4tourism.tomcat02.opendatahub.bz.it
-cp ../../ROOT.war bigdata4tourism.tomcat02.opendatahub.bz.it/
+mkdir -p bigdata4tourism.tomcat02.opendatahub.com
+cp ../../ROOT.war bigdata4tourism.tomcat02.opendatahub.com/
 ```
 
 ### I want to create a new Pimcore server instance on AWS
@@ -1239,9 +1239,9 @@ repository.
 
 I have a website reachable with http://davinci.bz.it on an IP `34.247.202.9:80`,
 and want to make it HTTPS only. If that domain does not exist, tell your ICT
-guys to point the DNS entries for `davinci.bz.it` to `proxy.opendatahub.bz.it`,
+guys to point the DNS entries for `davinci.bz.it` to `proxy.opendatahub.com`,
 or add a subdomain as `CNAME` to your `AWS/Route53` configuration, if you own
-the domain. Use a TTL of `300` and `proxy.opendatahub.bz.it` as `VALUE`.
+the domain. Use a TTL of `300` and `proxy.opendatahub.com` as `VALUE`.
 
 We use a proxy with Apache and [Let's Encrypt](https://letsencrypt.org/) for
 that. Let's assume the IP of that proxy is `1.2.3.4`.
@@ -1358,8 +1358,8 @@ follows:
 
 ```
 <VirtualHost *:80>
-	ServerName proxy.opendatahub.bz.it
-	ServerAdmin help@opendatahub.bz.it
+	ServerName proxy.opendatahub.com
+	ServerAdmin help@opendatahub.com
 	DocumentRoot /var/www/html
 	ErrorLog ${APACHE_LOG_DIR}/it.bz.opendatahub.proxy.error.log
 	CustomLog ${APACHE_LOG_DIR}/it.bz.opendatahub.proxy.access.log combined
@@ -1775,7 +1775,7 @@ Add the opendatahub repository to your pom.xml file
 ```xml
 <repositories>
 	<repository>
-		<id>maven-repo.opendatahub.bz.it</id>
+		<id>maven-repo.opendatahub.com</id>
 		<url>http://it.bz.opendatahub.s3-website-eu-west-1.amazonaws.com/release</url>
 	</repository>
 </repositories>
@@ -1795,11 +1795,11 @@ Add distribution management to your pom.xml:
 ```xml
 <distributionManagement>
   <snapshotRepository>
-     <id>maven-repo.opendatahub.bz.it</id>
+     <id>maven-repo.opendatahub.com</id>
      <url>s3://it.bz.opendatahub/snapshot</url>
   </snapshotRepository>
   <repository>
-     <id>maven-repo.opendatahub.bz.it</id>
+     <id>maven-repo.opendatahub.com</id>
      <url>s3://it.bz.opendatahub/release</url>
   </repository>
 </distributionManagement>
@@ -1817,7 +1817,7 @@ Add a wagon which handles the transfer and deployment to the s3 bucket
 Configure your maven repository to handle authentication towards s3 bucket. Go to settings.xml and configure a server like this:
 ``` xml
 <server>
- <id>maven-repo.opendatahub.bz.it</id>
+ <id>maven-repo.opendatahub.com</id>
  <username>${aws_access_key_id}</username>
  <password>${aws_secret_access_key}</password>
 </server>
