@@ -69,7 +69,7 @@ In the following documentation some example names are used. Please replace them 
 7. For every commit the continuous integration pipeline will execute the tests and display the results in the pull request.
     ![Show a pull request](images/contributors/show-pull-request-ok-development.png)
 
-8. In addition, the detailed logs can be viewed under [https://ci.opendatahub.bz.it](https://ci.opendatahub.bz.it)
+8. In addition, the detailed logs can be viewed under [https://ci.opendatahub.com](https://ci.opendatahub.com)
 
 ## Syncing a Fork
 
