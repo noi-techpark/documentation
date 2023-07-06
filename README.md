@@ -41,9 +41,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to get an access token from our OAuth 2.0 Keycloak Server](#i-want-to-get-an-access-token-from-our-oauth-20-keycloak-server)
     - [I get an error called o.k.adapters.RequestAuthenticator: SSL is required to authenticate](#i-get-an-error-called-okadaptersrequestauthenticator-ssl-is-required-to-authenticate)
   - [Work Flow and Release Management](#work-flow-and-release-management)
-    - [I want to create a project for ODH](#i-want-to-create-a-project-for-odh)
-    - [I want to know how the git flow works for a project of ODH](#i-want-to-know-how-the-git-flow-works-for-a-project-of-odh)
-    - [I want to release a new version of an ODH-project](#i-want-to-release-a-new-version-of-an-odh-project)
+    - [I want to create a project for Open Data hub](#i-want-to-create-a-project-for-Open-Data-Hub)
+    - [I want to know how the git flow works for a project of Open Data hub](#i-want-to-know-how-the-git-flow-works-for-a-project-of-Open-Data-Hub)
+    - [I want to release a new version of an Open Data hub-project](#i-want-to-release-a-new-version-of-an-Open-Data-Hub-project)
     - [I found a small bug, and want to fix it immediately on a released version](#i-found-a-small-bug-and-want-to-fix-it-immediately-on-a-released-version)
   - [GitHub](#github)
     - [I want to create a repository](#i-want-to-create-a-repository)
@@ -117,9 +117,9 @@ _ps. Idea taken from the [GIT flight rules](https://github.com/k88hudson/git-fli
     - [I want to run maven in a non-interactive mode without output colors](#i-want-to-run-maven-in-a-non-interactive-mode-without-output-colors)
     - [I want to force maven to always update dependencies](#i-want-to-force-maven-to-always-update-dependencies)
     - [I want to use maven to deploy on a tomcat server](#i-want-to-use-maven-to-deploy-on-a-tomcat-server)
-    - [ODH Maven repository](#odh-maven-repository)
+    - [Open Data hub Maven repository](#Open-Data-hub-maven-repository)
       - [I want to use an open source java library of the OpenDataHub](#i-want-to-use-an-open-source-java-library-of-the-opendatahub)
-      - [I want to upload an artifact to the odh maven repository](#i-want-to-upload-an-artifact-to-the-odh-maven-repository)
+      - [I want to upload an artifact to the Open Data hub maven repository](#i-want-to-upload-an-artifact-to-the-Open-Data-Hub-maven-repository)
   - [App Development](#app-development)
     - [Android](#android)
       - [I want to add a new tester to an App on Google Play](#i-want-to-add-a-new-tester-to-an-app-on-google-play)
@@ -267,7 +267,7 @@ https://www.keycloak.org/docs/latest/securing_apps/index.html#_java_adapter_conf
 
 ## Work Flow and Release Management
 
-### I want to create a project for ODH
+### I want to create a project for Open Data hub
 
 Each project must be on our github `noi-techpark`. So, if you want to create a new repository, do:
 ```shell
@@ -298,13 +298,13 @@ NB: We can make an exception of this repository structure, iff a project is all 
 
 ...then you do not need to create a `development` branch and do not protect the `master` branch.
 
-### I want to know how the git flow works for a project of ODH
+### I want to know how the git flow works for a project of Open Data hub
 
 This work is based on [Vincent Driessen's post](https://nvie.com/posts/a-successful-git-branching-model/), about a
 successful Git branching model, and [Semantic Versioning](https://semver.org). We suggest, that you read these
 articles to better understand what follows.
 
-Please read [I want to create a project for ODH](#i-want-to-create-a-project-for-ODH) before you start.
+Please read [I want to create a project for Open Data hub](#i-want-to-create-a-project-for-Open-Data-Hub) before you start.
 
 We have two main branches:
   - `master` contains production-ready commits only
@@ -321,7 +321,7 @@ We have two main branches:
     - Must be merged to `master` and `development` at the end
     - no fast-forward (`--no-ff`)
 
-### I want to release a new version of an ODH-project
+### I want to release a new version of an Open Data hub-project
 
 We have a `master` branch with a release at `1.0.0` and want now to release a new `development` branch. The new version
 should be `1.1.0`, since we add a new feature. (See https://semver.org to understand how to choose a new version)
@@ -1769,7 +1769,7 @@ Then run:
 mvn -B -U tomcat:redeploy -Dmaven.tomcat.url=${TESTSERVER_TOMCAT_ENDPOINT} -Dmaven.tomcat.server=testServer -Dmaven.tomcat.path=/
 ```
 
-### ODH Maven repository
+### Open Data hub Maven repository
 #### I want to use an open source java library of the OpenDataHub
 Add the opendatahub repository to your pom.xml file
 ```xml
@@ -1789,7 +1789,7 @@ and add the library you need as dependency eg.:
 </dependency>
 ```
 
-#### I want to upload an artifact to the odh maven repository
+#### I want to upload an artifact to the Open Data hub maven repository
 
 Add distribution management to your pom.xml:
 ```xml
