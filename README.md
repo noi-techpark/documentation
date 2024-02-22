@@ -386,15 +386,15 @@ git branch -d hotfix-1.0.1
 
 Create a new GitHub repository (private or public).
 
-Create a `Jenkinsfile-CI` in the repository and specify the build steps.
+When naming the repository you should follow these guidelines:
+ - Never use the 'odh' abbreviation
+ - Always keep names short and concise
+ - Always use lowercase
+ - Always use hyphens for multi-word-names
+ - Consider using codenames for projects
+ - For multi-word names: first where it belongs to, then what it is
 
-Create a new Jenkins pipeline at [https://ci.opendatahub.com](https://ci.opendatahub.com)
-
-- Type: **Multibranch Pipeline**
-- Branch Sources: **GitHub**
-    - Attention: For **Discover pull requests from forks** the trust part must be set to **From users with Admin or Write permission** to only allow users with Admin or Write permissions to modify the Jenkinsfile
-- Build Configuration: Reference the Jenkinsfile with the continuous integration build steps
-- Properties: Enable **Enable project-based security** and set the following permissions
+Refer to [this presentation](resources/repo-naming.odp) for some more context
 
 ### I want to give access to a public repository
 
