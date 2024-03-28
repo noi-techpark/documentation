@@ -10,10 +10,41 @@ https://postgis.net/workshops/postgis-intro/loading_data.html
 ```
 FROM postgis/postgis
 RUN apt -y update
-RUN apt install -y postgis
+RUN apt install -y postgis wget unzip
 ENTRYPOINT bash
+WORKDIR /shp
 ```
 
+```bash
+docker run --rm -v  -it $(docker build -q .)
+
+# download and extract the shapefile zip. If you want to load other files, you can also do this outside docker first and mount as volume
+wget https://www.istat.it/storage/cartografia/confini_amministrativi/generalizzati/2023/Limiti01012023_g.zip
+unzip *.zip
+
+# convert the shape file to SQL insert commands
+args=(
+  # create geospatial index (?)
+  -I 
+  # drop (!!!!!) and recreate the old table 
+  -d 
+  # SRID of the source format. Look up which format your file is in 
+  -s 32632 \
+  # The shape file which to load. In this case it's the provinces of italy 
+  Limiti01012023_g/ProvCM01012023_g/ProvCM01012023_g_WGS84.shp \
+  # name of the table that is created 
+  shapes.it_prov
+)
+shp2pgsql "${args[@]}" > it_prov.sql
+
+# it_prov.sql now is a sql script to drop, create and populate the table shapes.it_prov
+# either load it using your favourite postgresql admin tool, or directly via CLI
+psql  --username=xxxx --dbname=xxxx --host=xxxxxxxxx -f it_prov.sql
+
 ```
-docker run --rm -it $(docker build -q .)
+Note: If the schema doesn't exist yet, create it with
+```pgsql
+create schema if not exists shapes;
 ```
+
+Since every shape file has it's own set of fields, the table structure is specific to that shape file
