@@ -23,7 +23,7 @@ WORKDIR /shp
 ```
 then run it as an interactive console:
 ```
-docker run --rm -v  -it $(docker build -q .)
+docker run --rm -it $(docker build -q .)
 ```
 
 ### Convert the shapefile to Postgres SQL
@@ -41,11 +41,11 @@ args=(
   # SRID of the source format. Look up which format your file is in 
   -s 32632 \
   # The shape file which to load. In this case it's the provinces of italy 
-  Limiti01012023_g/ProvCM01012023_g/ProvCM01012023_g_WGS84.shp \
+  ./Limiti01012023_g/Reg01012023_g/Reg01012023_g_WGS84.shp \
   # name of the table that is created 
-  shapes.it_prov
+  shapes.it_region
 )
-shp2pgsql "${args[@]}" > it_prov.sql
+shp2pgsql "${args[@]}" > it_region.sql
 ```
 
 ### Load the SQL script
