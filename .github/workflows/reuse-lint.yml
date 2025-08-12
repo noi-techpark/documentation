@@ -1,4 +1,4 @@
-name: REUSE Lint
+name: REUSE Compliance Check
 
 on:
   push:
