@@ -4,6 +4,8 @@ SPDX-FileCopyrightText: NOI Techpark <digital@noi.com>
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
+[![REUSE Compliance](https://github.com/noi-techpark/documentation/actions/workflows/reuse-lint.yml/badge.svg)](https://github.com/noi-techpark/opendatahub-docs/wiki/REUSE#badges)
+
 # Flight rules for the Core Team of the Open Data Hub
 
 **What are "flight rules"?**
